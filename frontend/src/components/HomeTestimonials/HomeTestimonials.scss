@@ -1,0 +1,28 @@
+.testimonials-container {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1 {
+        font-size: 3.5rem;
+        text-align: center;
+    }
+    p {
+      font-size: 1.6rem;
+      text-align: center;
+
+      width: 60%;
+    }
+  }
+  .testimonial-card {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    .blockquote {
+      font-size: 1.6rem;
+    }
+    .blockquote-footer {
+      font-size: 1.4rem;
+    }
+  }
+}

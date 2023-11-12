@@ -1,0 +1,60 @@
+.intro-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 10rem;
+  .left-content {
+    h3 {
+      font-size: 1.4rem;
+    }
+    h1 {
+      font-size: 4rem;
+    }
+    p {
+      font-size: 1.6rem;
+    }
+    .info-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      .card-info {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        img {
+          width: 5rem;
+          aspect-ratio: 1/1;
+          border-radius: 50%;
+          outline: none;
+          border: none;
+        }
+        .info {
+          display: flex;
+          flex-flow: column wrap;
+          padding: 0.5rem;
+        }
+      }
+    }
+  }
+  .right-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    p {
+      font-size: 1.5rem;
+      line-height: 2.2rem;
+    }
+    p:first-child::first-letter {
+      initial-letter: 2;
+    }
+    .left {
+      display: flex;
+      flex-flow: column wrap;
+      flex: 1;
+    }
+    .right {
+      flex: 1;
+    }
+  }
+}
