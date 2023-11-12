@@ -1,0 +1,17 @@
+.carousel-container {
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    .image {
+        height: 100vh;
+        object-fit: cover;
+    }
+    .caption {
+        h1 {
+            font-size: 4rem;
+        }
+        p {
+            font-size: 1.6rem;
+        }
+    }
+}
