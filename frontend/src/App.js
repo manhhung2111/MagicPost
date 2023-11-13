@@ -1,5 +1,4 @@
 import "./App.scss";
-import { ToastContainer } from "react-toastify";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -15,15 +14,22 @@ import HomeServices from "./components/HomeServices/HomeServices";
 import HomeTestimonials from "./components/HomeTestimonials/HomeTestimonials";
 import HomeFAQ from "./components/HomeFAQ/HomeFAQ";
 import Footer from "./components/Footer/Footer";
+import LoginModal from "./components/LoginModal/LoginModal";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleChangeHeaderColor = (e) => {
     const scrollHeight = e.currentTarget.scrollTop;
     if (scrollHeight >= 150) setHeaderColor("blur");
     else setHeaderColor("");
   };
+
+  const handleLogin = () => {
+    setShowLoginModal(true);
+  };
+
   return (
     <div className="app-container" onScroll={(e) => handleChangeHeaderColor(e)}>
       <header>
@@ -71,6 +77,22 @@ function App() {
                   <NavLink to={"/services"} className="nav-link">
                     Services
                   </NavLink>
+                  {headerColor === "blur" && (
+                    <button
+                      className="signin-btn"
+                      onClick={() => handleLogin()}
+                    >
+                      Log in
+                    </button>
+                  )}
+                  {headerColor === "" && (
+                    <button
+                      className="signin-btn"
+                      onClick={() => handleLogin()}
+                    >
+                      Log in
+                    </button>
+                  )}
                 </Nav>
               </Offcanvas.Body>
             </Navbar.Offcanvas>
@@ -84,17 +106,9 @@ function App() {
       <HomeTestimonials />
       <HomeFAQ />
       <Footer />
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable={false}
-        pauseOnHover
-        theme="light"
+      <LoginModal
+        showLoginModal={showLoginModal}
+        setShowLoginModal={setShowLoginModal}
       />
     </div>
   );
