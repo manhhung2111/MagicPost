@@ -3,6 +3,12 @@ import express from "express";
 require("dotenv").config();
 import cors from "cors";
 
+import Center from "./models/Center";
+import Order from "./models/Order";
+import Role from "./models/Role";
+import Shipment from "./models/Shipment";
+import URL from "./models/URL";
+import User from "./models/User";
 
 const app = express();
 const corsOptions = {
