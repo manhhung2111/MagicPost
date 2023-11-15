@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const userSchema = new mongoose.Schema({
-  user_id: { type: String, unique: true },
+  user_name: { type: String, unique: true },
   password: String,
   center_id: String,
   role_name: String,

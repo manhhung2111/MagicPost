@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const centerSchema = new mongoose.Schema({
-  center_id: { type: String, unique: true },
+  name: { type: String, unique: true },
   location: String,
   phone: String,
   email: String,

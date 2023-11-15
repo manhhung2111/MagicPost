@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const shipmentSchema = new mongoose.Schema({
-  shipment_id: { type: String, unique: true },
   user_id: String,
   start: {
     center_id: String,
