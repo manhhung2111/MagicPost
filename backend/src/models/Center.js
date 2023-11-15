@@ -3,6 +3,8 @@ import mongoose_delete from "mongoose-delete";
 
 const centerSchema = new mongoose.Schema({
   name: { type: String, unique: true },
+  user_name: String, // TDGD or TDTK
+  parent_center_name: String, // = null -> dtk, != null -> dgd
   location: String,
   phone: String,
   email: String,
