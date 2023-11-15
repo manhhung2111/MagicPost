@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const urlSchema = new mongoose.Schema({
-  url_id: { type: String, unique: true },
+  url_name: { type: String, unique: true },
   url: { type: [String] },
 });
 

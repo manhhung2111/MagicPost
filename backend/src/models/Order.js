@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const orderSchema = new mongoose.Schema({
-  order_id: { type: String, unique: true },
   package: {
     category: { type: String },
     weight: { type: Number },
