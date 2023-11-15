@@ -24,11 +24,12 @@ const orderSchema = new mongoose.Schema({
   cost: Number,
   paths: [
     {
-      center_id: String,
-      user_id: { type: String, default: null },
+      center_name: String,
+      user_name: { type: String, default: null },
       time: { type: Date, default: Date.now },
     },
   ],
+  delivered: { type: Boolean, default: false },
 });
 
 orderSchema.plugin(mongoose_delete, { overrideMethods: "all" });
