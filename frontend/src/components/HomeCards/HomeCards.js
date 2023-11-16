@@ -28,12 +28,13 @@ function HomeCards() {
   ];
   return (
     <Container className="home-cards-container">
-      {cards.map(card => {
+      {cards.map((card, index) => {
         return (
             <HomeCard 
                 title={card.title}
                 description={card.description}
                 imgSrc={card.imgSrc}
+                key={index}
             />
         )
       })}

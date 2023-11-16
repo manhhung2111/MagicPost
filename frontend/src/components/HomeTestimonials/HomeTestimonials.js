@@ -10,7 +10,7 @@ function HomeTestimonials() {
     <Container className="testimonials-container">
       <Row className="mb-3">
         <Col sm={12} className="header">
-          <h1 class="mb-2 text-center">Meet real customers</h1>
+          <h1 className="mb-2 text-center">Meet real customers</h1>
           <p>
             Learn how different companies have benefited from our digital
             logistics services to grow their business and move their goods
