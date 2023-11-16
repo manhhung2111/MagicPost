@@ -1,19 +1,29 @@
 $accordion-icon-transition: transform 1s ease-in-out;
 $accordion-transition: border-radius 1s ease;
 @import "~bootstrap/scss/bootstrap";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap");
+
 html {
   font-size: 62.5%;
+  font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  background-color: #f5f5f5;
 }
 
 .app-container {
   position: relative;
   max-height: 100vh;
-  // width: 100vw;
+  width: 100vw;
   overflow: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
+
   .nav-bar-custom {
     background: transparent;
     transition: all 1s ease;
@@ -24,12 +34,14 @@ html {
         rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
       .nav-brand {
+        transition: color 1s ease-in;
         .icon,
         h3 {
           color: black;
         }
       }
       .nav-links {
+        transition: color 1s ease-in;
         .nav-link {
           color: black;
         }
@@ -96,7 +108,7 @@ html {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0.7rem 2rem; 
+        padding: 0.7rem 2rem;
         // line-height: 2.5em;
         overflow: hidden;
         // margin: 20px;
@@ -133,6 +145,36 @@ html {
           top: -30px;
           left: -30px;
         }
+      }
+    }
+  }
+  main {
+    min-height: 59vh;
+    -webkit-animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+
+    @-webkit-keyframes fade-in-fwd {
+      0% {
+        -webkit-transform: translateZ(-80px);
+        transform: translateZ(-80px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        opacity: 1;
+      }
+    }
+    @keyframes fade-in-fwd {
+      0% {
+        -webkit-transform: translateZ(-80px);
+        transform: translateZ(-80px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        opacity: 1;
       }
     }
   }

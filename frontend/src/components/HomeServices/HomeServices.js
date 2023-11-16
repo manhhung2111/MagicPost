@@ -42,12 +42,13 @@ function HomeServices() {
         neat reports — all in one place.
       </p>
       <div className="services">
-        {services.map((service) => {
+        {services.map((service, index) => {
           return (
             <HomeService
               title={service.title}
               description={service.description}
               imgSrc={service.imgSrc}
+              key={index}
             />
           );
         })}
