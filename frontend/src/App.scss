@@ -1,38 +1,181 @@
-.App {
-  text-align: center;
+$accordion-icon-transition: transform 1s ease-in-out;
+$accordion-transition: border-radius 1s ease;
+@import "~bootstrap/scss/bootstrap";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap");
+
+html {
+  font-size: 62.5%;
+  font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  height: 100%;
+  background-color: #f5f5f5;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.app-container {
+  position: relative;
+  max-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  .nav-bar-custom {
+    background: transparent;
+    transition: all 1s ease;
+    &.blur {
+      // backdrop-filter: blur(5px);
+      background-color: whitesmoke;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
-.App-link {
-  color: #61dafb;
-}
+      .nav-brand {
+        transition: color 1s ease-in;
+        .icon,
+        h3 {
+          color: black;
+        }
+      }
+      .nav-links {
+        transition: color 1s ease-in;
+        .nav-link {
+          color: black;
+        }
+        .signin-btn {
+          --color: black;
+          border: 2px solid black;
+          &:hover {
+            color: whitesmoke;
+          }
+        }
+      }
+    }
+    .nav-brand {
+      text-decoration: none;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      .icon {
+        font-size: 2.5rem;
+        color: white;
+      }
+      h3 {
+        font-size: 2.3rem;
+        color: white;
+      }
+    }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      .nav-link {
+        font-size: 1.6rem;
+        position: relative;
+        color: white;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        display: inline-block;
+        height: 1em;
+        width: 100%;
+        border-bottom: 1px solid;
+        margin-top: 10px;
+        opacity: 0;
+        -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+        transition: opacity 0.35s, transform 0.35s;
+        -webkit-transform: scale(0, 1);
+        transform: scale(0, 1);
+      }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+      .signin-btn {
+        --color: whitesmoke;
+        font-family: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.7rem 2rem;
+        // line-height: 2.5em;
+        overflow: hidden;
+        // margin: 20px;
+        font-size: 1.7rem;
+        z-index: 1;
+        color: var(--color);
+        // border: 2px solid var(--color);
+        border: none;
+        border-radius: 7px;
+        position: relative;
+        background-color: transparent;
+
+        &::before {
+          position: absolute;
+          content: "";
+          background: var(--color);
+          width: 150px;
+          height: 200px;
+          z-index: -1;
+          border-radius: 50%;
+        }
+
+        &:hover {
+          color: black;
+        }
+
+        &:before {
+          top: 100%;
+          left: 100%;
+          transition: 0.3s all;
+        }
+
+        &:hover::before {
+          top: -30px;
+          left: -30px;
+        }
+      }
+    }
   }
-  to {
-    transform: rotate(360deg);
+  main {
+    min-height: 59vh;
+    -webkit-animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+
+    @-webkit-keyframes fade-in-fwd {
+      0% {
+        -webkit-transform: translateZ(-80px);
+        transform: translateZ(-80px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        opacity: 1;
+      }
+    }
+    @keyframes fade-in-fwd {
+      0% {
+        -webkit-transform: translateZ(-80px);
+        transform: translateZ(-80px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        opacity: 1;
+      }
+    }
   }
 }
