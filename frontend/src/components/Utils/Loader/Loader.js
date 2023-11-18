@@ -1,7 +1,7 @@
 import "./Loader.scss";
 
 function Loader() {
-  return <div class="loader-container"></div>;
+  return <div className="loader-container"></div>;
 }
 
 export default Loader;

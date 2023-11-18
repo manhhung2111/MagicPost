@@ -1,8 +1,8 @@
 import Container from "react-bootstrap/Container";
 import "./Pages.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import Loader from "../components/Loader/Loader";
+import Loader from "../components/Utils/Loader/Loader";
 import { FaArrowRight, FaCheck, FaRegClock } from "react-icons/fa6";
 import ParcelValueTable from "../components/TrackingComponents/ParcelValueTable";
 import approvedImg from "../assets/approved.png";
@@ -32,8 +32,8 @@ function TrackingPage() {
   ];
 
   const parcelWeight = [
-    { title: "Actual Weight:", value: "30" },
-    { title: "Converted Weight:", value: "0" },
+    { title: "Actual weight:", value: "30" },
+    { title: "Converted weight:", value: "0" },
   ];
   return (
     <Container className="tracking-page">
@@ -50,7 +50,7 @@ function TrackingPage() {
             placeholder="Parcel Tracking Id"
           />
         </div>
-        <button class="button" onClick={() => handleSearchParcel()}>
+        <button className="button" onClick={() => handleSearchParcel()}>
           {" "}
           Search{" "}
         </button>
@@ -164,14 +164,14 @@ function TrackingPage() {
                       </p>
 
                       <div className="check-box-group">
-                        <label class="checkBox">
-                          <input type="checkbox" class="input" checked disabled/>
-                          <span class="custom-checkbox"></span>
+                        <label className="checkBox">
+                          <input type="checkbox" className="input" checked disabled/>
+                          <span className="custom-checkbox"></span>
                           Document
                         </label>
-                        <label class="checkBox">
-                          <input type="checkbox" class="input" disabled/>
-                          <span class="custom-checkbox"></span>
+                        <label className="checkBox">
+                          <input type="checkbox" className="input" disabled/>
+                          <span className="custom-checkbox"></span>
                           Package
                         </label>
                       </div>
@@ -202,31 +202,31 @@ function TrackingPage() {
                       <b>6. Sender's instructions for undeliverable parcel</b>
                     </p>
                     <div className="check-box-group">
-                      <label class="checkBox">
-                        <input type="checkbox" class="input" checked disabled/>
-                        <span class="custom-checkbox"></span>
+                      <label className="checkBox">
+                        <input type="checkbox" className="input" checked disabled/>
+                        <span className="custom-checkbox"></span>
                         Return immediately
                       </label>
-                      <label class="checkBox">
-                        <input type="checkbox" class="input" disabled/>
-                        <span class="custom-checkbox"></span>
+                      <label className="checkBox">
+                        <input type="checkbox" className="input" disabled/>
+                        <span className="custom-checkbox"></span>
                         Call the recipient
                       </label>
-                      <label class="checkBox">
-                        <input type="checkbox" class="input" disabled/>
-                        <span class="custom-checkbox"></span>
+                      <label className="checkBox">
+                        <input type="checkbox" className="input" disabled/>
+                        <span className="custom-checkbox"></span>
                         Cancel
                       </label>
                     </div>
                     <div className="check-box-group">
-                      <label class="checkBox">
-                        <input type="checkbox" class="input" disabled/>
-                        <span class="custom-checkbox"></span>
+                      <label className="checkBox">
+                        <input type="checkbox" className="input" disabled/>
+                        <span className="custom-checkbox"></span>
                         Return before Sep 6th
                       </label>
-                      <label class="checkBox">
-                        <input type="checkbox" class="input" checked disabled/>
-                        <span class="custom-checkbox"></span>
+                      <label className="checkBox">
+                        <input type="checkbox" className="input" checked disabled/>
+                        <span className="custom-checkbox"></span>
                         Return at the end of storage period
                       </label>
                     </div>
