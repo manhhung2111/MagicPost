@@ -3,6 +3,8 @@ import express from "express";
 require("dotenv").config();
 import cors from "cors";
 
+import router from "./routes/api";
+
 import Center from "./models/Center";
 import Order from "./models/Order";
 import Role from "./models/Role";
@@ -11,6 +13,7 @@ import URL from "./models/URL";
 import User from "./models/User";
 
 const app = express();
+
 const corsOptions = {
   origin: "http://localhost:3000",
   // credentials:true,            //access-control-allow-credentials:true
@@ -26,7 +29,7 @@ const dbName = process.env.DB_NAME;
 // get data
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
-
+app.use("/", router);
 
 (async function () {
   try {
