@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema({
     {
       center_name: String,
       user_name: { type: String, default: null },
-      time: { type: Date, default: Date.now },
+      time: { type: String, default: null },
     },
   ],
   delivered: { type: Boolean, default: false },

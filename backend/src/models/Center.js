@@ -9,6 +9,7 @@ const centerSchema = new mongoose.Schema({
   phone: String,
   email: String,
   orders: [{ order_id: String, next_center_id: String }],
+  responsible_locations: [],
 });
 
 centerSchema.plugin(mongoose_delete, { overrideMethods: "all" });
