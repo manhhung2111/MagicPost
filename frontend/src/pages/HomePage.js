@@ -1,9 +1,9 @@
-import Intro from "../components/Intro/Intro";
-import HomeCards from "../components/HomeCards/HomeCards";
-import HomeServices from "../components/HomeServices/HomeServices";
-import HomeTestimonials from "../components/HomeTestimonials/HomeTestimonials";
-import HomeFAQ from "../components/HomeFAQ/HomeFAQ";
-import Slider from "../components/Slider/Slider";
+import Intro from "../components/HomeComponents/Intro/Intro";
+import HomeCards from "../components/HomeComponents/HomeCards/HomeCards";
+import HomeServices from "../components/HomeComponents/HomeServices/HomeServices";
+import HomeTestimonials from "../components/HomeComponents/HomeTestimonials/HomeTestimonials";
+import HomeFAQ from "../components/HomeComponents/HomeFAQ/HomeFAQ";
+import Slider from "../components/HomeComponents/Slider/Slider";
 function HomePage() {
   return (
     <>

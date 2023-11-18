@@ -7,7 +7,7 @@ import { BiPackage } from "react-icons/bi";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Footer from "./components/Footer/Footer";
-import LoginModal from "./components/LoginModal/LoginModal";
+import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");

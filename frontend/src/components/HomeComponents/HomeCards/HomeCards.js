@@ -1,8 +1,8 @@
 import HomeCard from "./HomeCard";
 import "./HomeCard.scss";
-import freightTruck from "../../assets/freight_truck.jpg";
-import freightShip from "../../assets/freight_ship.jpg";
-import freightRailRoad from "../../assets/freight_railroad.jpg";
+import freightTruck from "../../../assets/freight_truck.jpg";
+import freightShip from "../../../assets/freight_ship.jpg";
+import freightRailRoad from "../../../assets/freight_railroad.jpg";
 import Container from 'react-bootstrap/Container';
 
 function HomeCards() {
