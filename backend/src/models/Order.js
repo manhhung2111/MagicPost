@@ -17,14 +17,14 @@ const orderSchema = new mongoose.Schema({
     ],
 
     senderInfo: {
-      name: { type: String, defaul: null },
+      nameAddress: { type: String, defaul: null },
       address: { type: String, defaul: null },
       phoneNum: { type: String, defaul: null },
       zipcode: { type: String, defaul: "10000" },
       customerID: { type: String, default: null },
     },
     recipientInfo: {
-      name: { type: String, defaul: null },
+      nameAddress: { type: String, defaul: null },
       address: { type: String, defaul: null },
       phoneNum: { type: String, defaul: null },
       zipcode: { type: String, defaul: "10000" },

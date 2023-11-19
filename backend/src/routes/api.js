@@ -3,6 +3,7 @@ import {
   handleCreateOrder,
   handleVerifyShipment,
   handleGetParcelID,
+  handleGetAllResponsibleLocations,
 } from "../controllers/gdvController";
 import { handleGetDTK } from "../controllers/gdControler";
 import {
@@ -53,6 +54,11 @@ router.put("/order", async (req, res) => {
 router.get("/order", async (req, res) => {
   const data = req.body.id;
   const result = await handleGetParcelID(data);
+  res.send(result);
+});
+
+router.get("/resLocations", async (req, res) => {
+  const result = await handleGetAllResponsibleLocations();
   res.send(result);
 });
 

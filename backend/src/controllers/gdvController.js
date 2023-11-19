@@ -130,4 +130,21 @@ const handleGetParcelID = async (id) => {
   };
 };
 
-export { handleCreateOrder, handleVerifyShipment, handleGetParcelID };
+const handleGetAllResponsibleLocations = async () => {
+  const allCenter = await Center.find();
+  let allResponsibleLocations = [];
+  for (let i = 0; i < allCenter.length; i++) {
+    const responsible_location = allCenter[i]["responsible_locations"];
+    if (responsible_location.length > 0) {
+      allResponsibleLocations.push(...responsible_location);
+    }
+  }
+  return allResponsibleLocations;
+};
+
+export {
+  handleCreateOrder,
+  handleVerifyShipment,
+  handleGetParcelID,
+  handleGetAllResponsibleLocations,
+};
