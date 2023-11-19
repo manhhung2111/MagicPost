@@ -2,6 +2,7 @@ import express from "express";
 import {
   handleCreateOrder,
   handleVerifyShipment,
+  handleGetParcelID,
 } from "../controllers/gdvController";
 import { handleGetDTK } from "../controllers/gdControler";
 import {
@@ -46,6 +47,12 @@ router.post("/order", async (req, res) => {
 router.put("/order", async (req, res) => {
   const data = req.body;
   const result = await handleVerifyShipment(data);
+  res.send(result);
+});
+
+router.get("/order", async (req, res) => {
+  const data = req.body.id;
+  const result = await handleGetParcelID(data);
   res.send(result);
 });
 

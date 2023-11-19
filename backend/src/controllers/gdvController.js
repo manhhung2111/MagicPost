@@ -3,12 +3,20 @@ import Center from "../models/Center";
 
 const handleCreateOrder = async (data) => {
   const paths = [];
-  const receiver_location = data["receiver"]["address"];
+  const {
+    senderInfo,
+    recipientInfo,
+    additionalService,
+    sender_instruction,
+    notes,
+    deliveryFare,
+    weight,
+    recipientFare,
+  } = data.packageInfo;
+  const receiver_location = recipientInfo["address"];
   const receiverCenter = "GD1";
   const currentUser = "GD1_V";
   // construting paths
-
-  console.log(data["paths"]);
   const paths_name = [receiverCenter];
   const currentdate = new Date();
   const currentTime =
@@ -62,8 +70,11 @@ const handleCreateOrder = async (data) => {
     { orders: [...centerInfo.orders, result._id] },
     { new: true }
   );
-  console.log(updatedOrders);
-  return updatedOrders;
+  return {
+    errorCode: 0,
+    data: result,
+    message: "Get All Barem diem successfully",
+  };
 };
 
 const handleCreateShipmentToCenter = async (data) => {};
@@ -103,4 +114,20 @@ const handleVerifyShipment = async (data) => {
   return result;
 };
 
-export { handleCreateOrder, handleVerifyShipment };
+const handleGetParcelID = async (id) => {
+  const result = await Order.findOne({ parcelId: id });
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: "Parcel not found",
+    };
+  }
+  return {
+    errorCode: 1,
+    data: [],
+    message: "Parcel not found",
+  };
+};
+
+export { handleCreateOrder, handleVerifyShipment, handleGetParcelID };
