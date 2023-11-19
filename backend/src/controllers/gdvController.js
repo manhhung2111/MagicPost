@@ -139,7 +139,7 @@ const handleGetAllResponsibleLocations = async () => {
       allResponsibleLocations.push(...responsible_location);
     }
   }
-  if (result) {
+  if (allResponsibleLocations) {
     return {
       errorCode: 0,
       data: allResponsibleLocations,
