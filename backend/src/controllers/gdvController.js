@@ -73,7 +73,7 @@ const handleCreateOrder = async (data) => {
   return {
     errorCode: 0,
     data: result,
-    message: "Get All Barem diem successfully",
+    message: "Create order successfully",
   };
 };
 
@@ -120,7 +120,7 @@ const handleGetParcelID = async (id) => {
     return {
       errorCode: 0,
       data: result,
-      message: "Parcel not found",
+      message: "Parcel found successfully",
     };
   }
   return {
@@ -139,7 +139,18 @@ const handleGetAllResponsibleLocations = async () => {
       allResponsibleLocations.push(...responsible_location);
     }
   }
-  return allResponsibleLocations;
+  if (result) {
+    return {
+      errorCode: 0,
+      data: allResponsibleLocations,
+      message: "Locations found successfully",
+    };
+  }
+  return {
+    errorCode: 1,
+    data: [],
+    message: "LOcations not found",
+  };
 };
 
 export {
