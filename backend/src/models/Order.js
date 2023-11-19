@@ -2,26 +2,57 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const orderSchema = new mongoose.Schema({
-  package: {
-    category: { type: String },
-    weight: { type: Number },
+  parcelId: { type: String },
+  packageInfo: {
+    typeOfParcel: {
+      isDocument: { type: Boolean, defaul: false },
+    },
+    parcelContentValue: [
+      {
+        content: String,
+        quantity: { type: String, default: "0" },
+        value: { type: String, default: "0" },
+        attachment: String,
+      },
+    ],
+
+    senderInfo: {
+      name: { type: String, defaul: null },
+      address: { type: String, defaul: null },
+      phoneNum: { type: String, defaul: null },
+      zipcode: { type: String, defaul: "10000" },
+      customerID: { type: String, default: null },
+    },
+    recipientInfo: {
+      name: { type: String, defaul: null },
+      address: { type: String, defaul: null },
+      phoneNum: { type: String, defaul: null },
+      zipcode: { type: String, defaul: "10000" },
+    },
+    additionalService: { type: String, default: null },
+    sender_instruction: {
+      returnImmediately: { type: Boolean, default: false },
+      callRecipient: { type: Boolean, default: false },
+      cancel: { type: Boolean, default: false },
+      returnBefore: { type: Boolean, default: false },
+      returnAfterStorage: { type: Boolean, default: false },
+    },
+    notes: String,
+    deliveryFare: {
+      primary: String,
+      subordinated: String,
+      vat: String,
+      another: String,
+    },
+    weight: {
+      actual: String,
+      converted: String,
+    },
+    recipientFare: {
+      cod: String,
+      another: String,
+    },
   },
-  sender: {
-    name: { type: String },
-    address: { type: String },
-    zip_code: { type: String },
-    phone: { type: String },
-    email: { type: String },
-    request: { type: String },
-  },
-  receiver: {
-    name: { type: String },
-    address: { type: String },
-    zip_code: { type: String },
-    phone: { type: String },
-    email: { type: String },
-  },
-  cost: Number,
   paths: [
     {
       center_name: String,
