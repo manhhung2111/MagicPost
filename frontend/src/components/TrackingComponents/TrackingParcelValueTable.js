@@ -1,6 +1,6 @@
 import Table from "react-bootstrap/Table";
 
-function ParcelValueTable({ parcelValues }) {
+function TrackingParcelValueTable({ parcelValues }) {
   return (
     <Table striped bordered hover>
       <thead>
@@ -23,4 +23,4 @@ function ParcelValueTable({ parcelValues }) {
   );
 }
 
-export default ParcelValueTable;
+export default TrackingParcelValueTable;
