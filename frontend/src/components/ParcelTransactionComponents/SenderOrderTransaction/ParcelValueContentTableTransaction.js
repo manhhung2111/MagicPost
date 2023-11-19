@@ -1,7 +1,12 @@
 import Table from "react-bootstrap/Table";
 
-function ParcelValueContentTableTransaction({parcelValues, isDeletedRows, handleChangeParcelValues, handleRemoveRows, handleAddMoreRow}) {
-  
+function ParcelValueContentTableTransaction({
+  parcelValues,
+  isDeletedRows,
+  handleChangeParcelValues,
+  handleRemoveRows,
+  handleAddMoreRow,
+}) {
   return (
     <div className="parcel-value-table">
       <Table striped bordered hover className="table">
