@@ -2,10 +2,13 @@ import Container from "react-bootstrap/Container";
 import "./SenderOrderTransaction.scss";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import ParcelValueContentTableTransaction from "./ParcelValueContentTableTransaction";
 import { useEffect, useState } from "react";
 import _ from "lodash";
-import ShortUniqueId from 'short-unique-id';
+import ShortUniqueId from "short-unique-id";
+import { handleGetAllDistricts } from "../../../services/transactionServices";
 
 function SenderOrderTransaction() {
   const initialParcelContentValue = {
@@ -23,7 +26,7 @@ function SenderOrderTransaction() {
   const [senderInfo, setSenderInfo] = useState({
     nameAddress: "",
     phoneNum: "",
-    customerId: "",
+    customerId: "None",
   });
   const [recipientInfo, setRecipientInfo] = useState({
     nameAddress: "",
@@ -46,23 +49,50 @@ function SenderOrderTransaction() {
     subordinated: "",
     vat: "",
     another: "",
+    total: "",
   });
 
   const [weight, setWeight] = useState({ actual: "", converted: "" });
   const [recipientFare, setRecipientFare] = useState({ cod: "", another: "" });
+  const [allDistricts, setAllDistricts] = useState([]);
+  // useEffect(() => {
+  //   const fetchApi = async () => {
+  //     const res = await handleGetAllDistricts();
+  //     console.log(res);
+  //   };
+  //   fetchApi();
+  // }, []);
 
   useEffect(() => {
     if (
       senderInfo.nameAddress &&
       senderInfo.phoneNum &&
       recipientInfo.nameAddress &&
-      recipientInfo.phoneNum && !recipientInfo.parcelId
+      recipientInfo.phoneNum &&
+      !recipientInfo.parcelId
     ) {
       const serialNum = new ShortUniqueId({ length: 9 });
       const parcelId = "MP" + serialNum.rnd() + "HN";
       setRecipientInfo((prev) => ({ ...prev, parcelId: parcelId }));
     }
   }, [senderInfo, recipientInfo]);
+
+  useEffect(() => {
+    if (
+      !isNaN(+deliveryFare.primary) &&
+      !isNaN(+deliveryFare.subordinated) &&
+      !isNaN(+deliveryFare.vat) &&
+      !isNaN(+deliveryFare.another)
+    ) {
+      console.log("trigger");
+      const total =
+        +deliveryFare.primary +
+        +deliveryFare.subordinated +
+        +deliveryFare.vat +
+        +deliveryFare.another;
+      setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
+    }
+  }, [deliveryFare]);
   const handleChangeParcelContentValues = (value, index, key) => {
     const clone = _.cloneDeep(parcelContentValues);
     clone[index][key] = value;
@@ -121,22 +151,50 @@ function SenderOrderTransaction() {
     clone[key] = value;
     setRecipientFare((prev) => clone);
   };
+
   const handleSubmitOrder = () => {
-    console.log(
-      parcelContentValues,
-      senderInfo,
-      recipientInfo,
-      isDocument,
-      additionalService,
-      senderInstruction,
-      notes,
-      deliveryFare,
-      weight,
-      recipientFare
-    );
+    const { phoneNum, nameAddress, parcelId } = recipientInfo;
+    const parcel = {
+      parcelId: parcelId,
+      senderInfo: senderInfo,
+      recipientInfo: {
+        phoneNum,
+        nameAddress,
+      },
+      typeOfParcel: {
+        isDocument: isDocument,
+      },
+      additionalService: additionalService,
+      senderInstruction: {
+        returnImmediately: senderInstruction.returnImmediately,
+        callRecipient: senderInstruction.callRecipient,
+        cancel: senderInstruction.cancel,
+        returnBefore: senderInstruction.returnBefore,
+        returnAfterStorage: senderInstruction.returnAfterStorage,
+      },
+      notes: notes,
+      deliveryFare: {
+        primary: deliveryFare.primary,
+        subordinated: deliveryFare.subordinated,
+        vat: deliveryFare.vat,
+        another: deliveryFare.another,
+      },
+      weight: {
+        actual: weight.actual,
+        converted: weight.converted,
+      },
+      recipientFare: {
+        cod: recipientFare.actual,
+        another: recipientFare.another,
+      },
+    };
+    // setShowModal(true);
   };
   return (
-    <Container className="sender-order-transaction-container">
+    <Container
+      className="sender-order-transaction-container"
+      id="sender-order-transaction"
+    >
       <h2>Create new order</h2>
       <div className="sender-information">
         <p>1. Sender's information</p>
@@ -173,21 +231,43 @@ function SenderOrderTransaction() {
                 }
               />
             </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Sender's customer Id"
-              className="input"
-              value={senderInfo.customerId}
-              onChange={(e) =>
-                handleChangeSenderInfo(e.target.value, "customerId")
-              }
-            >
-              <Form.Control
-                type="text"
-                placeholder="name@example.com"
-                size="lg"
-              />
-            </FloatingLabel>
+
+            <Row className="g-2">
+              <Col md>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Sender's customer Id"
+                  className="input"
+                  value={senderInfo.customerId}
+                  onChange={(e) =>
+                    handleChangeSenderInfo(e.target.value, "customerId")
+                  }
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="name@example.com"
+                    size="lg"
+                  />
+                </FloatingLabel>
+              </Col>
+              <Col md>
+                <FloatingLabel
+                  controlId="floatingSelectGrid"
+                  label="Select the district"
+                  className="input"
+                >
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    style={{ paddingBottom: "3px" }}
+                  >
+                    <option disabled>Select the sender district</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
+                </FloatingLabel>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
@@ -226,20 +306,42 @@ function SenderOrderTransaction() {
                 }
               />
             </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Parcel Id"
-              className="input"
-              title="Fill all sender's and recipient's information to get Parcel Id"
-            >
-              <Form.Control
-                type="text"
-                placeholder="name@example.com"
-                size="lg"
-                disabled
-                value={recipientInfo.parcelId}
-              />
-            </FloatingLabel>
+
+            <Row className="g-2">
+              <Col md>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Parcel Id"
+                  className="input"
+                  title="Fill all sender's and recipient's information to get Parcel Id"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="name@example.com"
+                    size="lg"
+                    disabled
+                    value={recipientInfo.parcelId}
+                  />
+                </FloatingLabel>
+              </Col>
+              <Col md>
+                <FloatingLabel
+                  controlId="floatingSelectGrid"
+                  label="Select the district"
+                  className="input"
+                >
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    style={{ paddingBottom: "3px" }}
+                  >
+                    <option disabled>Select the sender district</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
+                </FloatingLabel>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
@@ -451,6 +553,7 @@ function SenderOrderTransaction() {
               type="text"
               placeholder="Leave a comment here"
               size="lg"
+              value={deliveryFare.total}
               disabled
             />
           </FloatingLabel>
@@ -536,6 +639,50 @@ function SenderOrderTransaction() {
       <button className="submit" onClick={() => handleSubmitOrder()}>
         Create Order
       </button>
+      {/* <ConfirmSenderOrderTransactionModal
+        senderInfo={senderInfo}
+        recipientInfo={recipientInfo}
+        typeOfParcel={{ isDocument }}
+        deliveryFare={[
+          {
+            index: "a",
+            title: "Primary Fare: ",
+            value: deliveryFare.primary,
+          },
+          {
+            index: "b",
+            title: "Subordinated Fare: ",
+            value: deliveryFare.subordinated,
+          },
+          { index: "c", title: "VAT:", value: deliveryFare.vat },
+          {
+            index: "d",
+            title: "Total Fare (VAT included):",
+            value: "12.312",
+          },
+          {
+            index: "e",
+            title: "Another Fare: ",
+            value: deliveryFare.another,
+          },
+          { index: "f", title: "Total", value: "12.312" },
+        ]}
+        recipientFare={[
+          { title: "COD", value: recipientFare.cod },
+          { title: "Another fare", value: recipientFare.another },
+          { title: "Total", value: 0 },
+        ]}
+        notes={notes}
+        weight={[
+          { title: "Actual weight:", value: weight.actual },
+          { title: "Converted weight:", value: weight.converted },
+        ]}
+        parcelValues={parcelContentValues}
+        additionalService={additionalService}
+        senderInstruction={senderInstruction}
+        show={showModal}
+        setShow={setShowModal}
+      /> */}
     </Container>
   );
 }
