@@ -1,8 +1,8 @@
 import Carousel from "react-bootstrap/Carousel";
 import React, { useState } from "react";
-import airFreight from "../../assets/header_air_cargo.jpg";
-import truckFreight from "../../assets/header_truck.jpg";
-import shipFreight from "../../assets/header_ship.jpg";
+import airFreight from "../../../assets/header_air_cargo.jpg";
+import truckFreight from "../../../assets/header_truck.jpg";
+import shipFreight from "../../../assets/header_ship.jpg";
 import "./Slider.scss";
 function Slider() {
   const slides = [

@@ -1,6 +1,4 @@
-$accordion-icon-transition: transform 1s ease-in-out;
-$accordion-transition: border-radius 1s ease;
-@import "~bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/bootstrap";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap");
 
 html {
@@ -149,7 +147,7 @@ body {
     }
   }
   main {
-    min-height: 59vh;
+    min-height: calc(59vh - 20px);
     -webkit-animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
     animation: fade-in-fwd 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 

@@ -1,5 +1,3 @@
-import Button from "react-bootstrap/Button";
-
 import Modal from "react-bootstrap/Modal";
 
 import "./LoginModal.scss";
@@ -17,8 +15,8 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
           <Modal.Title className="heading">Login form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form class="form">
-            <div class="input">
+          <form className="form">
+            <div className="input">
               <input
                 type="text"
                 className="input-field"
@@ -41,14 +39,12 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
               <input type="password" className="input-field" required />
               <label className="input-label">Password</label>
             </div>
-            <div className="action">
-              <button className="action-button">Get started</button>
-            </div>
+            <button>Log in</button>
           </form>
           <div className="card-info">
             <p>
               By logging in you are agreeing to our{" "}
-              <a href="#">Terms and Conditions</a>
+              <b>Terms and Conditions</b>
             </p>
           </div>
         </Modal.Body>
