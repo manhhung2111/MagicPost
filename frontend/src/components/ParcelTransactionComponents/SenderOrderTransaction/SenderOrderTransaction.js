@@ -8,7 +8,12 @@ import ParcelValueContentTableTransaction from "./ParcelValueContentTableTransac
 import { useEffect, useState } from "react";
 import _ from "lodash";
 import ShortUniqueId from "short-unique-id";
-import { handleGetAllDistricts } from "../../../services/transactionServices";
+import { toast } from "react-toastify";
+import {
+  handleCreateSenderOrder,
+  handleGetAllDistricts,
+} from "../../../services/transactionServices";
+import ConfirmSenderOrderTransactionModal from "./ConfirmSenderOrderTransactionModal";
 
 function SenderOrderTransaction() {
   const initialParcelContentValue = {
@@ -26,12 +31,14 @@ function SenderOrderTransaction() {
   const [senderInfo, setSenderInfo] = useState({
     nameAddress: "",
     phoneNum: "",
-    customerId: "None",
+    customerID: "None",
+    address: "",
   });
   const [recipientInfo, setRecipientInfo] = useState({
     nameAddress: "",
     phoneNum: "",
     parcelId: "",
+    address: "",
   });
 
   const [isDocument, setIsDocument] = useState(true);
@@ -55,19 +62,25 @@ function SenderOrderTransaction() {
   const [weight, setWeight] = useState({ actual: "", converted: "" });
   const [recipientFare, setRecipientFare] = useState({ cod: "", another: "" });
   const [allDistricts, setAllDistricts] = useState([]);
-  // useEffect(() => {
-  //   const fetchApi = async () => {
-  //     const res = await handleGetAllDistricts();
-  //     console.log(res);
-  //   };
-  //   fetchApi();
-  // }, []);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      const res = await handleGetAllDistricts();
+      setAllDistricts(res.data);
+      setSenderInfo((prev) => ({ ...prev, address: res.data[0] }));
+      setRecipientInfo((prev) => ({ ...prev, address: res.data[0] }));
+    };
+    fetchApi();
+  }, []);
 
   useEffect(() => {
     if (
       senderInfo.nameAddress &&
+      senderInfo.address &&
       senderInfo.phoneNum &&
       recipientInfo.nameAddress &&
+      recipientInfo.address &&
       recipientInfo.phoneNum &&
       !recipientInfo.parcelId
     ) {
@@ -79,18 +92,24 @@ function SenderOrderTransaction() {
 
   useEffect(() => {
     if (
-      !isNaN(+deliveryFare.primary) &&
-      !isNaN(+deliveryFare.subordinated) &&
-      !isNaN(+deliveryFare.vat) &&
-      !isNaN(+deliveryFare.another)
+      deliveryFare.primary.length !== 0 &&
+      deliveryFare.subordinated.length !== 0 &&
+      deliveryFare.vat.length !== 0 &&
+      deliveryFare.another.length !== 0
     ) {
-      console.log("trigger");
-      const total =
-        +deliveryFare.primary +
-        +deliveryFare.subordinated +
-        +deliveryFare.vat +
-        +deliveryFare.another;
-      setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
+      if (
+        !isNaN(+deliveryFare.primary) &&
+        !isNaN(+deliveryFare.subordinated) &&
+        !isNaN(+deliveryFare.vat) &&
+        !isNaN(+deliveryFare.another)
+      ) {
+        const total =
+          +deliveryFare.primary +
+          +deliveryFare.subordinated +
+          +deliveryFare.vat +
+          +deliveryFare.another;
+        setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
+      }
     }
   }, [deliveryFare]);
   const handleChangeParcelContentValues = (value, index, key) => {
@@ -152,43 +171,56 @@ function SenderOrderTransaction() {
     setRecipientFare((prev) => clone);
   };
 
-  const handleSubmitOrder = () => {
-    const { phoneNum, nameAddress, parcelId } = recipientInfo;
+  //Todo: 
+  const validateInputs = () => {
+
+  }
+  const handleSubmitOrder = async () => {
+    const { phoneNum, nameAddress, parcelId, address } = recipientInfo;
     const parcel = {
       parcelId: parcelId,
-      senderInfo: senderInfo,
-      recipientInfo: {
-        phoneNum,
-        nameAddress,
+      packageInfo: {
+        senderInfo: senderInfo,
+        recipientInfo: {
+          phoneNum,
+          nameAddress,
+          address,
+        },
+        typeOfParcel: {
+          isDocument: isDocument,
+        },
+        additionalService: additionalService,
+        sender_instruction: {
+          returnImmediately: senderInstruction.returnImmediately,
+          callRecipient: senderInstruction.callRecipient,
+          cancel: senderInstruction.cancel,
+          returnBefore: senderInstruction.returnBefore,
+          returnAfterStorage: senderInstruction.returnAfterStorage,
+        },
+        notes: notes,
+        deliveryFare: {
+          primary: deliveryFare.primary,
+          subordinated: deliveryFare.subordinated,
+          vat: deliveryFare.vat,
+          another: deliveryFare.another,
+        },
+        weight: {
+          actual: weight.actual,
+          converted: weight.converted,
+        },
+        recipientFare: {
+          cod: recipientFare.cod,
+          another: recipientFare.another,
+        },
+        parcelContentValue: parcelContentValues,
       },
-      typeOfParcel: {
-        isDocument: isDocument,
-      },
-      additionalService: additionalService,
-      senderInstruction: {
-        returnImmediately: senderInstruction.returnImmediately,
-        callRecipient: senderInstruction.callRecipient,
-        cancel: senderInstruction.cancel,
-        returnBefore: senderInstruction.returnBefore,
-        returnAfterStorage: senderInstruction.returnAfterStorage,
-      },
-      notes: notes,
-      deliveryFare: {
-        primary: deliveryFare.primary,
-        subordinated: deliveryFare.subordinated,
-        vat: deliveryFare.vat,
-        another: deliveryFare.another,
-      },
-      weight: {
-        actual: weight.actual,
-        converted: weight.converted,
-      },
-      recipientFare: {
-        cod: recipientFare.actual,
-        another: recipientFare.another,
-      },
+      paths: [],
     };
-    // setShowModal(true);
+    const result = await handleCreateSenderOrder(parcel);
+    if (result.errorCode === 0) {
+      toast.success(result.message);
+      setShowModal(true);
+    }
   };
   return (
     <Container
@@ -238,7 +270,7 @@ function SenderOrderTransaction() {
                   controlId="floatingInput"
                   label="Sender's customer Id"
                   className="input"
-                  value={senderInfo.customerId}
+                  value={senderInfo.customerID}
                   onChange={(e) =>
                     handleChangeSenderInfo(e.target.value, "customerId")
                   }
@@ -253,17 +285,20 @@ function SenderOrderTransaction() {
               <Col md>
                 <FloatingLabel
                   controlId="floatingSelectGrid"
-                  label="Select the district"
+                  label="Select sender's district"
                   className="input"
                 >
                   <Form.Select
                     aria-label="Floating label select example"
                     style={{ paddingBottom: "3px" }}
+                    value={senderInfo.address}
+                    onChange={(e) =>
+                      handleChangeSenderInfo(e.target.value, "address")
+                    }
                   >
-                    <option disabled>Select the sender district</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {allDistricts.map((district) => {
+                      return <option value={district}>{district}</option>;
+                    })}
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -327,17 +362,20 @@ function SenderOrderTransaction() {
               <Col md>
                 <FloatingLabel
                   controlId="floatingSelectGrid"
-                  label="Select the district"
+                  label="Select recipient's district"
                   className="input"
                 >
                   <Form.Select
                     aria-label="Floating label select example"
                     style={{ paddingBottom: "3px" }}
+                    value={recipientInfo.address}
+                    onChange={(e) =>
+                      handleChangeRecipientInfo(e.target.value, "address")
+                    }
                   >
-                    <option disabled>Select the sender district</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {allDistricts.map((district) => {
+                      return <option value={district}>{district}</option>;
+                    })}
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -639,50 +677,11 @@ function SenderOrderTransaction() {
       <button className="submit" onClick={() => handleSubmitOrder()}>
         Create Order
       </button>
-      {/* <ConfirmSenderOrderTransactionModal
-        senderInfo={senderInfo}
-        recipientInfo={recipientInfo}
-        typeOfParcel={{ isDocument }}
-        deliveryFare={[
-          {
-            index: "a",
-            title: "Primary Fare: ",
-            value: deliveryFare.primary,
-          },
-          {
-            index: "b",
-            title: "Subordinated Fare: ",
-            value: deliveryFare.subordinated,
-          },
-          { index: "c", title: "VAT:", value: deliveryFare.vat },
-          {
-            index: "d",
-            title: "Total Fare (VAT included):",
-            value: "12.312",
-          },
-          {
-            index: "e",
-            title: "Another Fare: ",
-            value: deliveryFare.another,
-          },
-          { index: "f", title: "Total", value: "12.312" },
-        ]}
-        recipientFare={[
-          { title: "COD", value: recipientFare.cod },
-          { title: "Another fare", value: recipientFare.another },
-          { title: "Total", value: 0 },
-        ]}
-        notes={notes}
-        weight={[
-          { title: "Actual weight:", value: weight.actual },
-          { title: "Converted weight:", value: weight.converted },
-        ]}
-        parcelValues={parcelContentValues}
-        additionalService={additionalService}
-        senderInstruction={senderInstruction}
+      <ConfirmSenderOrderTransactionModal
+        parcelId={recipientInfo.parcelId}
         show={showModal}
         setShow={setShowModal}
-      /> */}
+      />
     </Container>
   );
 }
