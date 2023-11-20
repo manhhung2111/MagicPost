@@ -359,6 +359,17 @@
                   }
                 }
               }
+              .parcel-content-value-table {
+                tr {
+                  td:first-child,
+                  td:last-child {
+                    max-width: 100px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  }
+                }
+              }
               &:first-of-type {
                 border-bottom: 2px solid black;
               }
@@ -475,19 +486,25 @@
               }
             }
             .section {
+              height: 100%;
               .parcel-approval {
                 padding: 7px;
                 border-right: 2px solid black;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding-bottom: 81px;
+                justify-content: space-between;
+                // padding-bottom: 81px;
+                flex: 1;
+                height: 100%;
               }
               .delivery-date {
                 padding: 7px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                // justify-content: space-around;
+                gap: 1rem;
                 p:not(:first-child) {
                   font-size: 1.2rem;
                 }

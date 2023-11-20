@@ -12,6 +12,9 @@ function TrackingParcelInformation({
   deliveryFare,
   weight,
   recipientFare,
+  parcelId,
+  paths,
+  delivered,
 }) {
   return (
     <div className="parcel-information">
@@ -47,7 +50,7 @@ function TrackingParcelInformation({
           </div>
           <div>
             <p>
-              <b>Parcel Id:</b> #{recipientInfo.parcelId}
+              <b>Parcel Id:</b> #{parcelId}
             </p>
             <div className="code">
               <p>
@@ -81,7 +84,7 @@ function TrackingParcelInformation({
                   <input
                     type="checkbox"
                     className="input"
-                    checked={typeOfParcel.isDocument}
+                    checked={!typeOfParcel.isDocument}
                     disabled
                   />
                   <span className="custom-checkbox"></span>
@@ -109,29 +112,54 @@ function TrackingParcelInformation({
             </p>
             <div className="check-box-group">
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnImmediately} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnImmediately}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return immediately
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.callRecipient} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.callRecipient}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Call the recipient
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.cancel} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.cancel}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Cancel
               </label>
             </div>
             <div className="check-box-group">
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnBefore}disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnBefore}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return before Sep 6th
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnAfterStorage} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnAfterStorage}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return at the end of storage period
               </label>
@@ -230,7 +258,7 @@ function TrackingParcelInformation({
                 <b>13. Post office approval</b>
               </p>
               <p>Receiving clerk's signature</p>
-              <img src={approvedImg} alt="post office aproval" width="70px" />
+              <img src={approvedImg} alt="post office aproval" width="110px" />
               <p>
                 <i>Phan Anh Duc</i>
               </p>
@@ -239,7 +267,7 @@ function TrackingParcelInformation({
               <p>
                 <b>14. Received date</b>
               </p>
-              <p>21:11, Nov 21, 2023</p>
+              <p>{`${delivered ? paths[3].time ?? "Delivered" : "Not delivered" }`}</p>
               <p>Recipient's signature</p>
               <p>
                 <i>hmanh</i>
