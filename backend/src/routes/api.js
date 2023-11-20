@@ -52,7 +52,7 @@ router.put("/order", async (req, res) => {
 });
 
 router.get("/order", async (req, res) => {
-  const data = req.body.id;
+  const data = req.query.id;
   const result = await handleGetParcelID(data);
   res.send(result);
 });

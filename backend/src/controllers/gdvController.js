@@ -20,7 +20,6 @@ const handleCreateOrder = async (data) => {
   const paths_name = [receiverCenter];
   const currentdate = new Date();
   const currentTime =
-    "Arrived at: " +
     currentdate.getDate() +
     "/" +
     (currentdate.getMonth() + 1) +
@@ -51,7 +50,9 @@ const handleCreateOrder = async (data) => {
   const path = {
     center_name: paths_name[0],
     user_name: currentUser,
-    time: currentTime,
+    time: {
+      timeArrived: currentTime,
+    },
   };
   paths.push(path);
   for (let i = 1; i < paths_name.length; i++) {
@@ -87,7 +88,6 @@ const handleVerifyShipment = async (data) => {
   const order = await Order.findOne({ _id: orderID });
   const currentdate = new Date();
   const currentTime =
-    "Arrived at: " +
     currentdate.getDate() +
     "/" +
     (currentdate.getMonth() + 1) +
@@ -103,7 +103,7 @@ const handleVerifyShipment = async (data) => {
   for (let i = 0; i < order["paths"].length; i++) {
     if (order["paths"][i]["center_name"] == currentCenter) {
       order["paths"][i]["user_name"] = currentUser;
-      order["paths"][i]["time"] = currentTime;
+      order["paths"][i]["time"]["timeArrived"] = currentTime;
     }
   }
   const result = await Order.findOneAndUpdate({ _id: orderID }, order, {
