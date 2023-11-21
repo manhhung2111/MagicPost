@@ -1,5 +1,6 @@
 import Order from "../models/Order";
 import Center from "../models/Center";
+import Shipment from "../models/Shipment";
 
 const handleCreateOrder = async (data) => {
   const paths = [];
@@ -78,8 +79,6 @@ const handleCreateOrder = async (data) => {
   };
 };
 
-const handleCreateShipmentToCenter = async (data) => {};
-
 const handleVerifyShipment = async (data) => {
   // sửa order paths
   const currentCenter = "TK1";
@@ -109,7 +108,6 @@ const handleVerifyShipment = async (data) => {
   const result = await Order.findOneAndUpdate({ _id: orderID }, order, {
     new: true,
   });
-  // sửa center.orders
 
   return result;
 };
@@ -153,9 +151,45 @@ const handleGetAllResponsibleLocations = async () => {
   };
 };
 
+const handleCreateShipment = async (data) => {
+  const result = await Shipment.create(data);
+  if (result) {
+    return {
+      errorCode: 0,
+      data : `Create shipment to ${data["destination"]["center_id"]} successfully`,
+    };
+  }
+};
+
+const handleGetResponsibleOrder = async () => {
+  let result = [];
+  const currentCenter = "GD1";
+  const user_name = "GD1_V";
+  const allOrders = await Order.find();
+  for (let i = 0; i < allOrders.length; i++) {
+    const path = allOrders[i]["paths"];
+    for (let j = 0; j < path.length; j++) {
+      if (
+        path[j]["user_name"] === user_name &&
+        path[j]["center_name"] === currentCenter
+      ) {
+        result.push(allOrders[i]["parcelId"]);
+      }
+    }
+  }
+  
+  return {
+    errorCode: 0,
+    data: result,
+    message: `Load all parcel responsible by ${user_name} in ${currentCenter} successfully`,
+  };
+};
+
 export {
   handleCreateOrder,
   handleVerifyShipment,
   handleGetParcelID,
   handleGetAllResponsibleLocations,
+  handleGetResponsibleOrder,
+  handleCreateShipment
 };
