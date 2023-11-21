@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
 import "./Pages.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import Loader from "../components/Utils/Loader/Loader";
 import { FaArrowRight, FaCheck, FaRegClock } from "react-icons/fa6";
@@ -8,18 +8,20 @@ import { useNavigate } from "react-router-dom";
 import TrackingParcelInformation from "../components/TrackingComponents/TrackingParcelInformation";
 import { handleGetParcelById } from "../services/trackingService";
 import { toast } from "react-toastify";
+import { useSearchParams } from "react-router-dom";
 
 function TrackingPage() {
   const [trackingId, setTrackingId] = useState("");
   const [isSearching, setIsSearching] = useState("beofre");
   const [parcelInfo, setParcelInfo] = useState({});
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const handleSearchParcel = async () => {
+  const handleSearchParcel = async (id) => {
     setIsSearching("searching");
     setParcelInfo((prev) => ({}));
-    const parcel = await handleGetParcelById(trackingId);
-    navigate(`?id=${trackingId}`);
+    const parcel = await handleGetParcelById(id);
+    navigate(`?id=${id}`);
     setTimeout(() => {
       if (parcel.errorCode === 1) {
         toast.warn(`${parcel.message}. Please try again!`);
@@ -32,10 +34,18 @@ function TrackingPage() {
           parcelId: parcel.data.parcelId,
         }));
       }
-      // console.log(parcel.data);
       setIsSearching("done");
     }, 3000);
   };
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      // setTrackingId(id);
+      handleSearchParcel(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container className="tracking-page">
@@ -52,7 +62,10 @@ function TrackingPage() {
             placeholder="Parcel Tracking Id"
           />
         </div>
-        <button className="button" onClick={() => handleSearchParcel()}>
+        <button
+          className="button"
+          onClick={() => handleSearchParcel(trackingId)}
+        >
           {" "}
           Search{" "}
         </button>
@@ -65,7 +78,11 @@ function TrackingPage() {
               <h2>Tracking history</h2>
               <div className="parcel-quick-info">
                 <div className="header">
-                  <h3>Apple Watch</h3>
+                  <h3>
+                    {parcelInfo.typeOfParcel.isDocument
+                      ? "Document"
+                      : "Package"}
+                  </h3>
                   <p>In Transit</p>
                 </div>
                 <div className="id">
@@ -73,7 +90,8 @@ function TrackingPage() {
                   <p>Magic Post</p>
                 </div>
                 <p>
-                  An Khanh, Ha Noi <FaArrowRight /> Cau Giay, Ha Noi
+                  {parcelInfo.senderInfo.address}, Ha Noi <FaArrowRight />{" "}
+                  {parcelInfo.recipientInfo.address}, Ha Noi
                 </p>
                 <div className="status">
                   <p>Expected Delivery</p>

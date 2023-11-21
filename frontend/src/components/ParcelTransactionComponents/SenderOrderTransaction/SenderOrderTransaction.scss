@@ -218,6 +218,9 @@
       border: 1px solid #dee2e6;
       border-radius: 5px;
       padding: 5px 10px;
+      &.error {
+        outline: 2px solid red;
+      }
       p {
         font-size: 1.3rem;
         font-weight: 500;
@@ -438,6 +441,9 @@
     border-radius: 5px;
     padding: 5px 10px;
     margin-bottom: 1rem;
+    &.error {
+      outline: 2px solid red;
+    }
     p {
       font-size: 1.3rem;
       font-weight: 500;
@@ -447,7 +453,11 @@
     padding: 5px 10px 0 10px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
+
     margin-bottom: 1rem;
+    &.error {
+      outline: 2px solid red;
+    }
     p {
       font-size: 1.3rem;
       font-weight: 500;
@@ -460,6 +470,9 @@
     display: flex;
     gap: 1rem;
     // margin-bottom: 1rem;
+    &.error {
+      outline: 2px solid red;
+    }
     .weight {
       display: flex;
       flex-direction: column;
