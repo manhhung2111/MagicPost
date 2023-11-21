@@ -171,11 +171,121 @@ function SenderOrderTransaction() {
     setRecipientFare((prev) => clone);
   };
 
-  //Todo: 
-  const validateInputs = () => {
+  //Todo:
+  const isAllInputsValid = () => {
+    function hasTwoSentences(str) {
+      // Define a regular expression pattern for two sentences separated by a dot
+      const pattern = /[.!?]\s+[A-Z]/;
 
-  }
+      // Test the string against the pattern
+      return pattern.test(str);
+    }
+    function removeErrorClass(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.classList.remove("error");
+      }
+    }
+
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      const ids = [
+        "senderInfo",
+        "recipientInfo",
+        "contentValue",
+        "deliveryFare",
+        "lastSection",
+      ];
+      ids.forEach((el) => removeErrorClass(el));
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("error");
+      }
+    };
+
+    if (!hasTwoSentences(senderInfo.nameAddress)) {
+      toast.error(
+        "Sender's name and address must have 2 sentences and separated by a dot"
+      );
+      scrollToSection("senderInfo");
+      return false;
+    }
+    if (!senderInfo.phoneNum) {
+      toast.error("Sender's phone number must not be empty");
+      scrollToSection("senderInfo");
+      return false;
+    }
+
+    if (!hasTwoSentences(recipientInfo.nameAddress)) {
+      toast.error(
+        "Recipient's name and address must have 2 sentences and separated by a dot"
+      );
+      scrollToSection("recipientInfo");
+      return false;
+    }
+
+    if (!recipientInfo.phoneNum) {
+      toast.error("Recipient's phone number must not be empty");
+      scrollToSection("recipientInfo");
+      return false;
+    }
+
+    const isValidContentValue = parcelContentValues.every(
+      (content, index) => !isNaN(content.quantity) && !isNaN(content.value)
+    );
+
+    if (!isValidContentValue) {
+      toast.error(
+        `Parcel content value: ${"quantity"} and ${"value"} fields must be number`
+      );
+      scrollToSection("contentValue");
+      return false;
+    }
+
+    const isValidDeliveryFare =
+      !isNaN(+deliveryFare.primary) &&
+      !isNaN(+deliveryFare.subordinated) &&
+      !isNaN(+deliveryFare.vat) &&
+      !isNaN(+deliveryFare.another) &&
+      deliveryFare.primary.length !== 0 &&
+      deliveryFare.subordinated.length !== 0 &&
+      deliveryFare.vat.length !== 0 &&
+      deliveryFare.another.length !== 0;
+
+    if (!isValidDeliveryFare) {
+      toast.error(`Delivery fare fields must be filled and must be numbers`);
+      scrollToSection("deliveryFare");
+      return false;
+    }
+
+    const isValidWeight =
+      !isNaN(+weight.actual) &&
+      !isNaN(+weight.converted) &&
+      weight.actual.length !== 0 &&
+      weight.converted.length !== 0;
+
+    if (!isValidWeight) {
+      toast.error(`Parcel's weight fields must be filled and must be numbers`);
+      scrollToSection("lastSection");
+      return false;
+    }
+
+    const isValidRecipientFare =
+      !isNaN(+recipientFare.cod) &&
+      !isNaN(+recipientFare.another) &&
+      recipientFare.cod.length !== 0 &&
+      recipientFare.another.length !== 0;
+
+    if (!isValidRecipientFare) {
+      toast.error(`Recipient fare fields must be filled and must be numbers`);
+      scrollToSection("lastSection");
+      return false;
+    }
+    return true;
+  };
   const handleSubmitOrder = async () => {
+    if (!isAllInputsValid()) return;
     const { phoneNum, nameAddress, parcelId, address } = recipientInfo;
     const parcel = {
       parcelId: parcelId,
@@ -228,7 +338,7 @@ function SenderOrderTransaction() {
       id="sender-order-transaction"
     >
       <h2>Create new order</h2>
-      <div className="sender-information">
+      <div className="sender-information" id="senderInfo">
         <p>1. Sender's information</p>
         <div className="input-group">
           <FloatingLabel
@@ -245,6 +355,7 @@ function SenderOrderTransaction() {
               onChange={(e) =>
                 handleChangeSenderInfo(e.target.value, "nameAddress")
               }
+              autoFocus={true}
             />
           </FloatingLabel>
           <div className="sender">
@@ -306,7 +417,7 @@ function SenderOrderTransaction() {
           </div>
         </div>
       </div>
-      <div className="sender-information">
+      <div className="sender-information" id="recipientInfo">
         <p>2. Recipient's information</p>
         <div className="input-group">
           <FloatingLabel
@@ -383,7 +494,7 @@ function SenderOrderTransaction() {
           </div>
         </div>
       </div>
-      <div className="input-group">
+      <div className="input-group" id="parcelType">
         <div className="parcel-type">
           <p>3. Type of parcel</p>
 
@@ -432,7 +543,7 @@ function SenderOrderTransaction() {
         </div>
       </div>
       <div className="input-group">
-        <div className="parcel-value">
+        <div className="parcel-value" id="contentValue">
           <p>4. Parcel content value</p>
           <ParcelValueContentTableTransaction
             parcelValues={parcelContentValues}
@@ -534,7 +645,7 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <div className="delivery-fare">
+      <div className="delivery-fare" id="deliveryFare">
         <p>8. Delivery Fare</p>
         <div className="input-group">
           <FloatingLabel
@@ -612,7 +723,7 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <div className="last-section">
+      <div className="last-section" id="lastSection">
         <div className="weight">
           <p>9. Weight (kg)</p>
           <FloatingLabel

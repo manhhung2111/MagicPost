@@ -12,13 +12,15 @@ function TrackingParcelValueTable({ parcelValues }) {
         </tr>
       </thead>
       <tbody>
-        {parcelValues?.map((row) => {
-          return <tr>
-            <td>{row.content}</td>
-            <td>{row.quantity}</td>
-            <td>{row.value}</td>
-            <td>{row.attachment}</td>
-          </tr>;
+        {parcelValues?.map((row, index) => {
+          return (
+            <tr key={index}>
+              <td>{row.content}</td>
+              <td>{row.quantity}</td>
+              <td>{row.value}</td>
+              <td>{row.attachment}</td>
+            </tr>
+          );
         })}
       </tbody>
     </Table>

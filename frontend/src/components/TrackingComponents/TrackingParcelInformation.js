@@ -185,14 +185,19 @@ function TrackingParcelInformation({
                 <p>
                   <b>8. Date of Sending</b>
                 </p>
-                <p>6:09 PM, 21/11/2023</p>
+                <p>{paths[0].time.timeArrived}</p>
               </div>
               <div className="signature">
                 <p>
                   <b>Sender's signature</b>
                 </p>
                 <p>
-                  <i>mhung</i>
+                  <i>
+                    {senderInfo.nameAddress
+                      ?.split(".")[0]
+                      .replace(/\s+/g, "")
+                      .toLowerCase()}
+                  </i>
                 </p>
               </div>
             </div>
@@ -205,9 +210,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>9. Delivery fare:</b>
                 </p>
-                {deliveryFare.map((fare) => {
+                {deliveryFare.map((fare, index) => {
                   return (
-                    <div className="fare">
+                    <div className="fare" key={index}>
                       <p>
                         {fare.index}. {fare.title}
                       </p>
@@ -220,9 +225,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>11. Recipient's fare:</b>
                 </p>
-                {recipientFare.map((fare) => {
+                {recipientFare.map((fare, index) => {
                   return (
-                    <div className="fare">
+                    <div className="fare" key={index}>
                       <p>{fare.title}</p>
                       <p>{fare.value}</p>
                     </div>
@@ -235,9 +240,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>10. Weight (kg):</b>
                 </p>
-                {weight.map((weight) => {
+                {weight.map((weight, index) => {
                   return (
-                    <div className="weight">
+                    <div className="weight" key={index}>
                       <p>{weight.title}</p>
                       <p>{weight.value}</p>
                     </div>
@@ -260,18 +265,27 @@ function TrackingParcelInformation({
               <p>Receiving clerk's signature</p>
               <img src={approvedImg} alt="post office aproval" width="110px" />
               <p>
-                <i>Phan Anh Duc</i>
+                <i>{paths[0]?.user_name}</i>
               </p>
             </div>
             <div className="delivery-date">
               <p>
                 <b>14. Received date</b>
               </p>
-              <p>{`${delivered ? paths[3].time ?? "Delivered" : "Not delivered" }`}</p>
+              <p>{`${
+                delivered ? paths[3].time ?? "Delivered" : "Not delivered"
+              }`}</p>
               <p>Recipient's signature</p>
-              <p>
-                <i>hmanh</i>
-              </p>
+              {delivered && (
+                <p>
+                  <i>
+                    {recipientInfo.nameAddress
+                      ?.split(".")[0]
+                      .replace(/\s+/g, "")
+                      .toLowerCase()}
+                  </i>
+                </p>
+              )}
             </div>
           </div>
         </div>
