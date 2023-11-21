@@ -8,12 +8,19 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Footer from "./components/Footer/Footer";
 import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
+import avatar from "./assets/programmer.png";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const location = useLocation();
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isShowSetting, setIsShowSetting] = useState(false);
+  useEffect(() => {
+    let isLogin = JSON.parse(localStorage.getItem("account"))?.isAuthenticated;
+    if (!isLogin) isLogin = false;
+    setIsAuthenticated(isLogin);
+  }, []);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     // window.scrollTo(0, 0)
@@ -89,12 +96,12 @@ function App() {
                 <NavLink to={"/services"} className="nav-link">
                   Services
                 </NavLink>
-                {headerColor === "blur" && (
+                {headerColor === "blur" && !isAuthenticated && (
                   <button className="signin-btn" onClick={() => handleLogin()}>
                     Log in
                   </button>
                 )}
-                {headerColor === "" && (
+                {headerColor === "" && !isAuthenticated && (
                   <button className="signin-btn" onClick={() => handleLogin()}>
                     Log in
                   </button>
@@ -102,6 +109,14 @@ function App() {
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
+          {isAuthenticated && (
+            <div className="user-account">
+              <img src={avatar} alt="This is avatar after login" />
+              <div className={`settings ${isShowSetting ? "active" : ""}`}>
+                <p>Log out</p>
+              </div>
+            </div>
+          )}
         </Container>
       </Navbar>
       <main>

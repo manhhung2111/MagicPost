@@ -145,6 +145,22 @@ body {
         }
       }
     }
+
+    .user-account {
+      img {
+        height: 60%;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+      }
+      .settings {
+        &.active {
+
+        }
+        p {
+
+        }
+      } 
+    }
   }
   main {
     min-height: calc(59vh - 20px);
