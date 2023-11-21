@@ -16,7 +16,7 @@ import ParcelTransactionStatusStatistics from "./components/ParcelTransactionCom
 import RecipientOrderTransaction from "./components/ParcelTransactionComponents/RecipientOrderTransaction/RecipientOrderTransaction";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <div>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
@@ -50,7 +50,7 @@ root.render(
     </BrowserRouter>
     <ToastContainer
       position="top-right"
-      autoClose={2000}
+      autoClose={3000}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick
@@ -60,5 +60,5 @@ root.render(
       pauseOnHover
       theme="light"
     />
-  </React.StrictMode>
+  </div>
 );

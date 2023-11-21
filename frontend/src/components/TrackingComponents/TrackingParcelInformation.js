@@ -12,6 +12,9 @@ function TrackingParcelInformation({
   deliveryFare,
   weight,
   recipientFare,
+  parcelId,
+  paths,
+  delivered,
 }) {
   return (
     <div className="parcel-information">
@@ -47,7 +50,7 @@ function TrackingParcelInformation({
           </div>
           <div>
             <p>
-              <b>Parcel Id:</b> #{recipientInfo.parcelId}
+              <b>Parcel Id:</b> #{parcelId}
             </p>
             <div className="code">
               <p>
@@ -81,7 +84,7 @@ function TrackingParcelInformation({
                   <input
                     type="checkbox"
                     className="input"
-                    checked={typeOfParcel.isDocument}
+                    checked={!typeOfParcel.isDocument}
                     disabled
                   />
                   <span className="custom-checkbox"></span>
@@ -109,29 +112,54 @@ function TrackingParcelInformation({
             </p>
             <div className="check-box-group">
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnImmediately} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnImmediately}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return immediately
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.callRecipient} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.callRecipient}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Call the recipient
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.cancel} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.cancel}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Cancel
               </label>
             </div>
             <div className="check-box-group">
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnBefore}disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnBefore}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return before Sep 6th
               </label>
               <label className="checkBox">
-                <input type="checkbox" className="input" checked={senderInstruction.returnAfterStorage} disabled />
+                <input
+                  type="checkbox"
+                  className="input"
+                  checked={senderInstruction.returnAfterStorage}
+                  disabled
+                />
                 <span className="custom-checkbox"></span>
                 Return at the end of storage period
               </label>
@@ -157,14 +185,19 @@ function TrackingParcelInformation({
                 <p>
                   <b>8. Date of Sending</b>
                 </p>
-                <p>6:09 PM, 21/11/2023</p>
+                <p>{paths[0].time.timeArrived}</p>
               </div>
               <div className="signature">
                 <p>
                   <b>Sender's signature</b>
                 </p>
                 <p>
-                  <i>mhung</i>
+                  <i>
+                    {senderInfo.nameAddress
+                      ?.split(".")[0]
+                      .replace(/\s+/g, "")
+                      .toLowerCase()}
+                  </i>
                 </p>
               </div>
             </div>
@@ -177,9 +210,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>9. Delivery fare:</b>
                 </p>
-                {deliveryFare.map((fare) => {
+                {deliveryFare.map((fare, index) => {
                   return (
-                    <div className="fare">
+                    <div className="fare" key={index}>
                       <p>
                         {fare.index}. {fare.title}
                       </p>
@@ -192,9 +225,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>11. Recipient's fare:</b>
                 </p>
-                {recipientFare.map((fare) => {
+                {recipientFare.map((fare, index) => {
                   return (
-                    <div className="fare">
+                    <div className="fare" key={index}>
                       <p>{fare.title}</p>
                       <p>{fare.value}</p>
                     </div>
@@ -207,9 +240,9 @@ function TrackingParcelInformation({
                 <p>
                   <b>10. Weight (kg):</b>
                 </p>
-                {weight.map((weight) => {
+                {weight.map((weight, index) => {
                   return (
-                    <div className="weight">
+                    <div className="weight" key={index}>
                       <p>{weight.title}</p>
                       <p>{weight.value}</p>
                     </div>
@@ -230,20 +263,29 @@ function TrackingParcelInformation({
                 <b>13. Post office approval</b>
               </p>
               <p>Receiving clerk's signature</p>
-              <img src={approvedImg} alt="post office aproval" width="70px" />
+              <img src={approvedImg} alt="post office aproval" width="110px" />
               <p>
-                <i>Phan Anh Duc</i>
+                <i>{paths[0]?.user_name}</i>
               </p>
             </div>
             <div className="delivery-date">
               <p>
                 <b>14. Received date</b>
               </p>
-              <p>21:11, Nov 21, 2023</p>
+              <p>{`${
+                delivered ? paths[3].time ?? "Delivered" : "Not delivered"
+              }`}</p>
               <p>Recipient's signature</p>
-              <p>
-                <i>hmanh</i>
-              </p>
+              {delivered && (
+                <p>
+                  <i>
+                    {recipientInfo.nameAddress
+                      ?.split(".")[0]
+                      .replace(/\s+/g, "")
+                      .toLowerCase()}
+                  </i>
+                </p>
+              )}
             </div>
           </div>
         </div>

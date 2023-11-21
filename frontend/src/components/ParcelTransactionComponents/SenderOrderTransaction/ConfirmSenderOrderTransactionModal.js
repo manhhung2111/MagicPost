@@ -1,24 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TrackingParcelInformation from "../../TrackingComponents/TrackingParcelInformation";
+import QRCode from "react-qr-code";
 
-function ConfirmSenderOrderTransactionModal({
-  senderInfo,
-  recipientInfo,
-  typeOfParcel,
-  parcelValues,
-  additionalService,
-  senderInstruction,
-  notes,
-  deliveryFare,
-  weight,
-  recipientFare,
-  show,
-  setShow,
-}) {
+function ConfirmSenderOrderTransactionModal({ parcelId, show, setShow }) {
   return (
     <Modal
-      size="lg"
+      size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       backdrop="static"
@@ -26,25 +13,37 @@ function ConfirmSenderOrderTransactionModal({
     >
       <Modal.Header closeButton onHide={() => setShow(false)}>
         <Modal.Title id="contained-modal-title-vcenter">
-          Confirm your order
+          Parcel ID and Tracking QR code
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <TrackingParcelInformation
-          senderInfo={senderInfo}
-          recipientInfo={recipientInfo}
-          typeOfParcel={typeOfParcel}
-          deliveryFare={deliveryFare}
-          recipientFare={recipientFare}
-          notes={notes}
-          weight={weight}
-          parcelValues={parcelValues}
-          additionalService={additionalService}
-          senderInstruction={senderInstruction}
-        />
+        <h3 style={{ textAlign: "center", fontSize: "1.4rem" }}>
+          Parcel ID: {parcelId}
+        </h3>
+        <div
+          style={{
+            height: "auto",
+            margin: "1rem auto 0",
+            maxWidth: 128,
+            width: "100%",
+          }}
+        >
+          <QRCode
+            size={512}
+            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            value={`http://localhost:3000/tracking?parcelId=${parcelId}`}
+            viewBox={`0 0 256 256`}
+          />
+        </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => setShow(false)}>Close</Button>
+        <Button
+          variant="dark"
+          style={{ fontSize: "1.3rem", padding: "0.5rem 1.5rem" }}
+          onClick={() => setShow(false)}
+        >
+          Close
+        </Button>
       </Modal.Footer>
     </Modal>
   );

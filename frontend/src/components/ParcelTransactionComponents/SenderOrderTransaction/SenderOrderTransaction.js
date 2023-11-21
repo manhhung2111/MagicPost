@@ -8,7 +8,12 @@ import ParcelValueContentTableTransaction from "./ParcelValueContentTableTransac
 import { useEffect, useState } from "react";
 import _ from "lodash";
 import ShortUniqueId from "short-unique-id";
-import { handleGetAllDistricts } from "../../../services/transactionServices";
+import { toast } from "react-toastify";
+import {
+  handleCreateSenderOrder,
+  handleGetAllDistricts,
+} from "../../../services/transactionServices";
+import ConfirmSenderOrderTransactionModal from "./ConfirmSenderOrderTransactionModal";
 
 function SenderOrderTransaction() {
   const initialParcelContentValue = {
@@ -26,12 +31,14 @@ function SenderOrderTransaction() {
   const [senderInfo, setSenderInfo] = useState({
     nameAddress: "",
     phoneNum: "",
-    customerId: "None",
+    customerID: "None",
+    address: "",
   });
   const [recipientInfo, setRecipientInfo] = useState({
     nameAddress: "",
     phoneNum: "",
     parcelId: "",
+    address: "",
   });
 
   const [isDocument, setIsDocument] = useState(true);
@@ -55,19 +62,25 @@ function SenderOrderTransaction() {
   const [weight, setWeight] = useState({ actual: "", converted: "" });
   const [recipientFare, setRecipientFare] = useState({ cod: "", another: "" });
   const [allDistricts, setAllDistricts] = useState([]);
-  // useEffect(() => {
-  //   const fetchApi = async () => {
-  //     const res = await handleGetAllDistricts();
-  //     console.log(res);
-  //   };
-  //   fetchApi();
-  // }, []);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      const res = await handleGetAllDistricts();
+      setAllDistricts(res.data);
+      setSenderInfo((prev) => ({ ...prev, address: res.data[0] }));
+      setRecipientInfo((prev) => ({ ...prev, address: res.data[0] }));
+    };
+    fetchApi();
+  }, []);
 
   useEffect(() => {
     if (
       senderInfo.nameAddress &&
+      senderInfo.address &&
       senderInfo.phoneNum &&
       recipientInfo.nameAddress &&
+      recipientInfo.address &&
       recipientInfo.phoneNum &&
       !recipientInfo.parcelId
     ) {
@@ -79,18 +92,24 @@ function SenderOrderTransaction() {
 
   useEffect(() => {
     if (
-      !isNaN(+deliveryFare.primary) &&
-      !isNaN(+deliveryFare.subordinated) &&
-      !isNaN(+deliveryFare.vat) &&
-      !isNaN(+deliveryFare.another)
+      deliveryFare.primary.length !== 0 &&
+      deliveryFare.subordinated.length !== 0 &&
+      deliveryFare.vat.length !== 0 &&
+      deliveryFare.another.length !== 0
     ) {
-      console.log("trigger");
-      const total =
-        +deliveryFare.primary +
-        +deliveryFare.subordinated +
-        +deliveryFare.vat +
-        +deliveryFare.another;
-      setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
+      if (
+        !isNaN(+deliveryFare.primary) &&
+        !isNaN(+deliveryFare.subordinated) &&
+        !isNaN(+deliveryFare.vat) &&
+        !isNaN(+deliveryFare.another)
+      ) {
+        const total =
+          +deliveryFare.primary +
+          +deliveryFare.subordinated +
+          +deliveryFare.vat +
+          +deliveryFare.another;
+        setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
+      }
     }
   }, [deliveryFare]);
   const handleChangeParcelContentValues = (value, index, key) => {
@@ -152,43 +171,166 @@ function SenderOrderTransaction() {
     setRecipientFare((prev) => clone);
   };
 
-  const handleSubmitOrder = () => {
-    const { phoneNum, nameAddress, parcelId } = recipientInfo;
+  //Todo:
+  const isAllInputsValid = () => {
+    function hasTwoSentences(str) {
+      // Define a regular expression pattern for two sentences separated by a dot
+      const pattern = /[.!?]\s+[A-Z]/;
+
+      // Test the string against the pattern
+      return pattern.test(str);
+    }
+    function removeErrorClass(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.classList.remove("error");
+      }
+    }
+
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      const ids = [
+        "senderInfo",
+        "recipientInfo",
+        "contentValue",
+        "deliveryFare",
+        "lastSection",
+      ];
+      ids.forEach((el) => removeErrorClass(el));
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("error");
+      }
+    };
+
+    if (!hasTwoSentences(senderInfo.nameAddress)) {
+      toast.error(
+        "Sender's name and address must have 2 sentences and separated by a dot"
+      );
+      scrollToSection("senderInfo");
+      return false;
+    }
+    if (!senderInfo.phoneNum) {
+      toast.error("Sender's phone number must not be empty");
+      scrollToSection("senderInfo");
+      return false;
+    }
+
+    if (!hasTwoSentences(recipientInfo.nameAddress)) {
+      toast.error(
+        "Recipient's name and address must have 2 sentences and separated by a dot"
+      );
+      scrollToSection("recipientInfo");
+      return false;
+    }
+
+    if (!recipientInfo.phoneNum) {
+      toast.error("Recipient's phone number must not be empty");
+      scrollToSection("recipientInfo");
+      return false;
+    }
+
+    const isValidContentValue = parcelContentValues.every(
+      (content, index) => !isNaN(content.quantity) && !isNaN(content.value)
+    );
+
+    if (!isValidContentValue) {
+      toast.error(
+        `Parcel content value: ${"quantity"} and ${"value"} fields must be number`
+      );
+      scrollToSection("contentValue");
+      return false;
+    }
+
+    const isValidDeliveryFare =
+      !isNaN(+deliveryFare.primary) &&
+      !isNaN(+deliveryFare.subordinated) &&
+      !isNaN(+deliveryFare.vat) &&
+      !isNaN(+deliveryFare.another) &&
+      deliveryFare.primary.length !== 0 &&
+      deliveryFare.subordinated.length !== 0 &&
+      deliveryFare.vat.length !== 0 &&
+      deliveryFare.another.length !== 0;
+
+    if (!isValidDeliveryFare) {
+      toast.error(`Delivery fare fields must be filled and must be numbers`);
+      scrollToSection("deliveryFare");
+      return false;
+    }
+
+    const isValidWeight =
+      !isNaN(+weight.actual) &&
+      !isNaN(+weight.converted) &&
+      weight.actual.length !== 0 &&
+      weight.converted.length !== 0;
+
+    if (!isValidWeight) {
+      toast.error(`Parcel's weight fields must be filled and must be numbers`);
+      scrollToSection("lastSection");
+      return false;
+    }
+
+    const isValidRecipientFare =
+      !isNaN(+recipientFare.cod) &&
+      !isNaN(+recipientFare.another) &&
+      recipientFare.cod.length !== 0 &&
+      recipientFare.another.length !== 0;
+
+    if (!isValidRecipientFare) {
+      toast.error(`Recipient fare fields must be filled and must be numbers`);
+      scrollToSection("lastSection");
+      return false;
+    }
+    return true;
+  };
+  const handleSubmitOrder = async () => {
+    if (!isAllInputsValid()) return;
+    const { phoneNum, nameAddress, parcelId, address } = recipientInfo;
     const parcel = {
       parcelId: parcelId,
-      senderInfo: senderInfo,
-      recipientInfo: {
-        phoneNum,
-        nameAddress,
+      packageInfo: {
+        senderInfo: senderInfo,
+        recipientInfo: {
+          phoneNum,
+          nameAddress,
+          address,
+        },
+        typeOfParcel: {
+          isDocument: isDocument,
+        },
+        additionalService: additionalService,
+        sender_instruction: {
+          returnImmediately: senderInstruction.returnImmediately,
+          callRecipient: senderInstruction.callRecipient,
+          cancel: senderInstruction.cancel,
+          returnBefore: senderInstruction.returnBefore,
+          returnAfterStorage: senderInstruction.returnAfterStorage,
+        },
+        notes: notes,
+        deliveryFare: {
+          primary: deliveryFare.primary,
+          subordinated: deliveryFare.subordinated,
+          vat: deliveryFare.vat,
+          another: deliveryFare.another,
+        },
+        weight: {
+          actual: weight.actual,
+          converted: weight.converted,
+        },
+        recipientFare: {
+          cod: recipientFare.cod,
+          another: recipientFare.another,
+        },
+        parcelContentValue: parcelContentValues,
       },
-      typeOfParcel: {
-        isDocument: isDocument,
-      },
-      additionalService: additionalService,
-      senderInstruction: {
-        returnImmediately: senderInstruction.returnImmediately,
-        callRecipient: senderInstruction.callRecipient,
-        cancel: senderInstruction.cancel,
-        returnBefore: senderInstruction.returnBefore,
-        returnAfterStorage: senderInstruction.returnAfterStorage,
-      },
-      notes: notes,
-      deliveryFare: {
-        primary: deliveryFare.primary,
-        subordinated: deliveryFare.subordinated,
-        vat: deliveryFare.vat,
-        another: deliveryFare.another,
-      },
-      weight: {
-        actual: weight.actual,
-        converted: weight.converted,
-      },
-      recipientFare: {
-        cod: recipientFare.actual,
-        another: recipientFare.another,
-      },
+      paths: [],
     };
-    // setShowModal(true);
+    const result = await handleCreateSenderOrder(parcel);
+    if (result.errorCode === 0) {
+      toast.success(result.message);
+      setShowModal(true);
+    }
   };
   return (
     <Container
@@ -196,7 +338,7 @@ function SenderOrderTransaction() {
       id="sender-order-transaction"
     >
       <h2>Create new order</h2>
-      <div className="sender-information">
+      <div className="sender-information" id="senderInfo">
         <p>1. Sender's information</p>
         <div className="input-group">
           <FloatingLabel
@@ -213,6 +355,7 @@ function SenderOrderTransaction() {
               onChange={(e) =>
                 handleChangeSenderInfo(e.target.value, "nameAddress")
               }
+              autoFocus={true}
             />
           </FloatingLabel>
           <div className="sender">
@@ -238,7 +381,7 @@ function SenderOrderTransaction() {
                   controlId="floatingInput"
                   label="Sender's customer Id"
                   className="input"
-                  value={senderInfo.customerId}
+                  value={senderInfo.customerID}
                   onChange={(e) =>
                     handleChangeSenderInfo(e.target.value, "customerId")
                   }
@@ -253,17 +396,20 @@ function SenderOrderTransaction() {
               <Col md>
                 <FloatingLabel
                   controlId="floatingSelectGrid"
-                  label="Select the district"
+                  label="Select sender's district"
                   className="input"
                 >
                   <Form.Select
                     aria-label="Floating label select example"
                     style={{ paddingBottom: "3px" }}
+                    value={senderInfo.address}
+                    onChange={(e) =>
+                      handleChangeSenderInfo(e.target.value, "address")
+                    }
                   >
-                    <option disabled>Select the sender district</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {allDistricts.map((district) => {
+                      return <option value={district}>{district}</option>;
+                    })}
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -271,7 +417,7 @@ function SenderOrderTransaction() {
           </div>
         </div>
       </div>
-      <div className="sender-information">
+      <div className="sender-information" id="recipientInfo">
         <p>2. Recipient's information</p>
         <div className="input-group">
           <FloatingLabel
@@ -327,17 +473,20 @@ function SenderOrderTransaction() {
               <Col md>
                 <FloatingLabel
                   controlId="floatingSelectGrid"
-                  label="Select the district"
+                  label="Select recipient's district"
                   className="input"
                 >
                   <Form.Select
                     aria-label="Floating label select example"
                     style={{ paddingBottom: "3px" }}
+                    value={recipientInfo.address}
+                    onChange={(e) =>
+                      handleChangeRecipientInfo(e.target.value, "address")
+                    }
                   >
-                    <option disabled>Select the sender district</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {allDistricts.map((district) => {
+                      return <option value={district}>{district}</option>;
+                    })}
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -345,7 +494,7 @@ function SenderOrderTransaction() {
           </div>
         </div>
       </div>
-      <div className="input-group">
+      <div className="input-group" id="parcelType">
         <div className="parcel-type">
           <p>3. Type of parcel</p>
 
@@ -394,7 +543,7 @@ function SenderOrderTransaction() {
         </div>
       </div>
       <div className="input-group">
-        <div className="parcel-value">
+        <div className="parcel-value" id="contentValue">
           <p>4. Parcel content value</p>
           <ParcelValueContentTableTransaction
             parcelValues={parcelContentValues}
@@ -496,7 +645,7 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <div className="delivery-fare">
+      <div className="delivery-fare" id="deliveryFare">
         <p>8. Delivery Fare</p>
         <div className="input-group">
           <FloatingLabel
@@ -574,7 +723,7 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <div className="last-section">
+      <div className="last-section" id="lastSection">
         <div className="weight">
           <p>9. Weight (kg)</p>
           <FloatingLabel
@@ -639,50 +788,11 @@ function SenderOrderTransaction() {
       <button className="submit" onClick={() => handleSubmitOrder()}>
         Create Order
       </button>
-      {/* <ConfirmSenderOrderTransactionModal
-        senderInfo={senderInfo}
-        recipientInfo={recipientInfo}
-        typeOfParcel={{ isDocument }}
-        deliveryFare={[
-          {
-            index: "a",
-            title: "Primary Fare: ",
-            value: deliveryFare.primary,
-          },
-          {
-            index: "b",
-            title: "Subordinated Fare: ",
-            value: deliveryFare.subordinated,
-          },
-          { index: "c", title: "VAT:", value: deliveryFare.vat },
-          {
-            index: "d",
-            title: "Total Fare (VAT included):",
-            value: "12.312",
-          },
-          {
-            index: "e",
-            title: "Another Fare: ",
-            value: deliveryFare.another,
-          },
-          { index: "f", title: "Total", value: "12.312" },
-        ]}
-        recipientFare={[
-          { title: "COD", value: recipientFare.cod },
-          { title: "Another fare", value: recipientFare.another },
-          { title: "Total", value: 0 },
-        ]}
-        notes={notes}
-        weight={[
-          { title: "Actual weight:", value: weight.actual },
-          { title: "Converted weight:", value: weight.converted },
-        ]}
-        parcelValues={parcelContentValues}
-        additionalService={additionalService}
-        senderInstruction={senderInstruction}
+      <ConfirmSenderOrderTransactionModal
+        parcelId={recipientInfo.parcelId}
         show={showModal}
         setShow={setShowModal}
-      /> */}
+      />
     </Container>
   );
 }
