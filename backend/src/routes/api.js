@@ -4,6 +4,8 @@ import {
   handleVerifyShipment,
   handleGetParcelID,
   handleGetAllResponsibleLocations,
+  handleGetResponsibleOrder,
+  handleCreateShipment,
 } from "../controllers/gdvController";
 import { handleGetDTK } from "../controllers/gdControler";
 import {
@@ -11,6 +13,8 @@ import {
   handleGetAllGDV,
   handleGetAllOrderDGD,
 } from "../controllers/tgdController";
+
+import { handleLogin } from "../controllers/Authorization";
 
 const router = express.Router();
 
@@ -62,8 +66,21 @@ router.get("/resLocations", async (req, res) => {
   res.send(result);
 });
 
+router.get("/responOrder", async (req, res) => {
+  const result = await handleGetResponsibleOrder();
+  res.send(result);
+});
+
 router.post("/shipment", async (req, res) => {
   const data = req.body;
+  const result = await handleCreateShipment(data);
+  res.send(result);
+});
+
+router.post("/login", async (req, res) => {
+  const data = req.body;
+  const result = await handleLogin(data);
+  res.send(result);
 });
 
 router.get("orders-all", async (req, res) => {});
