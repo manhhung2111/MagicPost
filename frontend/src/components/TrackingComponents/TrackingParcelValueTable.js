@@ -2,7 +2,7 @@ import Table from "react-bootstrap/Table";
 
 function TrackingParcelValueTable({ parcelValues }) {
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover className="parcel-content-value-table">
       <thead>
         <tr>
           <th>Content</th>
@@ -12,12 +12,16 @@ function TrackingParcelValueTable({ parcelValues }) {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Total</td>
-          <td>0</td>
-          <td>N/A</td>
-          <td>N/A</td>
-        </tr>
+        {parcelValues?.map((row, index) => {
+          return (
+            <tr key={index}>
+              <td>{row.content}</td>
+              <td>{row.quantity}</td>
+              <td>{row.value}</td>
+              <td>{row.attachment}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </Table>
   );

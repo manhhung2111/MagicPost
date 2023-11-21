@@ -1,40 +1,52 @@
 import Container from "react-bootstrap/Container";
 import "./Pages.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import Loader from "../components/Utils/Loader/Loader";
 import { FaArrowRight, FaCheck, FaRegClock } from "react-icons/fa6";
-
+import { useNavigate } from "react-router-dom";
 import TrackingParcelInformation from "../components/TrackingComponents/TrackingParcelInformation";
+import { handleGetParcelById } from "../services/trackingService";
+import { toast } from "react-toastify";
+import { useSearchParams } from "react-router-dom";
+
 function TrackingPage() {
   const [trackingId, setTrackingId] = useState("");
   const [isSearching, setIsSearching] = useState("beofre");
-  const handleSearchParcel = () => {
+  const [parcelInfo, setParcelInfo] = useState({});
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const handleSearchParcel = async (id) => {
     setIsSearching("searching");
+    setParcelInfo((prev) => ({}));
+    const parcel = await handleGetParcelById(id);
+    navigate(`?id=${id}`);
     setTimeout(() => {
+      if (parcel.errorCode === 1) {
+        toast.warn(`${parcel.message}. Please try again!`);
+      } else {
+        toast.success("Your parcel is found successfuly!");
+        setParcelInfo((prev) => ({
+          ...parcel.data?.packageInfo,
+          paths: parcel.data.paths,
+          delivered: parcel.data.delivered,
+          parcelId: parcel.data.parcelId,
+        }));
+      }
       setIsSearching("done");
     }, 3000);
   };
 
-  const deliveryFare = [
-    { index: "a", title: "Primary Fare: ", value: "9.500" },
-    { index: "b", title: "Subordinated Fare: ", value: "1.900" },
-    { index: "c", title: "VAT:", value: "0" },
-    { index: "d", title: "Total Fare (VAT included):", value: "12.312" },
-    { index: "e", title: "Another Fare: ", value: "0" },
-    { index: "f", title: "Total", value: "12.312" },
-  ];
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      // setTrackingId(id);
+      handleSearchParcel(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const recipientFare = [
-    { title: "COD", value: 0 },
-    { title: "Another fare", value: 0 },
-    { title: "Total", value: 0 },
-  ];
-
-  const parcelWeight = [
-    { title: "Actual weight:", value: "30" },
-    { title: "Converted weight:", value: "0" },
-  ];
   return (
     <Container className="tracking-page">
       <h1>Magic Post Parcel Tracking</h1>
@@ -50,28 +62,36 @@ function TrackingPage() {
             placeholder="Parcel Tracking Id"
           />
         </div>
-        <button className="button" onClick={() => handleSearchParcel()}>
+        <button
+          className="button"
+          onClick={() => handleSearchParcel(trackingId)}
+        >
           {" "}
           Search{" "}
         </button>
       </div>
       <Container>
         {isSearching === "searching" && <Loader />}
-        {isSearching === "done" && (
+        {isSearching === "done" && Object.keys(parcelInfo).length !== 0 && (
           <Container className="tracking-history">
             <div className="left-content">
               <h2>Tracking history</h2>
               <div className="parcel-quick-info">
                 <div className="header">
-                  <h3>Apple Watch</h3>
+                  <h3>
+                    {parcelInfo.typeOfParcel.isDocument
+                      ? "Document"
+                      : "Package"}
+                  </h3>
                   <p>In Transit</p>
                 </div>
                 <div className="id">
-                  <p>#RH808426989CN</p>
+                  <p>{`#${parcelInfo.parcelId}`}</p>
                   <p>Magic Post</p>
                 </div>
                 <p>
-                  An Khanh, Ha Noi <FaArrowRight /> Cau Giay, Ha Noi
+                  {parcelInfo.senderInfo.address}, Ha Noi <FaArrowRight />{" "}
+                  {parcelInfo.recipientInfo.address}, Ha Noi
                 </p>
                 <div className="status">
                   <p>Expected Delivery</p>
@@ -106,7 +126,77 @@ function TrackingPage() {
               </div>
             </div>
             <div className="right-content">
-              <TrackingParcelInformation />
+              <TrackingParcelInformation
+                typeOfParcel={parcelInfo.typeOfParcel}
+                senderInfo={parcelInfo.senderInfo}
+                recipientFare={[
+                  { title: "COD", value: parcelInfo.recipientFare.cod },
+                  {
+                    title: "Another fare",
+                    value: parcelInfo.recipientFare.another,
+                  },
+                  {
+                    title: "Total",
+                    value:
+                      +parcelInfo.recipientFare.cod +
+                      +parcelInfo.recipientFare.another,
+                  },
+                ]}
+                recipientInfo={parcelInfo.recipientInfo}
+                notes={parcelInfo.notes}
+                additionalService={parcelInfo.additionalService}
+                parcelValues={parcelInfo.parcelContentValue}
+                weight={[
+                  { title: "Actual weight:", value: parcelInfo.weight.actual },
+                  {
+                    title: "Converted weight:",
+                    value: parcelInfo.weight.converted,
+                  },
+                ]}
+                deliveryFare={[
+                  {
+                    index: "a",
+                    title: "Primary Fare: ",
+                    value: parcelInfo.deliveryFare.primary,
+                  },
+                  {
+                    index: "b",
+                    title: "Subordinated Fare: ",
+                    value: parcelInfo.deliveryFare.subordinated,
+                  },
+                  {
+                    index: "c",
+                    title: "VAT:",
+                    value: parcelInfo.deliveryFare.vat,
+                  },
+                  {
+                    index: "d",
+                    title: "Total Fare (VAT included):",
+                    value:
+                      +parcelInfo.deliveryFare.primary +
+                      +parcelInfo.deliveryFare.subordinated +
+                      +parcelInfo.deliveryFare.vat,
+                  },
+                  {
+                    index: "e",
+                    title: "Another Fare: ",
+                    value: parcelInfo.deliveryFare.another,
+                  },
+                  {
+                    index: "f",
+                    title: "Total",
+                    value:
+                      +parcelInfo.deliveryFare.primary +
+                      +parcelInfo.deliveryFare.subordinated +
+                      +parcelInfo.deliveryFare.vat +
+                      +parcelInfo.deliveryFare.another,
+                  },
+                ]}
+                senderInstruction={parcelInfo.sender_instruction}
+                parcelId={parcelInfo.parcelId}
+                paths={parcelInfo.paths}
+                delivered={parcelInfo.delivered}
+              />
             </div>
           </Container>
         )}
