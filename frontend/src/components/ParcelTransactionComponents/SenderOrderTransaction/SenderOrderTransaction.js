@@ -63,7 +63,7 @@ function SenderOrderTransaction() {
   const [recipientFare, setRecipientFare] = useState({ cod: "", another: "" });
   const [allDistricts, setAllDistricts] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const [isDisabledButton, setIsDisabledButton] = useState(false);
   useEffect(() => {
     const fetchApi = async () => {
       const res = await handleGetAllDistricts();
@@ -282,10 +282,19 @@ function SenderOrderTransaction() {
       scrollToSection("lastSection");
       return false;
     }
+    const ids = [
+      "senderInfo",
+      "recipientInfo",
+      "contentValue",
+      "deliveryFare",
+      "lastSection",
+    ];
+    ids.forEach((el) => removeErrorClass(el));
     return true;
   };
   const handleSubmitOrder = async () => {
     if (!isAllInputsValid()) return;
+    setIsDisabledButton(true);
     const { phoneNum, nameAddress, parcelId, address } = recipientInfo;
     const parcel = {
       parcelId: parcelId,
@@ -331,6 +340,7 @@ function SenderOrderTransaction() {
       toast.success(result.message);
       setShowModal(true);
     }
+    setIsDisabledButton(false);
   };
   return (
     <Container
@@ -785,7 +795,11 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <button className="submit" onClick={() => handleSubmitOrder()}>
+      <button
+        className="submit"
+        onClick={() => handleSubmitOrder()}
+        disabled={isDisabledButton}
+      >
         Create Order
       </button>
       <ConfirmSenderOrderTransactionModal
