@@ -1,0 +1,51 @@
+[
+    {
+        "package": {
+            "category": "Tài liệu",
+            "weight": "0.2"
+        },
+        "sender": {
+            "name": "Người gửi 1",
+            "address": "Thanh Xuân",
+            "zip_code": "10000",
+            "phone": "1",
+            "email": "sender@gmail.com",
+            "request": "Gọi điện cho người gửi"
+        },
+        "receiver": {
+            "name": "Người nhận 1",
+            "address": "Hà Đông",
+            "zip_code": "20000",
+            "phone": "2",
+            "email": "receiver@gmail.com"
+        },
+        "cost": 500000,
+        "paths": [],
+        "delivered": false
+    },
+    {
+        "package": {
+            "category": "Tài liệu",
+            "weight": "0.2"
+        },
+        "sender": {
+            "name": "Người gửi 2",
+            "address": "Hà Đông",
+            "zip_code": "10000",
+            "phone": "1",
+            "email": "sender@gmail.com",
+            "request": "Gọi điện cho người gửi"
+        },
+        "receiver": {
+            "name": "Người nhận 2",
+            "address": "Thanh Xuân",
+            "zip_code": "20000",
+            "phone": "2",
+            "email": "receiver@gmail.com"
+        },
+        "cost": 500000,
+        "paths": [],
+        "delivered": false
+    }
+
+]

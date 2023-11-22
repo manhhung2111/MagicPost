@@ -1,0 +1,116 @@
+[
+    {
+        "user_name": "GD",
+        "name": "GD",
+        "password": "GD",
+        "center_name": null,
+        "role_name": "GD",
+        "address": "GD",
+        "phone": "1",
+        "email": "gd@gmail.com"
+    },
+
+    {
+        "user_name": "GD1_T",
+        "name": "GD1_T",
+        "password": "GD1_T",
+        "center_name": "GD1",
+        "role_name": "TDGD",
+        "address": "GD1_T",
+        "phone": "1",
+        "email": "gd1_t@gmail.com"
+    },
+    {
+        "user_name": "GD1_V",
+        "name": "GD1_V",
+        "password": "GD1_V",
+        "center_name": "GD1",
+        "role_name": "GDV",
+        "address": "GD1_V",
+        "phone": "1",
+        "email": "gd1_v@gmail.com"
+    },
+    {
+        "user_name": "GD1_S",
+        "name": "GD1_S",
+        "password": "GD1_S",
+        "center_name": "GD1",
+        "role_name": "NVGHDGD",
+        "address": "GD1_S",
+        "phone": "1",
+        "email": "gd1_s@gmail.com"
+    },
+    
+    {
+        "user_name": "GD2_T",
+        "name": "GD2_T",
+        "password": "GD2_T",
+        "center_name": "GD2",
+        "role_name": "TDGD",
+        "address": "GD2_T",
+        "phone": "2",
+        "email": "gd2_t@gmail.com"
+    },
+    {
+        "user_name": "GD2_V",
+        "name": "GD2_V",
+        "password": "GD2_V",
+        "center_name": "GD2",
+        "role_name": "GDV",
+        "address": "GD2_V",
+        "phone": "2",
+        "email": "gd2_v@gmail.com"
+    },
+    {
+        "user_name": "GD2_S",
+        "name": "GD2_S",
+        "password": "GD2_S",
+        "center_name": "GD2",
+        "role_name": "NVGHDGD",
+        "address": "GD2_S",
+        "phone": "2",
+        "email": "gd2_s@gmail.com"
+    },
+
+    {
+        "user_name": "TK1_T",
+        "name": "TK1_T",
+        "password": "TK1_T",
+        "center_name": "TK1",
+        "role_name": "TDTK",
+        "address": "TK1_T",
+        "phone": "3",
+        "email": "tk1_t@gmail.com"
+    },
+    {
+        "user_name": "TK1_V",
+        "name": "TK1_V",
+        "password": "TK1_V",
+        "center_name": "TK1",
+        "role_name": "NVDTK",
+        "address": "TK1_V",
+        "phone": "3",
+        "email": "tk1_v@gmail.com"
+    },
+
+    {
+        "user_name": "TK2_T",
+        "name": "TK2_T",
+        "password": "TK2_T",
+        "center_name": "TK2",
+        "role_name": "TDTK",
+        "address": "TK2_T",
+        "phone": "3",
+        "email": "tk2_t@gmail.com"
+    },
+    {
+        "user_name": "TK2_V",
+        "name": "TK2_V",
+        "password": "TK2_V",
+        "center_name": "TK2",
+        "role_name": "NVDTK",
+        "address": "TK2_V",
+        "phone": "3",
+        "email": "tk2_v@gmail.com"
+    }
+]
