@@ -10,4 +10,19 @@ const handleCreateSenderOrder = async (packageInfo) => {
   return result;
 };
 
-export { handleGetAllDistricts, handleCreateSenderOrder };
+const handleGetAllOrdersCreatedBy = async () => {
+  const result = await axios.get("responOrder");
+  return result;
+};
+
+const handleCreateOrderFromTransactionToCollection = async (order) => {
+  const result = await axios.post("shipment", { ...order });
+  return result;
+};
+
+export {
+  handleGetAllDistricts,
+  handleCreateSenderOrder,
+  handleGetAllOrdersCreatedBy,
+  handleCreateOrderFromTransactionToCollection,
+};

@@ -3,26 +3,63 @@ import "./OrderFromTransactionToCollection.scss";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Select from "react-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  handleCreateOrderFromTransactionToCollection,
+  handleGetAllOrdersCreatedBy,
+} from "../../../services/transactionServices";
+import { toast } from "react-toastify";
 function OrderFromTransactionToCollection() {
-  const [options, setOptions] = useState([
-    { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-    { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-    { value: "purple", label: "Purple", color: "#5243AA" },
-    { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-    { value: "orange", label: "Orange", color: "#FF8B00" },
-    { value: "yellow", label: "Yellow", color: "#FFC400" },
-    { value: "green", label: "Green", color: "#36B37E" },
-    { value: "forest", label: "Forest", color: "#00875A" },
-    { value: "slate", label: "Slate", color: "#253858" },
-    { value: "silver", label: "Silver", color: "#666666" },
-  ]);
-
+  const [options, setOptions] = useState([]);
+  const [destination, setDestination] = useState({});
   const [parcelIds, setParcelIds] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await handleGetAllOrdersCreatedBy();
+      if (result.errorCode === 0) {
+        const newOptions = result.data?.map((id) => {
+          return {
+            value: id,
+            label: id,
+          };
+        });
+        setOptions((prev) => newOptions);
+      }
+    };
+    fetchData();
+  }, []);
   const handleChangeOptions = (selectedOptions) => {
     setParcelIds(selectedOptions);
   };
 
+  const validate = () => {
+    if (parcelIds.length === 0 || !destination) {
+      toast.warn("Please fill all fields of the form");
+      return false;
+    }
+    return true;
+  };
+  const handleSubmit = async () => {
+    if (!validate()) return;
+    const order = {
+      user_id: "GD1_S",
+      start: {
+        center_id: "GD1",
+        orders: parcelIds.map((id) => id.value),
+      },
+      destination: {
+        center_id: destination.value,
+      },
+    };
+    const result = await handleCreateOrderFromTransactionToCollection(order);
+    if (result?.errorCode === 0) {
+      toast.success("Transfer parcels successfully");
+      setDestination({});
+      setParcelIds([]);
+    }
+    console.log(order);
+  };
   return (
     <Container className="order-from-transaction-to-collection">
       <h2>Create order from transaction to collection hub</h2>
@@ -31,36 +68,40 @@ function OrderFromTransactionToCollection() {
         isMulti
         options={options}
         className="multi-select"
+        value={parcelIds}
         onChange={handleChangeOptions}
         placeholder={"Select the parcel Ids"}
       />
-      {parcelIds.map((id) => {
-        return <p>{id.label}</p>;
-      })}
       <h3>Select the transfer hub</h3>
       <Row className="g-2 mt-2">
         <Col>
           <Select
-            defaultValue={[]}
-            isMulti
-            options={options}
             onChange={handleChangeOptions}
-            placeholder={"From"}
+            placeholder={
+              JSON.parse(localStorage.getItem("account")).center_name
+            }
             className="select"
+            value={JSON.parse(localStorage.getItem("account")).center_name}
+            isDisabled={true}
           />
         </Col>
         <Col>
           <Select
             defaultValue={[]}
-            isMulti
-            options={options}
-            onChange={handleChangeOptions}
+            options={[
+              { label: "TK1", value: "TK1" },
+              { label: "TK2", value: "TK2" },
+            ]}
+            onChange={(option) => setDestination(option)}
             placeholder={"To"}
             className="select"
+            value={destination}
           />
         </Col>
       </Row>
-      <button className="button">Confirm Transfer</button>
+      <button className="button" onClick={() => handleSubmit()}>
+        Confirm Transfer
+      </button>
     </Container>
   );
 }
