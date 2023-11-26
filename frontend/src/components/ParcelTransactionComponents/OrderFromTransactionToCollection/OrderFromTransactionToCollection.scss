@@ -31,12 +31,14 @@
     font-size: 1.2rem;
     font-weight: 500;
     margin-top: 10px;
+    z-index: 3;
   }
   h3 {
     margin-top: 1rem;
   }
   .select {
     font-size: 1.2rem;
+    z-index: 2;
     font-weight: 500;
   }
   .button {
@@ -102,6 +104,9 @@
     }
     &:active {
       filter: brightness(0.8);
+    }
+    &[disabled] {
+      cursor: not-allowed;
     }
   }
 }

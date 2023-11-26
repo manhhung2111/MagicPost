@@ -14,11 +14,14 @@ function TrackingPage() {
   const [trackingId, setTrackingId] = useState("");
   const [isSearching, setIsSearching] = useState("beofre");
   const [parcelInfo, setParcelInfo] = useState({});
+  const [isDisableButton, setIsDisableButton] = useState(false);
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const handleSearchParcel = async (id) => {
     setIsSearching("searching");
+    setIsDisableButton(true);
     setParcelInfo((prev) => ({}));
     const parcel = await handleGetParcelById(id);
     navigate(`?id=${id}`);
@@ -35,6 +38,7 @@ function TrackingPage() {
         }));
       }
       setIsSearching("done");
+      setIsDisableButton(false);
     }, 3000);
   };
 
@@ -65,6 +69,7 @@ function TrackingPage() {
         <button
           className="button"
           onClick={() => handleSearchParcel(trackingId)}
+          disabled={isDisableButton}
         >
           {" "}
           Search{" "}

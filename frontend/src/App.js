@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import Footer from "./components/Footer/Footer";
 import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
 import avatar from "./assets/programmer.png";
+import { useNavigate } from "react-router-dom";
+import AccountInfo from "./components/HomeComponents/AccountInfo/AccountInfo";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
@@ -16,8 +18,11 @@ function App() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isShowSetting, setIsShowSetting] = useState(false);
+  const [showAccountModal, setIsShowAccountModal] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     let isLogin = JSON.parse(localStorage.getItem("account"))?.isAuthenticated;
+    console.log(isLogin);
     if (!isLogin) isLogin = false;
     setIsAuthenticated(isLogin);
   }, []);
@@ -42,6 +47,14 @@ function App() {
 
   const handleLogin = () => {
     setShowLoginModal(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setIsShowSetting(false);
+    setShowLoginModal(false);
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -90,9 +103,11 @@ function App() {
                 <NavLink to={"/tracking"} className="nav-link">
                   Tracking
                 </NavLink>
-                <NavLink to={"/parcel-transaction"} className="nav-link">
-                  Parcel Transaction
-                </NavLink>
+                {isAuthenticated && (
+                  <NavLink to={"/parcel-transaction"} className="nav-link">
+                    Parcel Transaction
+                  </NavLink>
+                )}
                 <NavLink to={"/services"} className="nav-link">
                   Services
                 </NavLink>
@@ -110,10 +125,22 @@ function App() {
             </Offcanvas.Body>
           </Navbar.Offcanvas>
           {isAuthenticated && (
-            <div className="user-account">
-              <img src={avatar} alt="This is avatar after login" />
+            <div
+              className="user-account"
+              onBlur={() => setIsShowSetting(false)}
+              tabIndex={0}
+            >
+              <img
+                src={avatar}
+                alt="This is avatar after login"
+                onClick={() => setIsShowSetting((prev) => !prev)}
+              />
+              <div
+                className={`triangle ${isShowSetting ? "active" : ""}`}
+              ></div>
               <div className={`settings ${isShowSetting ? "active" : ""}`}>
-                <p>Log out</p>
+                <p onClick={() => setIsShowAccountModal(true)}>Account</p>
+                <p onClick={() => handleLogout()}>Log out</p>
               </div>
             </div>
           )}
@@ -126,6 +153,11 @@ function App() {
       <LoginModal
         showLoginModal={showLoginModal}
         setShowLoginModal={setShowLoginModal}
+        setIsAuthenticated={setIsAuthenticated}
+      />
+      <AccountInfo
+        showModal={showAccountModal}
+        setShowModal={setIsShowAccountModal}
       />
     </div>
   );

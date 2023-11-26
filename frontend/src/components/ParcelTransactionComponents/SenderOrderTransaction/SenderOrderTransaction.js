@@ -63,7 +63,7 @@ function SenderOrderTransaction() {
   const [recipientFare, setRecipientFare] = useState({ cod: "", another: "" });
   const [allDistricts, setAllDistricts] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const [isDisabledButton, setIsDisabledButton] = useState(false);
   useEffect(() => {
     const fetchApi = async () => {
       const res = await handleGetAllDistricts();
@@ -282,10 +282,21 @@ function SenderOrderTransaction() {
       scrollToSection("lastSection");
       return false;
     }
+    //remove error from form
+    const ids = [
+      "senderInfo",
+      "recipientInfo",
+      "contentValue",
+      "deliveryFare",
+      "lastSection",
+    ];
+    ids.forEach((el) => removeErrorClass(el));
+
     return true;
   };
   const handleSubmitOrder = async () => {
     if (!isAllInputsValid()) return;
+    setIsDisabledButton(true);
     const { phoneNum, nameAddress, parcelId, address } = recipientInfo;
     const parcel = {
       parcelId: parcelId,
@@ -331,6 +342,43 @@ function SenderOrderTransaction() {
       toast.success(result.message);
       setShowModal(true);
     }
+    setIsDisabledButton(false);
+    setParcelContentValues([initialParcelContentValue]);
+    setIsDeletedRows(false);
+    setSenderInfo({
+      nameAddress: "",
+      phoneNum: "",
+      customerID: "None",
+      address: allDistricts[0],
+    });
+    localStorage.setItem('id', recipientInfo.parcelId);
+    setRecipientInfo({
+      nameAddress: "",
+      phoneNum: "",
+      address: allDistricts[0],
+      parcelId: ""
+    });
+    setIsDocument(true);
+    setAdditionalService("");
+    setSenderInstruction({
+      returnImmediately: false,
+      callRecipient: false,
+      cancel: false,
+      returnBefore: false,
+      returnAfterStorage: false,
+    });
+    setNotes("");
+    setDeliveryFare({
+      primary: "",
+      subordinated: "",
+      vat: "",
+      another: "",
+      total: "",
+    });
+    setWeight({ actual: "", converted: "" });
+    setRecipientFare({ cod: "", another: "" });
+    
+
   };
   return (
     <Container
@@ -785,11 +833,15 @@ function SenderOrderTransaction() {
           </FloatingLabel>
         </div>
       </div>
-      <button className="submit" onClick={() => handleSubmitOrder()}>
+      <button
+        className="submit"
+        onClick={() => handleSubmitOrder()}
+        disabled={isDisabledButton}
+      >
         Create Order
       </button>
       <ConfirmSenderOrderTransactionModal
-        parcelId={recipientInfo.parcelId}
+        parcelId={localStorage.getItem("id")}
         show={showModal}
         setShow={setShowModal}
       />
