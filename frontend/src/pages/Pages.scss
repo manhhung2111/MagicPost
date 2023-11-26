@@ -131,6 +131,9 @@
       &:active {
         filter: brightness(0.8);
       }
+      &[disabled] {
+        cursor: not-allowed;
+      }
     }
   }
 

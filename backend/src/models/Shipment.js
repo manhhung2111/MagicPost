@@ -8,7 +8,7 @@ const shipmentSchema = new mongoose.Schema({
     orders: [String],
   },
   destination: {
-    center_id: String,
+    center_id: {type: String, default: null},
     orders: [String],
   },
 });
