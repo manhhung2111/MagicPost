@@ -8,7 +8,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [isDisableButton, setIsDisableButton] = useState(false);
   const validateInputs = () => {
     if (!userName) {
       toast.error("User name must be filled");
@@ -23,6 +23,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
 
   const handleSubmit = async () => {
     if (!validateInputs()) return;
+    setIsDisableButton(true);
     const result = await handleLogin(userName, password);
     setIsLoading(true);
     setTimeout(() => {
@@ -40,6 +41,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
         toast.success("Login successfully");
       }
       setIsLoading(false);
+      setIsDisableButton(false);
     }, 3000);
   };
   return (
@@ -78,7 +80,9 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
               <label className="input-label">Password</label>
             </div>
             <div className="login-submit">
-              <button onClick={() => handleSubmit()}>Log in</button>
+              <button onClick={() => handleSubmit()} disabled={isDisableButton}>
+                Log in
+              </button>
               {isLoading && <div class="loader"></div>}
             </div>
           </div>

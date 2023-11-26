@@ -282,6 +282,7 @@ function SenderOrderTransaction() {
       scrollToSection("lastSection");
       return false;
     }
+    //remove error from form
     const ids = [
       "senderInfo",
       "recipientInfo",
@@ -290,6 +291,7 @@ function SenderOrderTransaction() {
       "lastSection",
     ];
     ids.forEach((el) => removeErrorClass(el));
+
     return true;
   };
   const handleSubmitOrder = async () => {
@@ -341,6 +343,42 @@ function SenderOrderTransaction() {
       setShowModal(true);
     }
     setIsDisabledButton(false);
+    setParcelContentValues([initialParcelContentValue]);
+    setIsDeletedRows(false);
+    setSenderInfo({
+      nameAddress: "",
+      phoneNum: "",
+      customerID: "None",
+      address: allDistricts[0],
+    });
+    localStorage.setItem('id', recipientInfo.parcelId);
+    setRecipientInfo({
+      nameAddress: "",
+      phoneNum: "",
+      address: allDistricts[0],
+      parcelId: ""
+    });
+    setIsDocument(true);
+    setAdditionalService("");
+    setSenderInstruction({
+      returnImmediately: false,
+      callRecipient: false,
+      cancel: false,
+      returnBefore: false,
+      returnAfterStorage: false,
+    });
+    setNotes("");
+    setDeliveryFare({
+      primary: "",
+      subordinated: "",
+      vat: "",
+      another: "",
+      total: "",
+    });
+    setWeight({ actual: "", converted: "" });
+    setRecipientFare({ cod: "", another: "" });
+    
+
   };
   return (
     <Container
@@ -803,7 +841,7 @@ function SenderOrderTransaction() {
         Create Order
       </button>
       <ConfirmSenderOrderTransactionModal
-        parcelId={recipientInfo.parcelId}
+        parcelId={localStorage.getItem("id")}
         show={showModal}
         setShow={setShowModal}
       />
