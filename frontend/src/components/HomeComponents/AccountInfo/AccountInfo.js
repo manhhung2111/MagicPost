@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 function AccountInfo({ showModal, setShowModal }) {
   const [info, setInfo] = useState({});
   useEffect(() => {
-    let isLogin = (JSON.parse(localStorage.getItem("account")))?.isAuthenticated;
+    let isLogin = JSON.parse(localStorage.getItem("account"))?.isAuthenticated;
     if (!isLogin) return;
     const { center_name, email, name, role_name } = JSON.parse(
       localStorage.getItem("account")

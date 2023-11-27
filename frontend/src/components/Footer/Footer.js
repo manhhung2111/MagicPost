@@ -20,13 +20,12 @@ function Footer() {
         <p>About us</p>
         <p>Contact us</p>
         <p>Insights</p>
-        <p>Supports</p>
       </div>
       <div className="section">
         <h2>Legal</h2>
         <p>Privacy Policy</p>
         <p>Terms of Use</p>
-        <p>Site map</p>
+        <p>Supports</p>
       </div>
       <div className="section">
         <h2>Contacts</h2>

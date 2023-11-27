@@ -552,7 +552,7 @@
   // padding-bottom: 5rem;
   margin: 10rem auto 5rem;
   display: grid;
-  grid-template-columns: 1.3fr 4fr;
+  grid-template-columns: 1.35fr 4fr;
   grid-template-rows: auto;
   gap: 1rem;
   .side-bar {
@@ -603,5 +603,20 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-radius: 5px;
     padding: 5px;
+    height: calc(57vh);
+    overflow: hidden;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 1rem;
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 6px;
+      background-color: rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+    }
   }
 }

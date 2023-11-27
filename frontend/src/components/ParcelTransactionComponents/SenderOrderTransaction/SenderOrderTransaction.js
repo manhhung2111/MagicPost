@@ -455,8 +455,8 @@ function SenderOrderTransaction() {
                       handleChangeSenderInfo(e.target.value, "address")
                     }
                   >
-                    {allDistricts.map((district) => {
-                      return <option value={district}>{district}</option>;
+                    {allDistricts.map((district, index) => {
+                      return <option value={district} key={index}>{district}</option>;
                     })}
                   </Form.Select>
                 </FloatingLabel>
@@ -532,8 +532,8 @@ function SenderOrderTransaction() {
                       handleChangeRecipientInfo(e.target.value, "address")
                     }
                   >
-                    {allDistricts.map((district) => {
-                      return <option value={district}>{district}</option>;
+                    {allDistricts.map((district, index) => {
+                      return <option value={district} key={index}>{district}</option>;
                     })}
                   </Form.Select>
                 </FloatingLabel>
