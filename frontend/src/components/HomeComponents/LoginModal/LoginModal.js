@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-
+import { useNavigate } from "react-router-dom";
 import "./LoginModal.scss";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDisableButton, setIsDisableButton] = useState(false);
+  const navigate = useNavigate();
   const validateInputs = () => {
     if (!userName) {
       toast.error("User name must be filled");
@@ -39,6 +40,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
         setPassword("");
         setIsAuthenticated(true);
         toast.success("Login successfully");
+        navigate("/");
       }
       setIsLoading(false);
       setIsDisableButton(false);

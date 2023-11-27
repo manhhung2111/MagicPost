@@ -62,7 +62,7 @@ function OrderFromTransactionToCollection() {
   };
   return (
     <Container className="order-from-transaction-to-collection">
-      <h2>Create order from transaction to collection hub</h2>
+      <h2>Create order transfer to collection hub</h2>
       <Select
         defaultValue={[]}
         isMulti
