@@ -1,14 +1,14 @@
-function CollectionToTransactionTable({ orders }) {
+function DelvieryOrderRecipientTable({ orders }) {
   return (
-    <table className="collection-to-transaction-table">
+    <table className="delivery-to-recipient-table">
       <thead>
         <tr>
           <th>#</th>
           <th>Parcel ID</th>
-          <th>From collection hub</th>
-          <th>Dispatched Date</th>
+          <th>Recipient's address</th>
+          <th>District</th>
           <th>Status</th>
-          <th>Confirm Receipt</th>
+          <th>Create order</th>
         </tr>
       </thead>
       <tbody>
@@ -17,13 +17,13 @@ function CollectionToTransactionTable({ orders }) {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{order.parcelId}</td>
-              <td>{order.from}</td>
-              <td class="amount">{order.date}</td>
+              <td className="address">{order.address}</td>
+              <td class="amount">{order.district}</td>
               <td>
                 <p class="status status-pending">Pending</p>
               </td>
               <td>
-                <button className="confirm">Confirm</button>
+                <button className="confirm">Create</button>
               </td>
             </tr>
           );
@@ -33,4 +33,4 @@ function CollectionToTransactionTable({ orders }) {
   );
 }
 
-export default CollectionToTransactionTable;
+export default DelvieryOrderRecipientTable;

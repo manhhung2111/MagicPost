@@ -25,6 +25,7 @@ body {
   .nav-bar-custom {
     background: transparent;
     transition: all 1s ease;
+    font-weight: 600;
     &.blur {
       // backdrop-filter: blur(5px);
       background-color: whitesmoke;
