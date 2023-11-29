@@ -4,6 +4,7 @@ require("dotenv").config();
 import cors from "cors";
 
 import router from "./routes/api";
+import userRouter from "./routes/user";
 
 import Center from "./models/Center";
 import Order from "./models/Order";
@@ -30,6 +31,7 @@ const dbName = process.env.DB_NAME;
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
 app.use("/", router);
+app.use("/user", userRouter);
 
 (async function () {
   try {

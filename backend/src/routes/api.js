@@ -77,11 +77,11 @@ router.post("/shipment", async (req, res) => {
   res.send(result);
 });
 
-router.post("/login", async (req, res) => {
-  const data = req.body;
-  const result = await handleLogin(data);
-  res.send(result);
-});
+// router.post("/login", async (req, res) => {
+//   const data = req.body;
+//   const result = await handleLogin(data);
+//   res.send(result);
+// });
 
 router.get("orders-all", async (req, res) => {});
 
