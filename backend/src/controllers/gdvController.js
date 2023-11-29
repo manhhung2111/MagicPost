@@ -112,22 +112,6 @@ const handleVerifyShipment = async (data) => {
   return result;
 };
 
-const handleGetParcelID = async (id) => {
-  const result = await Order.findOne({ parcelId: id });
-  if (result) {
-    return {
-      errorCode: 0,
-      data: result,
-      message: "Parcel found successfully",
-    };
-  }
-  return {
-    errorCode: 1,
-    data: [],
-    message: "Parcel not found",
-  };
-};
-
 const handleGetAllResponsibleLocations = async () => {
   const allCenter = await Center.find();
   let allResponsibleLocations = [];
@@ -188,7 +172,6 @@ const handleGetResponsibleOrder = async () => {
 export {
   handleCreateOrder,
   handleVerifyShipment,
-  handleGetParcelID,
   handleGetAllResponsibleLocations,
   handleGetResponsibleOrder,
   handleCreateShipment
