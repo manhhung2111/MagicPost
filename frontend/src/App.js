@@ -68,7 +68,7 @@ function App() {
         className={`mb-3 nav-bar-custom ${headerColor}`}
         fixed="top"
       >
-        <Container className="p-3">
+        <Container className="p-3  main-nav">
           <Navbar.Brand>
             <NavLink to={"/"} className="nav-brand">
               <BiPackage className="icon" />
@@ -108,8 +108,8 @@ function App() {
                     Parcel Transaction
                   </NavLink>
                 )}
-                <NavLink to={"/services"} className="nav-link">
-                  Services
+                <NavLink to={"/transaction-management"} className="nav-link">
+                  Transaction Management
                 </NavLink>
                 {headerColor === "blur" && !isAuthenticated && (
                   <button className="signin-btn" onClick={() => handleLogin()}>
@@ -146,7 +146,7 @@ function App() {
           )}
         </Container>
       </Navbar>
-      <main>
+      <main className="app-main">
         <Outlet />
       </main>
       <Footer />

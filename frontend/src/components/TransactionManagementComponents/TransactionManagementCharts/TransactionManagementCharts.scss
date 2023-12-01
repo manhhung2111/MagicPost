@@ -1,0 +1,15 @@
+.transaction-management-charts {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 6.5fr 3.5fr;
+  gap: 2rem;
+  .left-content,
+  .right-content {
+    padding: 10px;
+    border-radius: 5px;
+    // border: 2px solid black;
+    // height: fit-content;
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+}

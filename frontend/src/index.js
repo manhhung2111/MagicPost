@@ -14,6 +14,9 @@ import OrderFromTransactionToCollection from "./components/ParcelTransactionComp
 import OrderFromCollectionToTransaction from "./components/ParcelTransactionComponents/OrderFromCollectionToTransaction/OrderFromCollectionToTransaction";
 import ParcelTransactionStatusStatistics from "./components/ParcelTransactionComponents/ParcelStatusStatistics/ParcelTransactionStatusStatistics";
 import RecipientOrderTransaction from "./components/ParcelTransactionComponents/RecipientOrderTransaction/RecipientOrderTransaction";
+import TransactionManagementPage from "./pages/TransactionManagement";
+import PageNotFound from "./components/Utils/404Page/PageNotFound";
+import AccessDeny from "./components/Utils/403Page/AccessDeny";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <div>
@@ -45,7 +48,13 @@ root.render(
               element={<ParcelTransactionStatusStatistics />}
             />
           </Route>
+          <Route
+            path="transaction-management"
+            element={<TransactionManagementPage />}
+          ></Route>
         </Route>
+        <Route path="access-deny" element={<AccessDeny />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
     <ToastContainer

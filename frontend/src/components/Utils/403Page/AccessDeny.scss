@@ -1,0 +1,95 @@
+.access-deny-container {
+  $bg: #313942;
+  $ghost: #818FB4;
+  $heading: #e7ebf2;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Concert One", cursive;
+  background-color: $bg;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  text-align: center;
+  h1 {
+    color: $heading;
+    font-weight: bold;
+    font-size: 15rem;
+    letter-spacing: 0.1em;
+    margin: 0.2em 0;
+    text-shadow: 0.05em 0.05em 0 rgba(0, 0, 0, 0.25);
+    white-space: nowrap;
+
+    @media (max-width: 30rem) {
+      font-size: 8.5rem;
+    }
+
+    & > span {
+      animation: spooky 1.5s alternate infinite linear;
+      color: $ghost;
+      display: inline-block;
+    }
+  }
+
+  h2 {
+    color: $heading;
+    margin-bottom: 0.4em;
+    font-size: 2.5rem;
+  }
+
+  p {
+    color: #ccc;
+    margin-top: 0;
+    font-weight: 500;
+    font-size: 1.7rem;
+  }
+
+  @keyframes spooky {
+    from {
+      transform: translatey(0.1em) scaley(0.95);
+    }
+
+    to {
+      transform: translatey(-0.1em);
+    }
+  }
+  .button {
+    padding: 1em 2em;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: black;
+    transition: all 1000ms;
+    font-size: 13px;
+    position: relative;
+    overflow: hidden;
+    outline: 2px solid gray;
+    margin-top: 1rem;
+    &:hover {
+      color: #ffffff;
+      transform: scale(1.1);
+      outline: 2px solid #818FB4;
+      box-shadow: 4px 5px 17px -4px #818FB4;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -50px;
+      top: 0;
+      width: 0;
+      height: 100%;
+      background-color: #818FB4;
+      transform: skewX(45deg);
+      z-index: -1;
+      transition: width 1000ms;
+    }
+
+    &:hover::before {
+      width: 250%;
+    }
+  }
+}
