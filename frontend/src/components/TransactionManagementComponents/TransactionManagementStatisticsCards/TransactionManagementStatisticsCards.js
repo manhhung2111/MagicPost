@@ -7,14 +7,26 @@ import {
 } from "react-icons/go";
 import { FaUsersLine } from "react-icons/fa6";
 import "./TransactionManagementStatisticsCards.scss";
+
 function TransactionManagementStatisticsCards({ cardsStatistics }) {
+  const handleScrollToView = () => {
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    scrollToSection("tables");
+  };
+
   return (
     <div className="transaction-management-statistic-cards">
       <div className="transaction-management-statistic-card">
         <div className="left-content">
           <h3>Total Incoming Parcels</h3>
           <Counter end={cardsStatistics.totalIncomingParcels} />
-          <p>View incoming parcels</p>
+          <p onClick={handleScrollToView}>View incoming parcels</p>
         </div>
         <div className="right-content">
           <p className="increase">
@@ -28,7 +40,7 @@ function TransactionManagementStatisticsCards({ cardsStatistics }) {
         <div className="left-content">
           <h3>Total Outgoing Parcels</h3>
           <Counter end={cardsStatistics.totalOutgoingParcels} />
-          <p>View outgoing parcels</p>
+          <p onClick={handleScrollToView}>View outgoing parcels</p>
         </div>
         <div className="right-content">
           <p className="decrease">
@@ -47,7 +59,7 @@ function TransactionManagementStatisticsCards({ cardsStatistics }) {
               cardsStatistics.totalIncomingParcels
             }
           />
-          <p>See details</p>
+          <p onClick={handleScrollToView}>See details</p>
         </div>
         <div className="right-content">
           <p className="increase">
@@ -67,7 +79,7 @@ function TransactionManagementStatisticsCards({ cardsStatistics }) {
           <p className="">
             +<Counter end={0} decimal={2} />%
           </p>
-          <FaUsersLine  className="icon" />
+          <FaUsersLine className="icon" />
         </div>
       </div>
     </div>

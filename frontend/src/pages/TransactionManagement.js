@@ -156,7 +156,7 @@ function TransactionManagementPage() {
       </header>
       <TransactionManagementStatisticsCards cardsStatistics={cardsStatistics} />
       <TransactionManagementCharts />
-      <div className="transaction-management-tables">
+      <div className="transaction-management-tables" id="tables">
         <div className="left-content">
           <div className="top">
             <h3>Incoming Parcels</h3>
