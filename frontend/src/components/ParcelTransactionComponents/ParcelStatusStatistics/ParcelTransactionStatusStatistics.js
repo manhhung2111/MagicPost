@@ -12,9 +12,11 @@ import {
   LineController,
   BarController,
   Title,
+  ArcElement,
   Filler,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
+import { Chart, Doughnut } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 function ParcelTransactionStatusStatistics() {
   ChartJS.register(
     LinearScale,
@@ -27,25 +29,28 @@ function ParcelTransactionStatusStatistics() {
     LineController,
     BarController,
     Title,
+    ArcElement,
     Filler
   );
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "bottom",
       },
       title: {
         display: true,
-        text: "Parcel status statistics",
+        text: "Parcel Status Statistics",
       },
     },
     scales: {
       x: {
         stacked: true,
+        beginAtZero: true,
       },
       y: {
         stacked: true,
+        beginAtZero: true,
       },
     },
     interaction: {
@@ -68,37 +73,109 @@ function ParcelTransactionStatusStatistics() {
     "Nov",
     "Dec",
   ];
-
-  const data = {
+  const parcelsData = {
     labels,
     datasets: [
       {
         type: "line",
-        label: "Your contribution",
-        borderColor: "rgb(255, 225, 98)",
-        backgroundColor: "rgba(255, 225, 98, 0.4)",
+        label: "Successfully Delivered",
+        borderColor: " rgb(19, 195, 107)",
+        backgroundColor: " rgba(19, 195, 107, 0.2)",
         data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
-        // stack: "Stack 2",
+        stack: "Stack 2",
         fill: "origin",
       },
       {
-        label: "Delivered sucessfully",
-        data: labels.map(() => Math.floor(Math.random() * (500 - 100) + 100)),
-        backgroundColor: "#91C483",
-        stack: "Stack 0",
+        type: "line",
+        label: "Unsuccessfully Delivered",
+        borderColor: "rgba(255, 105, 105, 1)",
+        backgroundColor: "rgba(255, 105, 105, 0.2)",
+        data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
+        stack: "Stack 1",
+        fill: "origin",
       },
       {
-        label: "Delivered unsuccessfully",
+        label: "Total parcels",
         data: labels.map(() => Math.floor(Math.random() * (100 - 50) + 50)),
-        backgroundColor: "#FF6464",
+        backgroundColor: "rgba(255, 196, 54, 0.7)",
         stack: "Stack 0",
+      },
+    ],
+  };
+
+  const employeeData = {
+    labels: ["Hoang Manh Hung", "Others"],
+    datasets: [
+      {
+        label: "# of Parcels",
+        data: [369, 400],
+        backgroundColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
+        borderColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
+        borderWidth: 1,
       },
     ],
   };
 
   return (
     <Container className="parcel-transaction-statistic">
-      <Chart type="bar" data={data} options={options} />
+      <div className="doughnut-chart">
+        <Doughnut
+          data={employeeData}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              title: {
+                display: true,
+                text: "Your contribution",
+              },
+              datalabels: {
+                color: "white",
+                formatter: (value, context) => {
+                  const dataPoints = context.chart.data.datasets[0].data;
+                  function totalSum(total, dataPoint) {
+                    return total + dataPoint;
+                  }
+                  const totalValue = dataPoints.reduce(totalSum, 0);
+                  const percentage = ((value / totalValue) * 100).toFixed(1);
+                  return `${percentage}%`;
+                },
+                font: {
+                  weight: "bold",
+                  //   size: 16,
+                },
+              },
+            },
+            scales: {
+              x: {
+                // stacked: true,
+                beginAtZero: true,
+                // display: false,
+              },
+              y: {
+                // stacked: true,
+                beginAtZero: true,
+                // display: false,
+              },
+            },
+            interaction: {
+              //   mode: "index",
+              intersect: false,
+            },
+            tension: 0.3,
+          }}
+          plugins={[ChartDataLabels]}
+        />
+      </div>
+      <div className="bar-chart">
+        <Chart
+          type="bar"
+          data={parcelsData}
+          options={options}
+        />
+      </div>
     </Container>
   );
 }

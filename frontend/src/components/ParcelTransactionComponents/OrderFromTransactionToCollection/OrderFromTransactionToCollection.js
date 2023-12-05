@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 function OrderFromTransactionToCollection() {
   const [options, setOptions] = useState([]);
-  const [destination, setDestination] = useState({});
+  const [destination, setDestination] = useState(null);
   const [parcelIds, setParcelIds] = useState([]);
 
   useEffect(() => {
@@ -62,43 +62,46 @@ function OrderFromTransactionToCollection() {
   };
   return (
     <Container className="order-from-transaction-to-collection">
-      <h2>Create order transfer to collection hub</h2>
-      <Select
-        defaultValue={[]}
-        isMulti
-        options={options}
-        className="multi-select"
-        value={parcelIds}
-        onChange={handleChangeOptions}
-        placeholder={"Select the parcel Ids"}
-      />
-      <h3>Select the transfer hub</h3>
-      <Row className="g-2 mt-2">
-        <Col>
-          <Select
-            onChange={handleChangeOptions}
-            placeholder={
-              JSON.parse(localStorage.getItem("account")).center_name
-            }
-            className="select"
-            value={JSON.parse(localStorage.getItem("account")).center_name}
-            isDisabled={true}
-          />
-        </Col>
-        <Col>
-          <Select
-            defaultValue={[]}
-            options={[
-              { label: "TK1", value: "TK1" },
-              { label: "TK2", value: "TK2" },
-            ]}
-            onChange={(option) => setDestination(option)}
-            placeholder={"To"}
-            className="select"
-            value={destination}
-          />
-        </Col>
-      </Row>
+      <div className="top">
+        <h2>Transfer order(s) to collection hub</h2>
+        <Select
+          defaultValue={[]}
+          isMulti
+          options={options}
+          className="multi-select"
+          value={parcelIds}
+          onChange={handleChangeOptions}
+          placeholder={"Select the parcel Ids"}
+        />
+        <h3>Select the transfer hub</h3>
+        <Row className="g-2 mt-2 custom-row">
+          <Col>
+            <Select
+              onChange={handleChangeOptions}
+              placeholder={
+                JSON.parse(localStorage.getItem("account")).center_name
+              }
+              className="select"
+              value={JSON.parse(localStorage.getItem("account")).center_name}
+              isDisabled={true}
+            />
+          </Col>
+          To
+          <Col>
+            <Select
+              options={[
+                { label: "TK1", value: "TK1" },
+                { label: "TK2", value: "TK2" },
+              ]}
+              onChange={(option) => setDestination(option)}
+              placeholder={"Destination hub"}
+              className="select"
+              value={destination}
+              isClearable={true}
+            />
+          </Col>
+        </Row>
+      </div>
       <button className="button" onClick={() => handleSubmit()}>
         Confirm Transfer
       </button>
