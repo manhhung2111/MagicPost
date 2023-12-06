@@ -3,7 +3,7 @@ import { FaCalendarDays } from "react-icons/fa6";
 import { IoAddCircleOutline } from "react-icons/io5";
 import "./Pages.scss";
 import AddEmployeeAccountModal from "../components/TransactionManagementComponents/AddEmployeeAccountModal/AddEmployeeAccountModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TransactionManagementStatisticsCards from "../components/TransactionManagementComponents/TransactionManagementStatisticsCards/TransactionManagementStatisticsCards";
 import TransactionManagementCharts from "../components/TransactionManagementComponents/TransactionManagementCharts/TransactionManagementCharts";
 import TransactionManagementParcelTable from "../components/TransactionManagementComponents/TransactionManagementParcelTable/TransactionManagementParcelTable";
@@ -25,6 +25,17 @@ function TransactionManagementPage() {
     { value: "Status", isSelected: false },
     { value: "Dest", isSelected: false },
   ]);
+
+  useEffect(() => {
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    scrollToSection("transaction-management-page");
+  }, []);
 
   const cardsStatistics = {
     totalIncomingParcels: 10324,
@@ -134,7 +145,10 @@ function TransactionManagementPage() {
     return `${arr[2]} ${arr[1]}, ${arr[3]}`;
   };
   return (
-    <Container className="transaction-management-page">
+    <Container
+      className="transaction-management-page"
+      id="transaction-management-page"
+    >
       <header className="header">
         <div className="left-content">
           <h3>{getGreetingMessage()}</h3>
