@@ -31,22 +31,19 @@ function ParcelTransactionPage() {
   };
   return (
     <Container className="parcel-transaction-page">
-      <div className="sender-order-and-transfer-order">
-        <div className="right-content">
-          <header className="header">
-            <div className="left">
-              <h3>{getGreetingMessage()}</h3>
-              <p>Welcome back, let's begin your work here.</p>
-            </div>
-            <div className="right">
-              <div className="calendar">
-                <FaCalendarDays className="icon" />
-                <p>{getCurrentDate()}</p>
-              </div>
-            </div>
-          </header>
-          <OrderFromTransactionToCollection />
+      <header className="header">
+        <div className="left">
+          <h3>{getGreetingMessage()}</h3>
+          <p>Welcome back, let's begin your work at transaction hub here.</p>
         </div>
+        <div className="right">
+          <div className="calendar">
+            <FaCalendarDays className="icon" />
+            <p>{getCurrentDate()}</p>
+          </div>
+        </div>
+      </header>
+      <div className="sender-order-and-transfer-order">
         <div className="left-content">
           <img
             src={homeDeliveryWorker}
@@ -59,6 +56,9 @@ function ParcelTransactionPage() {
           <button onClick={() => setShowAddNewSenderOrderModal(true)}>
             Add a new parcel <FaPlus className="icon" />
           </button>
+        </div>
+        <div className="right-content">
+          <OrderFromTransactionToCollection />
         </div>
       </div>
       <div className="confirm-create-collection-recipient">
