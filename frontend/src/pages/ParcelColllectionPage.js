@@ -5,8 +5,19 @@ import ConfirmOrderFromTransactionToCollection from "../components/ParcelCollect
 import CreateOrderFromCollectionToTransaction from "../components/ParcelCollectionComponents/CreateOrderFromCollectionToTransaction/CreateOrderFromCollectionToTransaction";
 import { FaCalendarDays } from "react-icons/fa6";
 import ParcelCollectionStatusStatistics from "../components/ParcelCollectionComponents/ParcelCollectionStatistics/ParcelCollectionStatistics";
+import { useEffect } from "react";
 
 function ParcelCollectionPage() {
+  useEffect(() => {
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    scrollToSection("parcel-collection-page");
+  }, []);
   const getGreetingMessage = () => {
     const today = new Date();
     const userName =
@@ -23,8 +34,8 @@ function ParcelCollectionPage() {
     return `${arr[2]} ${arr[1]}, ${arr[3]}`;
   };
   return (
-    <Container className="parcel-collection-page">
-      <header className="header">
+    <Container className="parcel-collection-page" id="parcel-collection-page">
+      <header className="header" >
         <div className="left">
           <h3>{getGreetingMessage()}</h3>
           <p>Welcome back, let's begin your work at collection hub here.</p>

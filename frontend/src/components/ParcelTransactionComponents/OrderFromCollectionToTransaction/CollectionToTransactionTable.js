@@ -20,9 +20,9 @@ function CollectionToTransactionTable({ orders }) {
               <td>{order.parcelId}</td>
               <td>{order.type ?? "Document"}</td>
               <td>{order.from}</td>
-              <td class="amount">{order.date}</td>
+              <td className="amount">{order.date}</td>
               <td>
-                <p class="status status-pending">Pending</p>
+                <p className="status status-pending">Pending</p>
               </td>
               <td>
                 <button className="confirm">Confirm</button>

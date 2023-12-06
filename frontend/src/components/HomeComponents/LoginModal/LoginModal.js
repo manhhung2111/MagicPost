@@ -85,7 +85,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
               <button onClick={() => handleSubmit()} disabled={isDisableButton}>
                 Log in
               </button>
-              {isLoading && <div class="loader"></div>}
+              {isLoading && <div className="loader"></div>}
             </div>
           </div>
           <div className="card-info">

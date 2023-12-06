@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import "./Pages.scss";
 import { FaPlus } from "react-icons/fa6";
 import homeDeliveryWorker from "../assets/loading-workman.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SenderOrderTransaction from "../components/ParcelTransactionComponents/SenderOrderTransaction/SenderOrderTransaction";
 import OrderFromTransactionToCollection from "../components/ParcelTransactionComponents/OrderFromTransactionToCollection/OrderFromTransactionToCollection";
 import OrderFromCollectionToTransaction from "../components/ParcelTransactionComponents/OrderFromCollectionToTransaction/OrderFromCollectionToTransaction.js";
@@ -14,6 +14,16 @@ function ParcelTransactionPage() {
   const [showAddNewSenderOrderModal, setShowAddNewSenderOrderModal] =
     useState(false);
 
+  useEffect(() => {
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    scrollToSection("parcel-transaction-page");
+  }, []);
   const getGreetingMessage = () => {
     const today = new Date();
     const userName =
@@ -30,7 +40,7 @@ function ParcelTransactionPage() {
     return `${arr[2]} ${arr[1]}, ${arr[3]}`;
   };
   return (
-    <Container className="parcel-transaction-page">
+    <Container className="parcel-transaction-page" id="parcel-transaction-page">
       <header className="header">
         <div className="left">
           <h3>{getGreetingMessage()}</h3>
