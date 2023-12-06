@@ -17,6 +17,7 @@ import RecipientOrderTransaction from "./components/ParcelTransactionComponents/
 import TransactionManagementPage from "./pages/TransactionManagement";
 import PageNotFound from "./components/Utils/404Page/PageNotFound";
 import AccessDeny from "./components/Utils/403Page/AccessDeny";
+import ParcelCollectionPage from "./pages/ParcelColllectionPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <div>
@@ -52,6 +53,7 @@ root.render(
             path="transaction-management"
             element={<TransactionManagementPage />}
           ></Route>
+          <Route path="parcel-collection" element={<ParcelCollectionPage />} />
         </Route>
         <Route path="access-deny" element={<AccessDeny />} />
         <Route path="*" element={<PageNotFound />} />

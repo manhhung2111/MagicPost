@@ -1,8 +1,8 @@
-import Container from "react-bootstrap/Container";
-import "./OrderFromCollectionToTransaction.scss";
-import CollectionToTransactionTable from "./CollectionToTransactionTable";
 import Select from "react-select";
-function OrderFromCollectionToTransaction() {
+import Container from "react-bootstrap/Container";
+import "./ConfirmOrderFromTransactionToCollection.scss";
+import ConfirmOrderFromTractionToCollectionTable from "./ConfirmOrderFromTractionToCollectionTable";
+function ConfirmOrderFromTransactionToCollection() {
   const orders = [
     { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
     { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
@@ -20,8 +20,8 @@ function OrderFromCollectionToTransaction() {
     { label: "Date (desc)", value: "Date (desc)" },
   ];
   return (
-    <Container className="order-from-collection-to-transaction">
-      <h2>Confirm orders from other collection hub(s)</h2>
+    <Container className="confirm-order-from-transaction-to-collection">
+      <h2>Confirm orders from other transaction hub(s)</h2>
       <div className="pending-confirmation-orders">
         <div className="filter">
           <div className="left-content">
@@ -44,10 +44,10 @@ function OrderFromCollectionToTransaction() {
             />
           </div>
         </div>
-        <CollectionToTransactionTable orders={orders} />
+        <ConfirmOrderFromTractionToCollectionTable orders={orders} />
       </div>
     </Container>
   );
 }
 
-export default OrderFromCollectionToTransaction;
+export default ConfirmOrderFromTransactionToCollection;

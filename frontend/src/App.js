@@ -108,9 +108,16 @@ function App() {
                     Parcel Transaction
                   </NavLink>
                 )}
-                <NavLink to={"/transaction-management"} className="nav-link">
-                  Transaction Management
-                </NavLink>
+                {isAuthenticated && (
+                  <NavLink to={"/transaction-management"} className="nav-link">
+                    Transaction Management
+                  </NavLink>
+                )}
+                {isAuthenticated && (
+                  <NavLink to={"/parcel-collection"} className="nav-link">
+                    Parcel Collection
+                  </NavLink>
+                )}
                 {headerColor === "blur" && !isAuthenticated && (
                   <button className="signin-btn" onClick={() => handleLogin()}>
                     Log in

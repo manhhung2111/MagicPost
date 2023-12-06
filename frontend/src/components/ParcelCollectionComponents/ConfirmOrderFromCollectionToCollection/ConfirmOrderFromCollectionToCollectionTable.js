@@ -1,4 +1,4 @@
-function CollectionToTransactionTable({ orders }) {
+function ConfirmOrderFromCollectionToCollectionTable({ orders }) {
   return (
     <table className="collection-to-transaction-table">
       <thead>
@@ -9,7 +9,7 @@ function CollectionToTransactionTable({ orders }) {
           <th>From</th>
           <th>Dispatched Date</th>
           <th>Status</th>
-          <th>Confirm Receipt</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -35,4 +35,4 @@ function CollectionToTransactionTable({ orders }) {
   );
 }
 
-export default CollectionToTransactionTable;
+export default ConfirmOrderFromCollectionToCollectionTable;

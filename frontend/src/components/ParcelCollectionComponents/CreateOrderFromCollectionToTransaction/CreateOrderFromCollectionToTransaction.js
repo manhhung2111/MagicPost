@@ -1,34 +1,32 @@
-import Container from "react-bootstrap/Container";
-import "./OrderFromTransactionToCollection.scss";
+import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Select from "react-select";
+import "./CreateOrderFromCollectionToTransaction.scss";
 import { useEffect, useState } from "react";
-import {
-  handleCreateOrderFromTransactionToCollection,
-  handleGetAllOrdersCreatedBy,
-} from "../../../services/transactionServices";
 import { toast } from "react-toastify";
-function OrderFromTransactionToCollection() {
+
+function CreateOrderFromCollectionToTransaction() {
   const [options, setOptions] = useState([]);
   const [destination, setDestination] = useState(null);
   const [parcelIds, setParcelIds] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await handleGetAllOrdersCreatedBy();
-      if (result.errorCode === 0) {
-        const newOptions = result.data?.map((id) => {
-          return {
-            value: id,
-            label: id,
-          };
-        });
-        setOptions((prev) => newOptions);
-      }
-    };
-    fetchData();
+    // const fetchData = async () => {
+    //   const result = await handleGetAllOrdersCreatedBy();
+    //   if (result.errorCode === 0) {
+    //     const newOptions = result.data?.map((id) => {
+    //       return {
+    //         value: id,
+    //         label: id,
+    //       };
+    //     });
+    //     setOptions((prev) => newOptions);
+    //   }
+    // };
+    // fetchData();
   }, []);
+  
   const handleChangeOptions = (selectedOptions) => {
     setParcelIds(selectedOptions);
   };
@@ -52,17 +50,17 @@ function OrderFromTransactionToCollection() {
         center_id: destination.value,
       },
     };
-    const result = await handleCreateOrderFromTransactionToCollection(order);
-    if (result?.errorCode === 0) {
-      toast.success("Transfer parcels successfully");
-      setDestination({});
-      setParcelIds([]);
-    }
+    // const result = await handleCreateOrderFromTransactionToCollection(order);
+    // if (result?.errorCode === 0) {
+    //   toast.success("Transfer parcels successfully");
+    //   setDestination({});
+    //   setParcelIds([]);
+    // }
   };
   return (
-    <Container className="order-from-transaction-to-collection">
+    <Container className="create-order-from-collection-to-transaction">
       <div className="top">
-        <h2>Transfer order(s) to collection hub</h2>
+        <h2>Transfer order(s) to transaction hub</h2>
         <Select
           defaultValue={[]}
           isMulti
@@ -108,4 +106,4 @@ function OrderFromTransactionToCollection() {
   );
 }
 
-export default OrderFromTransactionToCollection;
+export default CreateOrderFromCollectionToTransaction;
