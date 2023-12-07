@@ -118,6 +118,11 @@ function App() {
                       Parcel Collection
                     </NavLink>
                   )}
+                  {isAuthenticated && (
+                    <NavLink to={"/collection-management"} className="nav-link">
+                      Collection Management
+                    </NavLink>
+                  )}
                   {headerColor === "blur" && !isAuthenticated && (
                     <button className="signin-btn" onClick={() => handleLogin()}>
                       Log in
