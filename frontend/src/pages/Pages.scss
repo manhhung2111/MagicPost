@@ -717,7 +717,6 @@
   }
 
   margin: 0 auto;
-
   padding: 10rem 0 5rem;
   .header {
     display: flex;
@@ -808,6 +807,8 @@
       justify-content: space-between;
       align-items: center;
       position: relative;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
       h3 {
         margin: 0;
         font-weight: 600;
@@ -988,6 +989,8 @@
       background-color: #fff;
       padding: 10px;
       border-top: 1px solid #e9ebec;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
       p {
         margin: 0;
         color: #878a99;

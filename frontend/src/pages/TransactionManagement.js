@@ -9,6 +9,7 @@ import TransactionManagementCharts from "../components/TransactionManagementComp
 import TransactionManagementParcelTable from "../components/TransactionManagementComponents/TransactionManagementParcelTable/TransactionManagementParcelTable";
 import { FaList } from "react-icons/fa6";
 import _ from "lodash";
+import TransactionEmployeeAccountTable from "../components/TransactionManagementComponents/TransactionEmployeeAccountTable/TransactionEmployeeAccountTable";
 function TransactionManagementPage() {
   const [showEmployeeAccountModal, setShowEmployeeAccountModal] =
     useState(false);
@@ -169,11 +170,12 @@ function TransactionManagementPage() {
         </div>
       </header>
       <TransactionManagementStatisticsCards cardsStatistics={cardsStatistics} />
+      <TransactionEmployeeAccountTable />
       <TransactionManagementCharts />
       <div className="transaction-management-tables" id="tables">
         <div className="left-content">
           <div className="top">
-            <h3>Incoming Parcels</h3>
+            <h3>Incoming parcels</h3>
             <p onClick={() => setIsShowSortIncoming((prev) => !prev)}>
               {sortIncoming.find((sort) => sort.isSelected === true).value}{" "}
               <FaList />
@@ -205,7 +207,7 @@ function TransactionManagementPage() {
         </div>
         <div className="right-content">
           <div className="top">
-            <h3>Outgoing Parcels</h3>
+            <h3>Outgoing parcels</h3>
             <p onClick={() => setIsShowSortOutgoing((prev) => !prev)}>
               {sortOutgoing.find((sort) => sort.isSelected === true).value}{" "}
               <FaList />

@@ -23,10 +23,10 @@ body {
   overflow: hidden;
   overflow-y: scroll;
   font-family: "Quicksand", sans-serif;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
+  scrollbar-gutter: auto;
   .nav-bar-custom {
     background: transparent;
     transition: all 1s ease;

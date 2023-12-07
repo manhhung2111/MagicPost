@@ -94,12 +94,12 @@ function ParcelTransactionStatusStatistics() {
         stack: "Stack 1",
         fill: "origin",
       },
-      {
-        label: "Total parcels",
-        data: labels.map(() => Math.floor(Math.random() * (100 - 50) + 50)),
-        backgroundColor: "rgba(255, 196, 54, 0.7)",
-        stack: "Stack 0",
-      },
+      // {
+      //   label: "Total parcels",
+      //   data: labels.map(() => Math.floor(Math.random() * (100 - 50) + 50)),
+      //   backgroundColor: "rgba(255, 196, 54, 0.7)",
+      //   stack: "Stack 0",
+      // },
     ],
   };
 
