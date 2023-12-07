@@ -14,10 +14,11 @@ import OrderFromTransactionToCollection from "./components/ParcelTransactionComp
 import OrderFromCollectionToTransaction from "./components/ParcelTransactionComponents/OrderFromCollectionToTransaction/OrderFromCollectionToTransaction";
 import ParcelTransactionStatusStatistics from "./components/ParcelTransactionComponents/ParcelStatusStatistics/ParcelTransactionStatusStatistics";
 import RecipientOrderTransaction from "./components/ParcelTransactionComponents/RecipientOrderTransaction/RecipientOrderTransaction";
-import TransactionManagementPage from "./pages/TransactionManagement";
+import TransactionManagementPage from "./pages/TransactionManagementPage";
 import PageNotFound from "./components/Utils/404Page/PageNotFound";
 import AccessDeny from "./components/Utils/403Page/AccessDeny";
 import ParcelCollectionPage from "./pages/ParcelColllectionPage";
+import CollectionManagementPage from "./pages/CollectionManagementPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <div>
@@ -54,6 +55,10 @@ root.render(
             element={<TransactionManagementPage />}
           ></Route>
           <Route path="parcel-collection" element={<ParcelCollectionPage />} />
+          <Route
+            path="collection-management"
+            element={<CollectionManagementPage />}
+          ></Route>
         </Route>
         <Route path="access-deny" element={<AccessDeny />} />
         <Route path="*" element={<PageNotFound />} />

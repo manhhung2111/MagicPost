@@ -40,16 +40,16 @@ function CreateOrderFromCollectionToTransaction() {
   };
   const handleSubmit = async () => {
     if (!validate()) return;
-    const order = {
-      user_id: "GD1_S",
-      start: {
-        center_id: "GD1",
-        orders: parcelIds.map((id) => id.value),
-      },
-      destination: {
-        center_id: destination.value,
-      },
-    };
+    // const order = {
+    //   user_id: "GD1_S",
+    //   start: {
+    //     center_id: "GD1",
+    //     orders: parcelIds.map((id) => id.value),
+    //   },
+    //   destination: {
+    //     center_id: destination.value,
+    //   },
+    // };
     // const result = await handleCreateOrderFromTransactionToCollection(order);
     // if (result?.errorCode === 0) {
     //   toast.success("Transfer parcels successfully");
