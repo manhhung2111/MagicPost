@@ -45,6 +45,7 @@ router.get("/orders-dgd", async (req, res) => {
 // Giao dịch viên
 router.post("/order", async (req, res) => {
   const data = req.body;
+  console.log(req.body);
   const result = await handleCreateOrder(data);
   res.send(result);
 });
@@ -77,11 +78,11 @@ router.post("/shipment", async (req, res) => {
   res.send(result);
 });
 
-router.post("/login", async (req, res) => {
-  const data = req.body;
-  const result = await handleLogin(data);
-  res.send(result);
-});
+// router.post("/login", async (req, res) => {
+//   const data = req.body;
+//   const result = await handleLogin(data);
+//   res.send(result);
+// });
 
 router.get("orders-all", async (req, res) => {});
 
