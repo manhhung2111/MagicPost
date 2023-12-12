@@ -173,9 +173,32 @@ const handleGetResponsibleOrder = async () => {
   };
 };
 
+const handleGetAllDGD = async (req) => {
+  const currentCenter = req.user.center_name;
+  const user_name = req.user.user_name;
+  const regex = /^DGD/;
+  const query = { name: { $regex: regex } };
+
+  const result = await Center.find(query, { name: 1, full_name: 1, _id: 0 });
+
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Load all locations successfully`,
+    };
+  }
+  return {
+    errorCode: 1,
+    data: "",
+    message: `Cant all locations successfully`,
+  };
+};
+
 export {
   handleCreateOrder,
   handleVerifyShipment,
   handleGetResponsibleOrder,
   handleCreateShipment,
+  handleGetAllDGD,
 };
