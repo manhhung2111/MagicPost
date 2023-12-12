@@ -16,9 +16,20 @@ const handleUserLogin = async (req, res) => {
     const user = await userLogin(user_name, password);
     const token = createToken(user.role_name, user_name, user.center_name);
 
-    return res.status(200).json({ user_info: user, token });
+    return res.status(200).json({
+      errorCode: 0,
+      data: {
+        user_info: user,
+        token,
+      },
+      message: "Login successfully",
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      errorCode: 1,
+      data: "",
+      message: error.message,
+    });
   }
 };
 
