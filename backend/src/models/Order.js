@@ -59,8 +59,10 @@ const orderSchema = new mongoose.Schema({
       user_name: { type: String, default: null },
       time: {
         timeArrived: { type: String, default: null },
-        timeDeparted: { type: String, default: null}
+        timeDeparted: { type: String, default: null },
       },
+      isConfirmed: { type: Boolean, default: false },
+      isSent: { type: Boolean, default: false },
     },
   ],
   delivered: { type: Boolean, default: false },
