@@ -15,7 +15,7 @@ const handleCreateOrder = async (req) => {
     weight,
     recipientFare,
   } = data.packageInfo;
-  const receiverDGD = recipientInfo["address"];
+  const receiverDGD_full_name = recipientInfo["address"];
   const senderDGD = req.user.center_name;
   const currentUser = req.user.user_name;
   // construting paths
@@ -44,11 +44,13 @@ const handleCreateOrder = async (req) => {
     }
   }
 
-  // tìm điểm tập kết chứa địa chỉ đến
+  // tìm điểm tập kết và điểm giao dịch chứa địa chỉ đến
   let receiverDTK = "";
+  let receiverDGD = "";
   for (let i = 0; i < allCenter.length; i++) {
-    if (allCenter[i].name === receiverDGD) {
+    if (allCenter[i].full_name === receiverDGD_full_name) {
       receiverDTK = allCenter[i].parent_center_name;
+      receiverDGD = allCenter[i].name;
       break;
     }
   }
@@ -74,6 +76,7 @@ const handleCreateOrder = async (req) => {
     time: {
       timeArrived: currentTime,
     },
+    isConfirmed: true,
   };
   paths.push(path);
   for (let i = 1; i < paths_name.length; i++) {
