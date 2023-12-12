@@ -16,11 +16,12 @@ const requireAuthTDGD = async (req, res, next) => {
       token,
       process.env.SECRET
     );
-
     if (role_name == "TDGD") {
-      req.role_name = role_name;
-      req.user_name = user_name;
-      req.center_name = center_name;
+      req.user = {
+        role_name: role_name,
+        user_name: user_name,
+        center_name: center_name,
+      };
     } else {
       return res.status(401).json({ error: "Request is not authorized" });
     }
@@ -50,9 +51,11 @@ const requireAuthGDV = async (req, res, next) => {
     );
 
     if (role_name == "GDV") {
-      req.role_name = role_name;
-      req.user_name = user_name;
-      req.center_name = center_name;
+      req.user = {
+        role_name: role_name,
+        user_name: user_name,
+        center_name: center_name,
+      };
     } else {
       return res.status(401).json({ error: "Request is not authorized" });
     }

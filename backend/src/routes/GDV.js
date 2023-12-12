@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const requireAuthGDV = require("../middlewares/requireAuthDGD");
+const { requireAuthGDV } = require("../middlewares/requireAuthDGD");
 import {
   handleCreateOrder,
   handleVerifyShipment,
@@ -17,8 +17,7 @@ router.use(requireAuthGDV);
 
 // tạo order mới
 router.post("/order", async (req, res) => {
-  const data = req.body;
-  const result = await handleCreateOrder(data);
+  const result = await handleCreateOrder(req);
   res.send(result);
 });
 
@@ -35,7 +34,7 @@ router.get("/resLocations", async (req, res) => {
   res.send(result);
 });
 
-// lấy ra các đơn hàng do GDV phụ trách 
+// lấy ra các đơn hàng do GDV phụ trách
 router.get("/responOrder", async (req, res) => {
   const result = await handleGetResponsibleOrder();
   res.send(result);
@@ -47,3 +46,5 @@ router.post("/shipment", async (req, res) => {
   const result = await handleCreateShipment(data);
   res.send(result);
 });
+
+export default router;

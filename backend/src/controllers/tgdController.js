@@ -1,9 +1,23 @@
 import User from "../models/User";
 import Center from "../models/Center";
 
-const handleCreateGDV = async (data) => {
-  const result = await User.create(data);
-  return result;
+const handleCreateGDV = async (req) => {
+  const curCenter = req.user.center_name;
+  let updateData = req.body;
+  updateData["center_name"] = curCenter;
+  const result = await User.create(updateData);
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: "Create user successfully",
+    };
+  }
+  return {
+    errorCode: 1,
+    data: "",
+    message: "Cannot create user",
+  };
 };
 
 const handleGetAllGDV = async () => {
