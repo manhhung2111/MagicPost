@@ -45,6 +45,7 @@ router.get("/orders-dgd", async (req, res) => {
 // Giao dịch viên
 router.post("/order", async (req, res) => {
   const data = req.body;
+  console.log(req.body);
   const result = await handleCreateOrder(data);
   res.send(result);
 });

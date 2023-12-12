@@ -2,8 +2,9 @@ import Order from "../models/Order";
 import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 
-const handleCreateOrder = async (data) => {
+const handleCreateOrder = async (req) => {
   const paths = [];
+  const data = req.body;
   const {
     senderInfo,
     recipientInfo,
@@ -14,11 +15,11 @@ const handleCreateOrder = async (data) => {
     weight,
     recipientFare,
   } = data.packageInfo;
-  const receiver_location = recipientInfo["address"];
-  const receiverCenter = "GD1";
-  const currentUser = "GD1_V";
+  const receiverDGD = recipientInfo["address"];
+  const senderDGD = req.user.center_name;
+  const currentUser = req.user.user_name;
   // construting paths
-  const paths_name = [receiverCenter];
+  const paths_name = [senderDGD];
   const currentdate = new Date();
   const currentTime =
     currentdate.getDate() +
@@ -32,22 +33,41 @@ const handleCreateOrder = async (data) => {
     currentdate.getMinutes() +
     ":" +
     currentdate.getSeconds();
-  // tìm điểm giao dịch chứa địa chỉ đến
+  // tìm điểm tập kết chứa địa chỉ gửi
   const allCenter = await Center.find();
-  let destCenter = null;
+  let senderDTK = "";
   for (let i = 0; i < allCenter.length; i++) {
-    const responsible_location = allCenter[i]["responsible_locations"];
-    if (allCenter[i]["name"] == receiverCenter) {
-      paths_name.push(allCenter[i]["parent_center_name"]);
-    }
-    if (
-      responsible_location.length > 0 &&
-      responsible_location.indexOf(receiver_location) !== -1
-    ) {
-      paths_name.push(allCenter[i]["parent_center_name"]);
-      paths_name.push(allCenter[i]["name"]);
+    if (allCenter[i].name === senderDGD) {
+      senderDTK = allCenter[i].parent_center_name;
+      paths_name.push(allCenter[i].parent_center_name);
+      break;
     }
   }
+
+  // tìm điểm tập kết chứa địa chỉ đến
+  let receiverDTK = "";
+  for (let i = 0; i < allCenter.length; i++) {
+    if (allCenter[i].name === receiverDGD) {
+      receiverDTK = allCenter[i].parent_center_name;
+      break;
+    }
+  }
+
+  // tìm điểm trung gian giữa hai điểm tập kết
+  for (let i = 0; i < allCenter.length; i++) {
+    const centerNames = allCenter[i].nearby_center.map(
+      (item) => item.center_name
+    );
+    if (centerNames.includes(receiverDTK) && centerNames.includes(senderDTK)) {
+      paths_name.push(allCenter[i].name);
+      break;
+    }
+  }
+
+  // thêm DTK và DGD nhận
+  paths_name.push(receiverDTK);
+  paths_name.push(receiverDGD);
+
   const path = {
     center_name: paths_name[0],
     user_name: currentUser,
@@ -66,16 +86,23 @@ const handleCreateOrder = async (data) => {
   }
   data["paths"] = paths;
   const result = await Order.create(data);
-  const centerInfo = await Center.findOne({ name: receiverCenter });
+  const centerInfo = await Center.findOne({ name: senderDGD });
   const updatedOrders = await Center.findOneAndUpdate(
-    { name: receiverCenter },
+    { name: senderDGD },
     { orders: [...centerInfo.orders, result._id] },
     { new: true }
   );
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: "Create order successfully",
+    };
+  }
   return {
-    errorCode: 0,
-    data: result,
-    message: "Create order successfully",
+    errorCode: 1,
+    data: "",
+    message: "Cannot create order",
   };
 };
 
@@ -112,35 +139,12 @@ const handleVerifyShipment = async (data) => {
   return result;
 };
 
-const handleGetAllResponsibleLocations = async () => {
-  const allCenter = await Center.find();
-  let allResponsibleLocations = [];
-  for (let i = 0; i < allCenter.length; i++) {
-    const responsible_location = allCenter[i]["responsible_locations"];
-    if (responsible_location.length > 0) {
-      allResponsibleLocations.push(...responsible_location);
-    }
-  }
-  if (allResponsibleLocations) {
-    return {
-      errorCode: 0,
-      data: allResponsibleLocations,
-      message: "Locations found successfully",
-    };
-  }
-  return {
-    errorCode: 1,
-    data: [],
-    message: "LOcations not found",
-  };
-};
-
 const handleCreateShipment = async (data) => {
   const result = await Shipment.create(data);
   if (result) {
     return {
       errorCode: 0,
-      data : `Create shipment to ${data["destination"]["center_id"]} successfully`,
+      data: `Create shipment to ${data["destination"]["center_id"]} successfully`,
     };
   }
 };
@@ -161,7 +165,7 @@ const handleGetResponsibleOrder = async () => {
       }
     }
   }
-  
+
   return {
     errorCode: 0,
     data: result,
@@ -172,7 +176,6 @@ const handleGetResponsibleOrder = async () => {
 export {
   handleCreateOrder,
   handleVerifyShipment,
-  handleGetAllResponsibleLocations,
   handleGetResponsibleOrder,
-  handleCreateShipment
+  handleCreateShipment,
 };

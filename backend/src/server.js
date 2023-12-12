@@ -3,7 +3,8 @@ import express from "express";
 require("dotenv").config();
 import cors from "cors";
 
-import router from "./routes/api";
+import GDVrouter from "./routes/GDV";
+import TGDrouter from "./routes/TGD";
 import userRouter from "./routes/user";
 
 import Center from "./models/Center";
@@ -30,8 +31,9 @@ const dbName = process.env.DB_NAME;
 // get data
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
-app.use("/", router);
-app.use("/user", userRouter);
+app.use("/general", userRouter);
+app.use("/gdv", GDVrouter);
+app.use("/tgd", TGDrouter);
 
 (async function () {
   try {

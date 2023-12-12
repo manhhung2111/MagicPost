@@ -12,7 +12,6 @@ const createToken = (role_name, user_name, center_name) => {
 
 const handleUserLogin = async (req, res) => {
   const { user_name, password } = req.body;
-
   try {
     const user = await userLogin(user_name, password);
     const token = createToken(user.role_name, user_name, user.center_name);
