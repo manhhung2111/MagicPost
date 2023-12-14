@@ -278,7 +278,7 @@ const handleGetAllDGD = async (req) => {
 };
 
 const handleGetParcelID = async (id) => {
-  const result = await Order.find({ parcelId: id });
+  const result = await Order.findOne({ parcelId: id });
 
   if (result) {
     return {
