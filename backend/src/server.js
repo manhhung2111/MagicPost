@@ -6,6 +6,7 @@ import cors from "cors";
 import GDVrouter from "./routes/GDV";
 import TGDrouter from "./routes/TGD";
 import userRouter from "./routes/user";
+import NVDTKrouter from "./routes/NVDTK";
 
 import Center from "./models/Center";
 import Order from "./models/Order";
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true })); // for form data
 app.use("/general", userRouter);
 app.use("/gdv", GDVrouter);
 app.use("/tgd", TGDrouter);
+app.use("/nvdtk", NVDTKrouter);
 
 (async function () {
   try {

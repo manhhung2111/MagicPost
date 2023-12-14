@@ -2,118 +2,12 @@ import Order from "../models/Order";
 import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 
-const handleCreateOrder = async (req) => {
-  const paths = [];
-  const data = req.body;
-  const {
-    senderInfo,
-    recipientInfo,
-    additionalService,
-    sender_instruction,
-    notes,
-    deliveryFare,
-    weight,
-    recipientFare,
-  } = data.packageInfo;
-  const receiverDGD_full_name = recipientInfo["address"];
-  const senderDGD = req.user.center_name;
-  const currentUser = req.user.user_name;
-  // construting paths
-  const paths_name = [senderDGD];
-  const currentdate = new Date();
-  const currentTime =
-    currentdate.getDate() +
-    "/" +
-    (currentdate.getMonth() + 1) +
-    "/" +
-    currentdate.getFullYear() +
-    " " +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
-  // tìm điểm tập kết chứa địa chỉ gửi
-  const allCenter = await Center.find();
-  let senderDTK = "";
-  for (let i = 0; i < allCenter.length; i++) {
-    if (allCenter[i].name === senderDGD) {
-      senderDTK = allCenter[i].parent_center_name;
-      paths_name.push(allCenter[i].parent_center_name);
-      break;
-    }
-  }
-
-  // tìm điểm tập kết và điểm giao dịch chứa địa chỉ đến
-  let receiverDTK = "";
-  let receiverDGD = "";
-  for (let i = 0; i < allCenter.length; i++) {
-    if (allCenter[i].full_name === receiverDGD_full_name) {
-      receiverDTK = allCenter[i].parent_center_name;
-      receiverDGD = allCenter[i].name;
-      break;
-    }
-  }
-
-  // tìm điểm trung gian giữa hai điểm tập kết
-  for (let i = 0; i < allCenter.length; i++) {
-    const centerNames = allCenter[i].nearby_center.map(
-      (item) => item.center_name
-    );
-    if (centerNames.includes(receiverDTK) && centerNames.includes(senderDTK)) {
-      paths_name.push(allCenter[i].name);
-      break;
-    }
-  }
-
-  // thêm DTK và DGD nhận
-  paths_name.push(receiverDTK);
-  paths_name.push(receiverDGD);
-
-  const path = {
-    center_name: paths_name[0],
-    user_name: currentUser,
-    time: {
-      timeArrived: currentTime,
-    },
-    isConfirmed: true,
-  };
-  paths.push(path);
-  for (let i = 1; i < paths_name.length; i++) {
-    const tmp_path = {
-      center_name: paths_name[i],
-      user_name: null,
-      time: null,
-    };
-    paths.push(tmp_path);
-  }
-  data["paths"] = paths;
-  const result = await Order.create(data);
-  const centerInfo = await Center.findOne({ name: senderDGD });
-  const updatedOrders = await Center.findOneAndUpdate(
-    { name: senderDGD },
-    { orders: [...centerInfo.orders, result._id] },
-    { new: true }
-  );
-  if (result) {
-    return {
-      errorCode: 0,
-      data: result,
-      message: "Create order successfully",
-    };
-  }
-  return {
-    errorCode: 1,
-    data: "",
-    message: "Cannot create order",
-  };
-};
-
 const handleVerifyShipment = async (req) => {
   // sửa order paths
   const currentCenter = req.user.center_name;
   const currentUser = req.user.user_name;
   const orderIDs = req.body.parcelIDs;
+  console.log(orderIDs, currentCenter, currentUser);
   for (let i = 0; i < orderIDs.length; i++) {
     const order = await Order.findOne({ parcelId: orderIDs[i] });
     const currentdate = new Date();
@@ -135,16 +29,12 @@ const handleVerifyShipment = async (req) => {
         order["paths"][i]["time"]["timeArrived"] = currentTime;
       }
     }
-    const result = await Order.findOneAndUpdate(
-      { parcelId: orderIDs[i] },
-      order,
-      {
-        new: true,
-      }
-    );
+    await Order.findOneAndUpdate({ parcelId: orderIDs[i] }, order, {
+      new: true,
+    });
   }
 
-  return result;
+  return "result";
 };
 
 const handleCreateShipment = async (req) => {
@@ -277,29 +167,10 @@ const handleGetAllDGD = async (req) => {
   };
 };
 
-const handleGetParcelID = async (id) => {
-  const result = await Order.find({ parcelId: id });
-
-  if (result) {
-    return {
-      errorCode: 0,
-      data: result,
-      message: `Get parcel successfully`,
-    };
-  }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Cant get parcel id`,
-  };
-};
-
 export {
-  handleCreateOrder,
   handleVerifyShipment,
   handleGetResponsibleOrder,
   handleCreateShipment,
   handleGetAllDGD,
-  handleGetParcelID,
   handleGetShipmentToCurrentCenter,
 };
