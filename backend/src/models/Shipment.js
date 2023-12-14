@@ -4,11 +4,11 @@ import mongoose_delete from "mongoose-delete";
 const shipmentSchema = new mongoose.Schema({
   user_id: String,
   start: {
-    center_id: String,
+    center_id: { type: String, default: null },
     orders: [String],
   },
   destination: {
-    center_id: {type: String, default: null},
+    center_id: { type: String, default: null },
     orders: [String],
   },
 });
