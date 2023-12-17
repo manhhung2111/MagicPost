@@ -163,7 +163,7 @@ function TrackingParcelInformation({
                   disabled
                 />
                 <span className="custom-checkbox"></span>
-                Return at the end of storage period
+                Return end of storage period
               </label>
             </div>
           </div>

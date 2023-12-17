@@ -18,10 +18,10 @@ function OrderFromTransactionToCollection() {
     const fetchData = async () => {
       const result = await handleGetAllOrdersCreatedBy();
       if (result.errorCode === 0) {
-        const newOptions = result.data?.map((id) => {
+        const newOptions = result.data?.map((parcel) => {
           return {
-            value: id,
-            label: id,
+            value: parcel.parcelID,
+            label: parcel.parcelID,
           };
         });
         setOptions((prev) => newOptions);
@@ -78,10 +78,10 @@ function OrderFromTransactionToCollection() {
             <Select
               onChange={handleChangeOptions}
               placeholder={
-                JSON.parse(localStorage.getItem("account")).center_name
+                JSON.parse(localStorage.getItem("account"))?.center_name
               }
               className="select"
-              value={JSON.parse(localStorage.getItem("account")).center_name}
+              value={JSON.parse(localStorage.getItem("account"))?.center_name}
               isDisabled={true}
             />
           </Col>

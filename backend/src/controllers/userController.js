@@ -1,12 +1,11 @@
 import { userLogin } from "../services/userServices";
-
+import Order from "../models/Order";
 const jwt = require("jsonwebtoken");
 
 const createToken = (role_name, user_name, center_name) => {
   return jwt.sign(
     { role_name: role_name, user_name: user_name, center_name: center_name },
-    process.env.SECRET,
-    { expiresIn: "3d" }
+    process.env.SECRET
   );
 };
 

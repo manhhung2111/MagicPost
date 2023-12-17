@@ -15,6 +15,7 @@ import {
   handleGetAllDistricts,
 } from "../../../services/transactionServices";
 import ConfirmSenderOrderTransactionModal from "./ConfirmSenderOrderTransactionModal";
+import Loader from "../../Utils/Loader/Loader";
 
 function SenderOrderTransaction({ show, setShow }) {
   const initialParcelContentValue = {
@@ -66,13 +67,29 @@ function SenderOrderTransaction({ show, setShow }) {
   const [showModal, setShowModal] = useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   useEffect(() => {
-    const fetchApi = async () => {
+    const fetchData = async () => {
       const res = await handleGetAllDistricts();
-      setAllDistricts(res.data);
-      setSenderInfo((prev) => ({ ...prev, address: res.data[0] }));
-      setRecipientInfo((prev) => ({ ...prev, address: res.data[0] }));
+      if (res.errorCode === 0) {
+        setAllDistricts(
+          res.data.map((location) => ({
+            name: location.name,
+            value: `${location.full_name}`,
+            full_name: `${location.full_name}, ${
+              location.parent_center_name.split("_")[1]
+            }`,
+          }))
+        );
+        setSenderInfo((prev) => ({
+          ...prev,
+          address: res.data.filter(
+            (location) =>
+              location.name ===
+              JSON.parse(localStorage.getItem("account"))?.user_info.center_name
+          )[0].full_name,
+        }));
+      }
     };
-    fetchApi();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -82,14 +99,29 @@ function SenderOrderTransaction({ show, setShow }) {
       senderInfo.phoneNum &&
       recipientInfo.nameAddress &&
       recipientInfo.address &&
-      recipientInfo.phoneNum &&
-      !recipientInfo.parcelId
+      recipientInfo.phoneNum
     ) {
       const serialNum = new ShortUniqueId({ length: 9 });
-      const parcelId = "MP" + serialNum.rnd() + "HN";
+      // const city = recipientInfo.address.split(" ");
+      const index = allDistricts.findIndex(
+        (district) => district.value === recipientInfo.address
+      );
+      if (index === -1) return;
+      const city = allDistricts[index].full_name.split(" ");
+      const parcelId = "MP" + serialNum.rnd() + `${city[city.length - 1]}`;
       setRecipientInfo((prev) => ({ ...prev, parcelId: parcelId }));
+    } else {
+      setRecipientInfo((prev) => ({ ...prev, parcelId: "" }));
     }
-  }, [senderInfo, recipientInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    senderInfo.nameAddress,
+    senderInfo.address,
+    senderInfo.phoneNum,
+    recipientInfo.nameAddress,
+    recipientInfo.address,
+    recipientInfo.phoneNum,
+  ]);
 
   useEffect(() => {
     if (
@@ -112,7 +144,12 @@ function SenderOrderTransaction({ show, setShow }) {
         setDeliveryFare((prev) => ({ ...prev, total: total.toString() }));
       }
     }
-  }, [deliveryFare]);
+  }, [
+    deliveryFare.primary,
+    deliveryFare.subordinated,
+    deliveryFare.vat,
+    deliveryFare.another,
+  ]);
 
   const resetAllInputs = () => {
     setParcelContentValues([initialParcelContentValue]);
@@ -391,520 +428,553 @@ function SenderOrderTransaction({ show, setShow }) {
 
   return (
     <>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        centered
-        size="lg"
-        className="add-sender-order-transaction-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="title">Create new order</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container
-            className="sender-order-transaction-container"
-            id="sender-order-transaction"
+      {allDistricts.length > 0 && (
+        <>
+          <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            centered
+            size="xl"
+            className="add-sender-order-transaction-modal"
           >
-            <div className="sender-information" id="senderInfo">
-              <p>1. Sender's information</p>
-              <div className="input-group">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Sender's name and address"
-                  className="input"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Leave a comment here"
-                    style={{
-                      height: "100%",
-                      resize: "none",
-                      borderRadius: "5px",
-                    }}
-                    size="lg"
-                    value={senderInfo.nameAddress}
-                    onChange={(e) =>
-                      handleChangeSenderInfo(e.target.value, "nameAddress")
-                    }
-                    autoFocus={true}
-                  />
-                </FloatingLabel>
-                <div className="sender">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Sender's phone number"
-                    className="input"
-                  >
-                    <Form.Control
-                      type="text"
-                      placeholder="name@example.com"
-                      size="lg"
-                      value={senderInfo.phoneNum}
-                      onChange={(e) =>
-                        handleChangeSenderInfo(e.target.value, "phoneNum")
-                      }
-                    />
-                  </FloatingLabel>
-
-                  <Row className="g-2">
-                    <Col md>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Sender's customer Id"
-                        className="input"
-                        value={senderInfo.customerID}
+            <Modal.Header closeButton>
+              <Modal.Title className="title">Create new order</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Container
+                className="sender-order-transaction-container"
+                id="sender-order-transaction"
+              >
+                <div className="sender-information" id="senderInfo">
+                  <p>1. Sender's information</p>
+                  <div className="input-group">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Sender's name and address"
+                      className="input"
+                    >
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Leave a comment here"
+                        style={{
+                          height: "100%",
+                          resize: "none",
+                          borderRadius: "5px",
+                        }}
+                        size="lg"
+                        value={senderInfo.nameAddress}
                         onChange={(e) =>
-                          handleChangeSenderInfo(e.target.value, "customerId")
+                          handleChangeSenderInfo(e.target.value, "nameAddress")
                         }
-                      >
-                        <Form.Control
-                          type="text"
-                          placeholder="name@example.com"
-                          size="lg"
-                        />
-                      </FloatingLabel>
-                    </Col>
-                    <Col md>
-                      <FloatingLabel
-                        controlId="floatingSelectGrid"
-                        label="Select sender's district"
-                        className="input"
-                      >
-                        <Form.Select
-                          aria-label="Floating label select example"
-                          style={{ paddingBottom: "3px" }}
-                          value={senderInfo.address}
-                          onChange={(e) =>
-                            handleChangeSenderInfo(e.target.value, "address")
-                          }
-                        >
-                          {allDistricts.map((district, index) => {
-                            return (
-                              <option value={district} key={index}>
-                                {district}
-                              </option>
-                            );
-                          })}
-                        </Form.Select>
-                      </FloatingLabel>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </div>
-            <div className="sender-information" id="recipientInfo">
-              <p>2. Recipient's information</p>
-              <div className="input-group">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Recipient's name and address"
-                  className="input"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Leave a comment here"
-                    style={{
-                      height: "100%",
-                      resize: "none",
-                      borderRadius: "5px",
-                    }}
-                    size="lg"
-                    value={recipientInfo.nameAddress}
-                    onChange={(e) =>
-                      handleChangeRecipientInfo(e.target.value, "nameAddress")
-                    }
-                  />
-                </FloatingLabel>
-                <div className="sender">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Recipient's phone number"
-                    className="input"
-                  >
-                    <Form.Control
-                      type="text"
-                      placeholder="name@example.com"
-                      size="lg"
-                      value={recipientInfo.phoneNum}
-                      onChange={(e) =>
-                        handleChangeRecipientInfo(e.target.value, "phoneNum")
-                      }
-                    />
-                  </FloatingLabel>
-
-                  <Row className="g-2">
-                    <Col md>
+                        autoFocus={true}
+                      />
+                    </FloatingLabel>
+                    <div className="sender">
                       <FloatingLabel
                         controlId="floatingInput"
-                        label="Parcel Id"
+                        label="Sender's phone number"
                         className="input"
-                        title="Fill all sender's and recipient's information to get Parcel Id"
                       >
                         <Form.Control
                           type="text"
                           placeholder="name@example.com"
                           size="lg"
-                          disabled
-                          value={recipientInfo.parcelId}
+                          value={senderInfo.phoneNum}
+                          onChange={(e) =>
+                            handleChangeSenderInfo(e.target.value, "phoneNum")
+                          }
                         />
                       </FloatingLabel>
-                    </Col>
-                    <Col md>
+
+                      <Row className="g-2">
+                        <Col md>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Sender's customer Id"
+                            className="input"
+                            value={senderInfo.customerID}
+                            onChange={(e) =>
+                              handleChangeSenderInfo(
+                                e.target.value,
+                                "customerId"
+                              )
+                            }
+                          >
+                            <Form.Control
+                              type="text"
+                              placeholder="name@example.com"
+                              size="lg"
+                            />
+                          </FloatingLabel>
+                        </Col>
+                        <Col md>
+                          <FloatingLabel
+                            controlId="floatingSelectGrid"
+                            label="Select sender's district"
+                            className="input"
+                          >
+                            <Form.Select
+                              aria-label="Floating label select example"
+                              style={{ paddingBottom: "3px" }}
+                              value={""}
+                              onChange={(e) =>
+                                handleChangeSenderInfo(
+                                  e.target.value,
+                                  "address"
+                                )
+                              }
+                              disabled
+                            >
+                              {allDistricts.map((district, index) => {
+                                return (
+                                  <option
+                                    value={district.value}
+                                    key={index}
+                                    disabled={
+                                      district.name !==
+                                      JSON.parse(
+                                        localStorage.getItem("account")
+                                      )?.user_info.center_name
+                                    }
+                                  >
+                                    {district.full_name}
+                                  </option>
+                                );
+                              })}
+                            </Form.Select>
+                          </FloatingLabel>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                </div>
+                <div className="sender-information" id="recipientInfo">
+                  <p>2. Recipient's information</p>
+                  <div className="input-group">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Recipient's name and address"
+                      className="input"
+                    >
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Leave a comment here"
+                        style={{
+                          height: "100%",
+                          resize: "none",
+                          borderRadius: "5px",
+                        }}
+                        size="lg"
+                        value={recipientInfo.nameAddress}
+                        onChange={(e) =>
+                          handleChangeRecipientInfo(
+                            e.target.value,
+                            "nameAddress"
+                          )
+                        }
+                      />
+                    </FloatingLabel>
+                    <div className="sender">
                       <FloatingLabel
-                        controlId="floatingSelectGrid"
-                        label="Select recipient's district"
+                        controlId="floatingInput"
+                        label="Recipient's phone number"
                         className="input"
                       >
-                        <Form.Select
-                          aria-label="Floating label select example"
-                          style={{ paddingBottom: "3px" }}
-                          value={recipientInfo.address}
+                        <Form.Control
+                          type="text"
+                          placeholder="name@example.com"
+                          size="lg"
+                          value={recipientInfo.phoneNum}
                           onChange={(e) =>
-                            handleChangeRecipientInfo(e.target.value, "address")
+                            handleChangeRecipientInfo(
+                              e.target.value,
+                              "phoneNum"
+                            )
                           }
-                        >
-                          {allDistricts.map((district, index) => {
-                            return (
-                              <option value={district} key={index}>
-                                {district}
-                              </option>
-                            );
-                          })}
-                        </Form.Select>
+                        />
                       </FloatingLabel>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </div>
-            <div className="input-group" id="parcelType">
-              <div className="parcel-type">
-                <p>3. Type of parcel</p>
 
-                <div className="check-box-group">
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={isDocument}
-                      onChange={(e) =>
-                        handleChangeParcelType(e.target.checked, "document")
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Document
-                  </label>
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={!isDocument}
-                      onChange={(e) =>
-                        handleChangeParcelType(e.target.checked, "package")
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Package
-                  </label>
+                      <Row className="g-2">
+                        <Col md>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Parcel Id"
+                            className="input"
+                            title="Fill all sender's and recipient's information to get Parcel Id"
+                          >
+                            <Form.Control
+                              type="text"
+                              placeholder="name@example.com"
+                              size="lg"
+                              disabled
+                              value={recipientInfo.parcelId}
+                            />
+                          </FloatingLabel>
+                        </Col>
+                        <Col md>
+                          <FloatingLabel
+                            controlId="floatingSelectGrid"
+                            label="Select recipient's district"
+                            className="input"
+                          >
+                            <Form.Select
+                              aria-label="Floating label select example"
+                              style={{ paddingBottom: "3px" }}
+                              value={recipientInfo.address}
+                              onChange={(e) =>
+                                handleChangeRecipientInfo(
+                                  e.target.value,
+                                  "address"
+                                )
+                              }
+                            >
+                              {allDistricts.map((district, index) => {
+                                return (
+                                  <option value={district.value} key={index}>
+                                    {district.full_name}
+                                  </option>
+                                );
+                              })}
+                            </Form.Select>
+                          </FloatingLabel>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="additional-service">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="5. Additional/Special services"
-                  className="input"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Leave a comment here"
-                    style={{
-                      height: "100%",
-                      resize: "none",
-                      borderRadius: "5px",
-                    }}
-                    size="lg"
-                    value={additionalService}
-                    onChange={(e) => setAdditionalService(e.target.value)}
-                  />
-                </FloatingLabel>
-              </div>
-            </div>
-            <div className="input-group">
-              <div className="parcel-value" id="contentValue">
-                <p>4. Parcel content value</p>
-                <ParcelValueContentTableTransaction
-                  parcelValues={parcelContentValues}
-                  isDeletedRows={isDeletedRows}
-                  handleAddMoreRow={handleAddMoreRow}
-                  handleChangeParcelValues={handleChangeParcelContentValues}
-                  handleRemoveRows={handleRemoveRows}
-                />
-              </div>
-              <div className="sender-instruction">
-                <p>6. Sender's instructions for undeliverable parcel</p>
-                <div className="check-box-group">
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
+                <div className="input-group" id="parcelType">
+                  <div className="parcel-type">
+                    <p>3. Type of parcel</p>
+
+                    <div className="check-box-group">
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={isDocument}
+                          onChange={(e) =>
+                            handleChangeParcelType(e.target.checked, "document")
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Document
+                      </label>
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={!isDocument}
+                          onChange={(e) =>
+                            handleChangeParcelType(e.target.checked, "package")
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Package
+                      </label>
+                    </div>
+                  </div>
+                  <div className="additional-service">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="5. Additional/Special services"
                       className="input"
-                      checked={senderInstruction.returnImmediately}
-                      onChange={(e) =>
-                        handleChangeSenderInstruction(
-                          e.target.checked,
-                          "returnImmediately"
-                        )
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Return immediately
-                  </label>
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={senderInstruction.callRecipient}
-                      onChange={(e) =>
-                        handleChangeSenderInstruction(
-                          e.target.checked,
-                          "callRecipient"
-                        )
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Call the recipient
-                  </label>
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={senderInstruction.cancel}
-                      onChange={(e) =>
-                        handleChangeSenderInstruction(
-                          e.target.checked,
-                          "cancel"
-                        )
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Cancel
-                  </label>
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={senderInstruction.returnBefore}
-                      onChange={(e) =>
-                        handleChangeSenderInstruction(
-                          e.target.checked,
-                          "returnBefore"
-                        )
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Return before Sep 6th
-                  </label>
-                  <label className="checkBox">
-                    <input
-                      type="checkbox"
-                      className="input"
-                      checked={senderInstruction.returnAfterStorage}
-                      onChange={(e) =>
-                        handleChangeSenderInstruction(
-                          e.target.checked,
-                          "returnAfterStorage"
-                        )
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    Return at the end of storage period
-                  </label>
+                    >
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Leave a comment here"
+                        style={{
+                          height: "100%",
+                          resize: "none",
+                          borderRadius: "5px",
+                        }}
+                        size="lg"
+                        value={additionalService}
+                        onChange={(e) => setAdditionalService(e.target.value)}
+                      />
+                    </FloatingLabel>
+                  </div>
                 </div>
-                <FloatingLabel
-                  controlId="floatingTextarea"
-                  label="7. Notes"
-                  className="mb-2 note"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    style={{ height: "60px", resize: "none" }}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                  />
-                </FloatingLabel>
-              </div>
-            </div>
-            <div className="delivery-fare" id="deliveryFare">
-              <p>8. Delivery Fare</p>
-              <div className="input-group">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Primary Fare"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={deliveryFare.primary}
-                    onChange={(e) =>
-                      handleChangeDeliveryFare(e.target.value, "primary")
-                    }
-                  />
-                </FloatingLabel>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Subordinated Fare"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={deliveryFare.subordinated}
-                    onChange={(e) =>
-                      handleChangeDeliveryFare(e.target.value, "subordinated")
-                    }
-                  />
-                </FloatingLabel>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="VAT"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={deliveryFare.vat}
-                    onChange={(e) =>
-                      handleChangeDeliveryFare(e.target.value, "vat")
-                    }
-                  />
-                </FloatingLabel>
-              </div>
-              <div className="input-group">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Total Fare (VAT included)"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={deliveryFare.total}
-                    disabled
-                  />
-                </FloatingLabel>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Another Fare"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={deliveryFare.another}
-                    onChange={(e) =>
-                      handleChangeDeliveryFare(e.target.value, "another")
-                    }
-                  />
-                </FloatingLabel>
-              </div>
-            </div>
-            <div className="last-section" id="lastSection">
-              <div className="weight">
-                <p>9. Weight (kg)</p>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Actual weight"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={weight.actual}
-                    onChange={(e) =>
-                      handleChangeWeight(e.target.value, "actual")
-                    }
-                  />
-                </FloatingLabel>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Converted weight"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={weight.converted}
-                    onChange={(e) =>
-                      handleChangeWeight(e.target.value, "converted")
-                    }
-                  />
-                </FloatingLabel>
-              </div>
-              <div className="weight">
-                <p>10. Recipient's Fare</p>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="COD"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={recipientFare.cod}
-                    onChange={(e) =>
-                      handleChangeRecipientFare(e.target.value, "cod")
-                    }
-                  />
-                </FloatingLabel>
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Another fare"
-                  className="input"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder="Leave a comment here"
-                    size="lg"
-                    value={recipientFare.another}
-                    onChange={(e) =>
-                      handleChangeRecipientFare(e.target.value, "another")
-                    }
-                  />
-                </FloatingLabel>
-              </div>
-            </div>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer className="footer-custom-modal">
-          <button className="button cancel" onClick={handleClose}>
-            Cancel
-          </button>
-          <button
-            className="button save"
-            onClick={() => handleSubmitOrder()}
-            disabled={isDisabledButton}
-          >
-            Save changes
-          </button>
-        </Modal.Footer>
-      </Modal>
-      <ConfirmSenderOrderTransactionModal
-        parcelId={localStorage.getItem("id")}
-        show={showModal}
-        setShow={setShowModal}
-      />
+                <div className="input-group">
+                  <div className="parcel-value" id="contentValue">
+                    <p>4. Parcel content value</p>
+                    <ParcelValueContentTableTransaction
+                      parcelValues={parcelContentValues}
+                      isDeletedRows={isDeletedRows}
+                      handleAddMoreRow={handleAddMoreRow}
+                      handleChangeParcelValues={handleChangeParcelContentValues}
+                      handleRemoveRows={handleRemoveRows}
+                    />
+                  </div>
+                  <div className="sender-instruction">
+                    <p>6. Sender's instructions for undeliverable parcel</p>
+                    <div className="check-box-group">
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={senderInstruction.returnImmediately}
+                          onChange={(e) =>
+                            handleChangeSenderInstruction(
+                              e.target.checked,
+                              "returnImmediately"
+                            )
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Return immediately
+                      </label>
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={senderInstruction.callRecipient}
+                          onChange={(e) =>
+                            handleChangeSenderInstruction(
+                              e.target.checked,
+                              "callRecipient"
+                            )
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Call the recipient
+                      </label>
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={senderInstruction.cancel}
+                          onChange={(e) =>
+                            handleChangeSenderInstruction(
+                              e.target.checked,
+                              "cancel"
+                            )
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Cancel
+                      </label>
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={senderInstruction.returnBefore}
+                          onChange={(e) =>
+                            handleChangeSenderInstruction(
+                              e.target.checked,
+                              "returnBefore"
+                            )
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Return before Sep 6th
+                      </label>
+                      <label className="checkBox">
+                        <input
+                          type="checkbox"
+                          className="input"
+                          checked={senderInstruction.returnAfterStorage}
+                          onChange={(e) =>
+                            handleChangeSenderInstruction(
+                              e.target.checked,
+                              "returnAfterStorage"
+                            )
+                          }
+                        />
+                        <span className="custom-checkbox"></span>
+                        Return at the end of storage period
+                      </label>
+                    </div>
+                    <FloatingLabel
+                      controlId="floatingTextarea"
+                      label="7. Notes"
+                      className="mb-2 note"
+                    >
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        style={{ height: "60px", resize: "none" }}
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                      />
+                    </FloatingLabel>
+                  </div>
+                </div>
+                <div className="delivery-fare" id="deliveryFare">
+                  <p>8. Delivery Fare</p>
+                  <div className="input-group">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Primary Fare"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={deliveryFare.primary}
+                        onChange={(e) =>
+                          handleChangeDeliveryFare(e.target.value, "primary")
+                        }
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Subordinated Fare"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={deliveryFare.subordinated}
+                        onChange={(e) =>
+                          handleChangeDeliveryFare(
+                            e.target.value,
+                            "subordinated"
+                          )
+                        }
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="VAT"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={deliveryFare.vat}
+                        onChange={(e) =>
+                          handleChangeDeliveryFare(e.target.value, "vat")
+                        }
+                      />
+                    </FloatingLabel>
+                  </div>
+                  <div className="input-group">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Total Fare (VAT included)"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={deliveryFare.total}
+                        disabled
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Another Fare"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={deliveryFare.another}
+                        onChange={(e) =>
+                          handleChangeDeliveryFare(e.target.value, "another")
+                        }
+                      />
+                    </FloatingLabel>
+                  </div>
+                </div>
+                <div className="last-section" id="lastSection">
+                  <div className="weight">
+                    <p>9. Weight (kg)</p>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Actual weight"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={weight.actual}
+                        onChange={(e) =>
+                          handleChangeWeight(e.target.value, "actual")
+                        }
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Converted weight"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={weight.converted}
+                        onChange={(e) =>
+                          handleChangeWeight(e.target.value, "converted")
+                        }
+                      />
+                    </FloatingLabel>
+                  </div>
+                  <div className="weight">
+                    <p>10. Recipient's Fare</p>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="COD"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={recipientFare.cod}
+                        onChange={(e) =>
+                          handleChangeRecipientFare(e.target.value, "cod")
+                        }
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Another fare"
+                      className="input"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Leave a comment here"
+                        size="lg"
+                        value={recipientFare.another}
+                        onChange={(e) =>
+                          handleChangeRecipientFare(e.target.value, "another")
+                        }
+                      />
+                    </FloatingLabel>
+                  </div>
+                </div>
+              </Container>
+            </Modal.Body>
+            <Modal.Footer className="footer-custom-modal">
+              <button className="button cancel" onClick={handleClose}>
+                Cancel
+              </button>
+              <button
+                className="button save"
+                onClick={() => handleSubmitOrder()}
+                disabled={isDisabledButton}
+              >
+                Save changes
+              </button>
+            </Modal.Footer>
+          </Modal>
+          <ConfirmSenderOrderTransactionModal
+            parcelId={localStorage.getItem("id")}
+            show={showModal}
+            setShow={setShowModal}
+          />
+        </>
+      )}
+      {allDistricts.length === 0 && <Loader />}
     </>
   );
 }

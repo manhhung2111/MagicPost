@@ -10,7 +10,7 @@ function AccountInfo({ showModal, setShowModal }) {
     if (!isLogin) return;
     const { center_name, email, name, role_name } = JSON.parse(
       localStorage.getItem("account")
-    );
+    ).user_info;
     setInfo((prev) => ({ center_name, email, name, role_name }));
   }, []);
   return (

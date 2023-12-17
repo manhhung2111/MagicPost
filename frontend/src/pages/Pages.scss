@@ -206,10 +206,16 @@
             border: none;
             outline: none;
             border-radius: 1.5rem;
-            background-color: rgba(255, 207, 153, 0.479);
             font-size: 1.3rem;
-            color: #ff9130;
             font-weight: bold;
+            &.transit {
+              background-color: rgba(255, 207, 153, 0.479);
+              color: #ff9130;
+            }
+            &.delivered {
+              background-color: #C1F2B0;
+              color: #65B741;
+            }
           }
         }
         .status {

@@ -11,7 +11,6 @@ function HomePage() {
       const element = document.getElementById(id);
       if (element) {
         // 👇 Will scroll smoothly to the top of the next section
-        console.log("hi");
         element.scrollIntoView({ behavior: "smooth" });
       }
     };

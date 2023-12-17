@@ -1,7 +1,6 @@
 import axios from "axios";
 import nProgress from "nprogress";
 
-
 nProgress.configure({
   showSpinner: false,
   trickleSpeed: 100,
@@ -12,19 +11,19 @@ const instance = axios.create({
 });
 
 // Add a request interceptor
-// instance.interceptors.request.use(
-//   function (config) {
-//     nProgress.start();
-//     const token = JSON.parse(localStorage.getItem("account"))?.access_token
-//     if(token) config.headers.Authorization = `Bearer ${token}`;
-//     // Do something before request is sent
-//     return config;
-//   },
-//   function (error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-//   }
-// );
+instance.interceptors.request.use(
+  function (config) {
+    nProgress.start();
+    const token = JSON.parse(localStorage.getItem("account"))?.token;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    // Do something before request is sent
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor
 instance.interceptors.response.use(
@@ -38,6 +37,9 @@ instance.interceptors.response.use(
     nProgress.done();
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if (error.response.status === 401) {
+      return "Unauthorized user";
+    }
     return error?.response?.data || Promise.reject(error);
   }
 );

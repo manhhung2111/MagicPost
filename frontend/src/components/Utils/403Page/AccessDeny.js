@@ -12,7 +12,7 @@ function AccessDeny() {
         </span>
         3
       </h1>
-      <h2>Error: 404 access denied</h2>
+      <h2>Error: 403 access denied</h2>
       <p>Sorry, you don't have permission to access this page</p>
       <button
         className="button"
