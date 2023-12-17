@@ -11,22 +11,27 @@ import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
 import avatar from "./assets/programmer.png";
 import { useNavigate } from "react-router-dom";
 import AccountInfo from "./components/HomeComponents/AccountInfo/AccountInfo";
+import axios from './config/axiosConfig'
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState("");
   const [isShowSetting, setIsShowSetting] = useState(false);
   const [showAccountModal, setIsShowAccountModal] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    let isLogin = JSON.parse(localStorage.getItem("account"))?.isAuthenticated;
-    console.log(isLogin);
-    if (!isLogin) isLogin = false;
-    setIsAuthenticated(isLogin);
+    let role_name = JSON.parse(localStorage.getItem("account"))?.user_info
+      .role_name;
+    if (!role_name) role_name = "";
+    setIsAuthenticated(role_name);
   }, []);
   useEffect(() => {
+    let role_name = JSON.parse(localStorage.getItem("account"))?.user_info
+      .role_name;
+    if (!role_name) role_name = "";
+    setIsAuthenticated(role_name);
     if (location.pathname !== "/") {
       setHeaderColor("blur");
     } else {
@@ -52,7 +57,11 @@ function App() {
     setIsShowSetting(false);
     setShowLoginModal(false);
     localStorage.clear();
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer`;
     navigate("/");
+    
   };
 
   return (
@@ -103,33 +112,42 @@ function App() {
                   <NavLink to={"/tracking"} className="nav-link">
                     Tracking
                   </NavLink>
-                  {isAuthenticated && (
+                  {isAuthenticated === "GDV" && (
                     <NavLink to={"/parcel-transaction"} className="nav-link">
                       Parcel Transaction
                     </NavLink>
                   )}
-                  {isAuthenticated && (
-                    <NavLink to={"/transaction-management"} className="nav-link">
+                  {isAuthenticated === "TDGD" && (
+                    <NavLink
+                      to={"/transaction-management"}
+                      className="nav-link"
+                    >
                       Transaction Management
                     </NavLink>
                   )}
-                  {isAuthenticated && (
+                  {isAuthenticated === "DTKV" && (
                     <NavLink to={"/parcel-collection"} className="nav-link">
                       Parcel Collection
                     </NavLink>
                   )}
-                  {isAuthenticated && (
+                  {isAuthenticated === "TDTK" && (
                     <NavLink to={"/collection-management"} className="nav-link">
                       Collection Management
                     </NavLink>
                   )}
                   {headerColor === "blur" && !isAuthenticated && (
-                    <button className="signin-btn" onClick={() => handleLogin()}>
+                    <button
+                      className="signin-btn"
+                      onClick={() => handleLogin()}
+                    >
                       Log in
                     </button>
                   )}
                   {headerColor === "" && !isAuthenticated && (
-                    <button className="signin-btn" onClick={() => handleLogin()}>
+                    <button
+                      className="signin-btn"
+                      onClick={() => handleLogin()}
+                    >
                       Log in
                     </button>
                   )}

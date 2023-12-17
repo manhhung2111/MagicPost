@@ -76,10 +76,10 @@ function CreateOrderFromCollectionToCollection() {
             <Select
               onChange={handleChangeOptions}
               placeholder={
-                JSON.parse(localStorage.getItem("account")).center_name
+                JSON.parse(localStorage.getItem("account"))?.center_name
               }
               className="select"
-              value={JSON.parse(localStorage.getItem("account")).center_name}
+              value={JSON.parse(localStorage.getItem("account"))?.center_name}
               isDisabled={true}
             />
           </Col>

@@ -261,7 +261,7 @@ const handleGetAllDGD = async (req) => {
   const regex = /^DGD/;
   const query = { name: { $regex: regex } };
 
-  const result = await Center.find(query, { name: 1, full_name: 1, _id: 0 });
+  const result = await Center.find(query, { name: 1, full_name: 1, parent_center_name: 1,  _id: 0 });
 
   if (result) {
     return {

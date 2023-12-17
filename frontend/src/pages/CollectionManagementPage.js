@@ -133,7 +133,7 @@ function CollectionManagementPage() {
   const getGreetingMessage = () => {
     const today = new Date();
     const userName =
-      JSON.parse(localStorage.getItem("account")).name ?? "Manh Hung";
+      JSON.parse(localStorage.getItem("account"))?.user_info?.name ?? "Manh Hung";
     if (today.getHours() >= 0 && today.getHours() < 12)
       return `Good morning, ${userName}!`;
     else if (today.getHours() <= 18) return `Good afternoon, ${userName}!`;

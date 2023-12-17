@@ -38,6 +38,7 @@ router.put("/order", async (req, res) => {
 // lấy ra các khu vực phụ trách
 router.get("/locations", async (req, res) => {
   const result = await handleGetAllDGD(req);
+  
   res.send(result);
 });
 

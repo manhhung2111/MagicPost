@@ -100,11 +100,11 @@ function TrackingPage() {
           Search{" "}
         </button>
       </div>
-      <Container >
+      <Container>
         {isSearching === "searching" && <Loader />}
         {isSearching === "done" && Object.keys(parcelInfo).length !== 0 && (
-          <Container className="tracking-history" >
-            <div className="left-content" >
+          <Container className="tracking-history">
+            <div className="left-content">
               <h2>Tracking history</h2>
               <div className="parcel-quick-info">
                 <div className="header">
@@ -113,7 +113,9 @@ function TrackingPage() {
                       ? "Document"
                       : "Package"}
                   </h3>
-                  <p>In Transit</p>
+                  <p className={parcelInfo.delivered ? "delivered" : "transit"}>
+                    {parcelInfo.delivered ? "Delivered" : "In Transit"}
+                  </p>
                 </div>
                 <div className="id">
                   <p>{`#${parcelInfo.parcelId}`}</p>
@@ -124,7 +126,7 @@ function TrackingPage() {
                   {parcelInfo.recipientInfo.address}, Ha Noi
                 </p>
                 <div className="status">
-                  <p>Expected Delivery</p>
+                  <p>{parcelInfo.delivered ? "Delivered at" : "Expected delivery"}</p>
                   <p>Nov 01 before 8:00 PM</p>
                 </div>
               </div>
