@@ -4,6 +4,7 @@ import "./LoginModal.scss";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { handleLogin } from "../../../services/authorizationService";
+import axios from "../../../config/axiosConfig";
 function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -35,10 +36,13 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
           "account",
           JSON.stringify({ ...result.data, isAuthenticated: true })
         );
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${result.token}`;
         setShowLoginModal(false);
         setUserName("");
         setPassword("");
-        setIsAuthenticated(true);
+        setIsAuthenticated(result.data.user_info.role_name);
         toast.success("Login successfully");
         navigate("/");
       }
@@ -85,7 +89,7 @@ function LoginModal({ showLoginModal, setShowLoginModal, setIsAuthenticated }) {
               <button onClick={() => handleSubmit()} disabled={isDisableButton}>
                 Log in
               </button>
-              {isLoading && <div class="loader"></div>}
+              {isLoading && <div className="loader"></div>}
             </div>
           </div>
           <div className="card-info">

@@ -1,5 +1,6 @@
 import TrackingParcelValueTable from "./TrackingParcelValueTable";
 import approvedImg from "../../assets/approved.png";
+import QRCode from "react-qr-code";
 
 function TrackingParcelInformation({
   senderInfo,
@@ -19,6 +20,7 @@ function TrackingParcelInformation({
   return (
     <div className="parcel-information">
       <h2>Parcel Information</h2>
+      
       <div className="boxes">
         <div className="box">
           <div className="header">
@@ -161,7 +163,7 @@ function TrackingParcelInformation({
                   disabled
                 />
                 <span className="custom-checkbox"></span>
-                Return at the end of storage period
+                Return end of storage period
               </label>
             </div>
           </div>
@@ -275,7 +277,7 @@ function TrackingParcelInformation({
               <p>{`${
                 delivered ? paths[3].time ?? "Delivered" : "Not delivered"
               }`}</p>
-              <p>Recipient's signature</p>
+              <p style={{fontSize: "1.1rem"}}>Recipient's signature</p>
               {delivered && (
                 <p>
                   <i>
@@ -286,6 +288,14 @@ function TrackingParcelInformation({
                   </i>
                 </p>
               )}
+              <div className="qr-code">
+        <QRCode
+          size={64}
+          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+          value={`http://localhost:3000/tracking?parcelId=${parcelId}`}
+          viewBox={`0 0 256 256`}
+        />
+      </div>
             </div>
           </div>
         </div>

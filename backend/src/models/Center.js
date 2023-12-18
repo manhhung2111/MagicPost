@@ -2,14 +2,13 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const centerSchema = new mongoose.Schema({
-  name: { type: String, unique: true },
-  user_name: String, // TDGD or TDTK
-  parent_center_name: String, // = null -> dtk, != null -> dgd
+  center_code: { type: String, unique: true },
+  name: String,
   location: String,
   phone: String,
   email: String,
-  orders: [{ order_id: String, next_center_id: String }],
-  responsible_locations: [],
+  nearby_center: [String],
+  postalCode: { type: String, default: "1000" },
 });
 
 centerSchema.plugin(mongoose_delete, { overrideMethods: "all" });
