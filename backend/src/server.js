@@ -3,14 +3,11 @@ import express from "express";
 require("dotenv").config();
 import cors from "cors";
 
-import router from "./routes/api";
-
-import Center from "./models/Center";
-import Order from "./models/Order";
-import Role from "./models/Role";
-import Shipment from "./models/Shipment";
-import URL from "./models/URL";
-import User from "./models/User";
+import transactionEmployeeRouter from "./routes/transactionEmployeeAPIs";
+import transactionManagerRouter from "./routes/transactionManagerAPIs";
+import collectionEmployeeRouter from "./routes/collectionEmployeeAPIs";
+import userRouter from "./routes/userAPIs";
+import generalManagerRouter from "./routes/generalManagerAPIs";
 
 const app = express();
 
@@ -29,7 +26,12 @@ const dbName = process.env.DB_NAME;
 // get data
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
-app.use("/", router);
+
+app.use("/general", userRouter);
+app.use("/trans-emp", transactionEmployeeRouter);
+app.use("/trans-mana", transactionManagerRouter);
+app.use("/collection-emp", collectionEmployeeRouter);
+app.use("/general-mana", generalManagerRouter);
 
 (async function () {
   try {

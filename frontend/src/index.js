@@ -8,16 +8,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import TrackingPage from "./pages/TrackingPage";
 import ParcelTransactionPage from "./pages/ParceTransactionPage";
-import SenderOrderTransaction from "./components/ParcelTransactionComponents/SenderOrderTransaction/SenderOrderTransaction";
-import RecipientOrderConfirmation from "./components/ParcelTransactionComponents/RecipientOrderConfirmation/RecipientOrderConfirmation";
-import OrderFromTransactionToCollection from "./components/ParcelTransactionComponents/OrderFromTransactionToCollection/OrderFromTransactionToCollection";
-import OrderFromCollectionToTransaction from "./components/ParcelTransactionComponents/OrderFromCollectionToTransaction/OrderFromCollectionToTransaction";
-import ParcelTransactionStatusStatistics from "./components/ParcelTransactionComponents/ParcelStatusStatistics/ParcelTransactionStatusStatistics";
-import RecipientOrderTransaction from "./components/ParcelTransactionComponents/RecipientOrderTransaction/RecipientOrderTransaction";
-import TransactionManagementPage from "./pages/TransactionManagement";
+import TransactionManagementPage from "./pages/TransactionManagementPage";
 import PageNotFound from "./components/Utils/404Page/PageNotFound";
 import AccessDeny from "./components/Utils/403Page/AccessDeny";
+import ParcelCollectionPage from "./pages/ParcelColllectionPage";
+import CollectionManagementPage from "./pages/CollectionManagementPage";
+import PrivateRoute from "./components/Utils/PrivateRoute";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <div>
     <BrowserRouter>
@@ -25,32 +23,37 @@ root.render(
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
           <Route path="tracking" element={<TrackingPage />} />
-          <Route path="parcel-transaction" element={<ParcelTransactionPage />}>
-            <Route index element={<SenderOrderTransaction />} />
-            <Route
-              path="delivery-order-collection-point"
-              element={<OrderFromTransactionToCollection />}
-            />
-            <Route
-              path="confirm-order-collection-point"
-              element={<OrderFromCollectionToTransaction />}
-            />
-            <Route
-              path="recipient-order"
-              element={<RecipientOrderTransaction />}
-            />
-            <Route
-              path="confirm-recipient-order"
-              element={<RecipientOrderConfirmation />}
-            />
-            <Route
-              path="statistics"
-              element={<ParcelTransactionStatusStatistics />}
-            />
-          </Route>
+          <Route
+            path="parcel-transaction"
+            element={
+              <PrivateRoute expectedRole={"GDV"}>
+                <ParcelTransactionPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="transaction-management"
-            element={<TransactionManagementPage />}
+            element={
+              <PrivateRoute expectedRole={"TDGD"}>
+                <TransactionManagementPage />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path="parcel-collection"
+            element={
+              <PrivateRoute expectedRole={"DTKV"}>
+                <ParcelCollectionPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="collection-management"
+            element={
+              <PrivateRoute expectedRole={"TDTK"}>
+                <CollectionManagementPage />
+              </PrivateRoute>
+            }
           ></Route>
         </Route>
         <Route path="access-deny" element={<AccessDeny />} />

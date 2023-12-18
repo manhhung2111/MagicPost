@@ -17,10 +17,10 @@ function TransactionManagementParcelTable({ orders, isIncoming }) {
               <td>{index + 1}</td>
               <td>{order.parcelId}</td>
               <td>{isIncoming ? order.from : order.to}</td>
-              <td class="amount">{order.date}</td>
+              <td className="amount">{order.date}</td>
               <td>
                 <p
-                  class={`status ${
+                  className={`status ${
                     order.status === "Pending"
                       ? "status-pending"
                       : "status-paid"

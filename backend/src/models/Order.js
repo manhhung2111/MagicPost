@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import mongoose_delete from "mongoose-delete";
 
 const orderSchema = new mongoose.Schema({
-  parcelId: { type: String },
+  parcelId: { type: String, unique: true, required: true },
   packageInfo: {
     typeOfParcel: {
       isDocument: { type: Boolean, defaul: false },
@@ -55,12 +55,13 @@ const orderSchema = new mongoose.Schema({
   },
   paths: [
     {
-      center_name: String,
+      center_code: String,
       user_name: { type: String, default: null },
       time: {
-        timeArrived: { type: String, default: null },
-        timeDeparted: { type: String, default: null}
+        timeArrived: { type: String, default: "" },
+        timeDeparted: { type: String, default: "" },
       },
+      isConfirmed: { type: Boolean, default: false },
     },
   ],
   delivered: { type: Boolean, default: false },

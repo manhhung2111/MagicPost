@@ -18,9 +18,9 @@ function DelvieryOrderRecipientTable({ orders }) {
               <td>{index + 1}</td>
               <td>{order.parcelId}</td>
               <td className="address">{order.address}</td>
-              <td class="amount">{order.district}</td>
+              <td className="amount">{order.district}</td>
               <td>
-                <p class="status status-pending">Pending</p>
+                <p className="status status-pending">Pending</p>
               </td>
               <td>
                 <button className="confirm">Create</button>
