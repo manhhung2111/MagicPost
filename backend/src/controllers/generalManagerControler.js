@@ -2,6 +2,7 @@ import Center from "../models/Center";
 import Order from "../models/Order";
 import User from "../models/User";
 import _ from "lodash";
+import { createNewCenter } from "../services/generalManagerServices";
 
 const handleGetDTK = async () => {
   let result = await Center.find({ parent_center_name: null });
@@ -23,4 +24,14 @@ const handleGetDTK = async () => {
 
 const handleGetAllOrders = async () => {};
 
-export { handleGetDTK };
+const handleCreateNewCenter = async (req, res) => {
+  const data = req.body;
+  const result = await createNewCenter(data);
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+export { handleGetDTK, handleCreateNewCenter };

@@ -78,7 +78,8 @@ function OrderFromTransactionToCollection() {
             <Select
               onChange={handleChangeOptions}
               placeholder={
-                JSON.parse(localStorage.getItem("account"))?.center_name
+                JSON.parse(localStorage.getItem("account"))?.user_info
+                  ?.center_name
               }
               className="select"
               value={JSON.parse(localStorage.getItem("account"))?.center_name}
@@ -101,6 +102,7 @@ function OrderFromTransactionToCollection() {
           </Col>
         </Row>
       </div>
+      <p className={`${parcelIds.length > 0? "active" : ""}`}>Expected next collection hub: DTK_DN</p>
       <button className="button" onClick={() => handleSubmit()}>
         Confirm Transfer
       </button>

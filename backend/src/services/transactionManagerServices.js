@@ -1,7 +1,7 @@
 import User from "../models/User";
 import Center from "../models/Center";
 
-const handleCreateGDV = async (req) => {
+const createNewEmployeeAndShipper = async () => {
   const curCenter = req.user.center_name;
   let updateData = req.body;
   updateData["center_name"] = curCenter;
@@ -20,7 +20,7 @@ const handleCreateGDV = async (req) => {
   };
 };
 
-const handleGetAllGDV = async () => {
+const getAllEmployees = async () => {
   const center_name = "GD1";
   const result = await User.find({
     center_name: center_name,
@@ -30,14 +30,4 @@ const handleGetAllGDV = async () => {
   return result;
 };
 
-const handleGetAllOrderDGD = async () => {
-  const center_name = "GD1";
-  const result = await Center.find({
-    center_name: center_name,
-    role_name: "GDV",
-  });
-  console.log(result);
-  return result;
-};
-
-export { handleCreateGDV, handleGetAllGDV, handleGetAllOrderDGD };
+export { createNewEmployeeAndShipper, getAllEmployees };
