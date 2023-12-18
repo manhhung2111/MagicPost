@@ -4,15 +4,15 @@ import CollectionToTransactionTable from "./CollectionToTransactionTable";
 import Select from "react-select";
 function OrderFromCollectionToTransaction() {
   const orders = [
-    { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
-    { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
-    { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
-    { parcelId: "MPN0WBQ9JJoHN", from: "TK1", date: "21/11/2023" },
+    { parcelId: "MPN0WBQ9JJoHN", from: "DTK Ha Noi", date: "21/11/2023" },
+    { parcelId: "MPN0WBQ9JJoHN", from: "DTK Ha Noi", date: "21/11/2023" },
+    { parcelId: "MPN0WBQ9JJoHN", from: "DTK Ha Noi", date: "21/11/2023" },
+    { parcelId: "MPN0WBQ9JJoHN", from: "DTK Ha Noi", date: "21/11/2023" },
   ];
 
   const collectionHubs = [
-    { label: "TK1", value: "TK1" },
-    { label: "TK2", value: "TK2" },
+    { label: "Document", value: "Document" },
+    { label: "Package", value: "Package" },
   ];
   const sortBy = [
     { label: "Alphabetical", value: "Alphabetical" },
@@ -21,17 +21,17 @@ function OrderFromCollectionToTransaction() {
   ];
   return (
     <Container className="order-from-collection-to-transaction">
-      <h2>Confirm orders from other collection hub(s)</h2>
+      <h2>Confirm orders from collection hub</h2>
       <div className="pending-confirmation-orders">
         <div className="filter">
           <div className="left-content">
-            <p>Select by collection hub</p>
+            <p>Select by parcel type</p>
             <Select
               defaultValue={[]}
               isMulti
               options={collectionHubs}
               className="multi-select"
-              placeholder={"Select collection hubs"}
+              placeholder={"Select parcel type"}
             />
           </div>
           <div className="right-content">
@@ -39,7 +39,7 @@ function OrderFromCollectionToTransaction() {
             <Select
               defaultValue={sortBy[0]}
               options={sortBy}
-              className="multi-select"
+              className="select"
               placeholder={"Sort by...."}
             />
           </div>

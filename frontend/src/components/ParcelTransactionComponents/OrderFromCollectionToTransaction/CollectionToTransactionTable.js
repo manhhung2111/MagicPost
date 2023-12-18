@@ -7,7 +7,8 @@ function CollectionToTransactionTable({ orders }) {
           <th>Parcel ID</th>
           <th>Type</th>
           <th>From</th>
-          <th>Dispatched Date</th>
+          <th>Pending From</th>
+          <th>Notes</th>
           <th>Status</th>
           <th>Confirm Receipt</th>
         </tr>
@@ -21,6 +22,7 @@ function CollectionToTransactionTable({ orders }) {
               <td>{order.type ?? "Document"}</td>
               <td>{order.from}</td>
               <td className="amount">{order.date}</td>
+              <td className="notes">Deliver as fast as possible, dsadsa deqwe2123213213</td>
               <td>
                 <p className="status status-pending">Pending</p>
               </td>

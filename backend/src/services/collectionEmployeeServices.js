@@ -2,7 +2,7 @@ import Order from "../models/Order";
 import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 
-const handleVerifyShipment = async (req) => {
+const confirmShipment = async () => {
   // sửa order paths
   const currentCenter = req.user.center_name;
   const currentUser = req.user.user_name;
@@ -37,7 +37,64 @@ const handleVerifyShipment = async (req) => {
   return "result";
 };
 
-const handleCreateShipment = async (req) => {
+const getAllTransactionAndCollectionsCenter = async () => {
+  const currentCenter = req.user.center_name;
+  const user_name = req.user.user_name;
+  const regex = /^DGD/;
+  const query = { name: { $regex: regex } };
+
+  const result = await Center.find(query, { name: 1, full_name: 1, _id: 0 });
+
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Load all locations successfully`,
+    };
+  }
+  return {
+    errorCode: 1,
+    data: "",
+    message: `Cant all locations successfully`,
+  };
+};
+
+const getResponsibleOrders = async () => {
+  let result = [];
+  const currentCenter = req.user.center_name;
+  const user_name = req.user.user_name;
+  const allOrders = await Order.find();
+  for (let i = 0; i < allOrders.length; i++) {
+    const path = allOrders[i]["paths"];
+    for (let j = 0; j < path.length - 1; j++) {
+      if (
+        path[j]["user_name"] === user_name &&
+        path[j]["center_name"] === currentCenter &&
+        path[j + 1]["user_name"] === null
+      ) {
+        result.push({
+          parcelID: allOrders[i]["parcelId"],
+          expectedCenter: path[j + 1]["center_name"],
+        });
+      }
+    }
+  }
+
+  if (result) {
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Load all parcel responsible by ${user_name} in ${currentCenter} successfully`,
+    };
+  }
+  return {
+    errorCode: 1,
+    data: "",
+    message: `Can't load all parcel responsible by ${user_name} in ${currentCenter}`,
+  };
+};
+
+const createShipmentToNextCenter = async () => {
   const currentCenter = req.user.center_name;
   const user_name = req.user.user_name;
   let data = req.body;
@@ -85,42 +142,7 @@ const handleCreateShipment = async (req) => {
   };
 };
 
-const handleGetResponsibleOrder = async (req) => {
-  let result = [];
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  const allOrders = await Order.find();
-  for (let i = 0; i < allOrders.length; i++) {
-    const path = allOrders[i]["paths"];
-    for (let j = 0; j < path.length - 1; j++) {
-      if (
-        path[j]["user_name"] === user_name &&
-        path[j]["center_name"] === currentCenter &&
-        path[j + 1]["user_name"] === null
-      ) {
-        result.push({
-          parcelID: allOrders[i]["parcelId"],
-          expectedCenter: path[j + 1]["center_name"],
-        });
-      }
-    }
-  }
-
-  if (result) {
-    return {
-      errorCode: 0,
-      data: result,
-      message: `Load all parcel responsible by ${user_name} in ${currentCenter} successfully`,
-    };
-  }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Can't load all parcel responsible by ${user_name} in ${currentCenter}`,
-  };
-};
-
-const handleGetShipmentToCurrentCenter = async (req) => {
+const getIncomingShipments = async () => {
   let result = [];
   const currentCenter = req.user.center_name;
   const user_name = req.user.user_name;
@@ -145,32 +167,10 @@ const handleGetShipmentToCurrentCenter = async (req) => {
   };
 };
 
-const handleGetAllDGD = async (req) => {
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  const regex = /^DGD/;
-  const query = { name: { $regex: regex } };
-
-  const result = await Center.find(query, { name: 1, full_name: 1, _id: 0 });
-
-  if (result) {
-    return {
-      errorCode: 0,
-      data: result,
-      message: `Load all locations successfully`,
-    };
-  }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Cant all locations successfully`,
-  };
-};
-
 export {
-  handleVerifyShipment,
-  handleGetResponsibleOrder,
-  handleCreateShipment,
-  handleGetAllDGD,
-  handleGetShipmentToCurrentCenter,
+  confirmShipment,
+  getAllTransactionAndCollectionsCenter,
+  getResponsibleOrders,
+  createShipmentToNextCenter,
+  getIncomingShipments,
 };
