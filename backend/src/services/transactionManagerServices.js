@@ -1,23 +1,25 @@
 import User from "../models/User";
 import Center from "../models/Center";
 
-const createNewEmployeeAndShipper = async () => {
-  const curCenter = req.user.center_name;
-  let updateData = req.body;
-  updateData["center_name"] = curCenter;
-  const result = await User.create(updateData);
-  if (result) {
+const createNewEmployee = async (data, user) => {
+  try {
+    const curCenter = user.center_name;
+    data["center_name"] = curCenter;
+    data["role_name"] = "GDV";
+
+    const result = await User.create(data);
     return {
       errorCode: 0,
       data: result,
-      message: "Create user successfully",
+      message: "Create new employee successfully",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
     };
   }
-  return {
-    errorCode: 1,
-    data: "",
-    message: "Cannot create user",
-  };
 };
 
 const getAllEmployees = async () => {
@@ -30,4 +32,4 @@ const getAllEmployees = async () => {
   return result;
 };
 
-export { createNewEmployeeAndShipper, getAllEmployees };
+export { createNewEmployee, getAllEmployees };

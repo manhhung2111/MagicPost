@@ -117,7 +117,7 @@ function App() {
                       Parcel Transaction
                     </NavLink>
                   )}
-                  {isAuthenticated === "TDGD" && (
+                  {isAuthenticated === "GDT" && (
                     <NavLink
                       to={"/transaction-management"}
                       className="nav-link"
@@ -125,12 +125,12 @@ function App() {
                       Transaction Management
                     </NavLink>
                   )}
-                  {isAuthenticated === "DTKV" && (
+                  {isAuthenticated === "TKV" && (
                     <NavLink to={"/parcel-collection"} className="nav-link">
                       Parcel Collection
                     </NavLink>
                   )}
-                  {isAuthenticated === "TDTK" && (
+                  {isAuthenticated === "TKT" && (
                     <NavLink to={"/collection-management"} className="nav-link">
                       Collection Management
                     </NavLink>

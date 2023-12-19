@@ -34,7 +34,7 @@ root.render(
           <Route
             path="transaction-management"
             element={
-              <PrivateRoute expectedRole={"TDGD"}>
+              <PrivateRoute expectedRole={"GDT"}>
                 <TransactionManagementPage />
               </PrivateRoute>
             }
@@ -42,7 +42,7 @@ root.render(
           <Route
             path="parcel-collection"
             element={
-              <PrivateRoute expectedRole={"DTKV"}>
+              <PrivateRoute expectedRole={"TKV"}>
                 <ParcelCollectionPage />
               </PrivateRoute>
             }
@@ -50,7 +50,7 @@ root.render(
           <Route
             path="collection-management"
             element={
-              <PrivateRoute expectedRole={"TDTK"}>
+              <PrivateRoute expectedRole={"TKT"}>
                 <CollectionManagementPage />
               </PrivateRoute>
             }
