@@ -1,10 +1,10 @@
 import {
-  createNewEmployeeAndShipper,
+  createNewEmployee,
   getAllEmployees,
 } from "../services/transactionManagerServices";
 
-const handleCreateEmployeeAndShipper = async (req, res) => {
-  const result = await createNewEmployeeAndShipper(data);
+const handleCreateNewEmployee = async (req, res) => {
+  const result = await createNewEmployee(req.body, req.user);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -23,7 +23,4 @@ const handleGetAllEmployees = async (req, res) => {
   });
 };
 
-export {
-  handleCreateEmployeeAndShipper,
-  handleGetAllEmployees,
-};
+export { handleCreateNewEmployee, handleGetAllEmployees };
