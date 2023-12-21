@@ -250,8 +250,8 @@ const getIncomingOrdersToConfirm = async (user) => {
         order.paths[order.paths.length - 1].user_name === null &&
         order.paths[order.paths.length - 2].user_name !== null &&
         order.paths[order.paths.length - 2].isConfirmed === true &&
-        order.paths[order.paths.length - 2].time.timeArrived !== null &&
-        order.paths[order.paths.length - 2].time.timeDeparted !== null
+        order.paths[order.paths.length - 2].time.timeArrived &&
+        order.paths[order.paths.length - 2].time.timeDeparted
     );
 
     return {

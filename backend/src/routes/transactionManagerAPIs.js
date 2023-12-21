@@ -9,7 +9,8 @@ import {
 // AUTHENTICATION
 router.use(requireAuthTDGD);
 
-router.post("/employee", handleCreateNewEmployee);
 router.get("/employee", handleGetAllEmployees);
+router.put("/employee");
+router.post("/employee", handleCreateNewEmployee);
 
 export default router;
