@@ -33,10 +33,11 @@ function TrackingPage() {
       } else {
         toast.success("Your parcel is found successfuly!");
         setParcelInfo((prev) => ({
-          ...parcel.data?.packageInfo,
-          paths: parcel.data.paths,
-          delivered: parcel.data.delivered,
-          parcelId: parcel.data.parcelId,
+          ...parcel.data?.parcel.packageInfo,
+          paths: parcel.data.parcel.paths,
+          delivered: parcel.data.parcel.delivered,
+          parcelId: parcel.data.parcel.parcelId,
+          centers: parcel.data?.centers
         }));
       }
       setIsSearching("done");
@@ -122,15 +123,29 @@ function TrackingPage() {
                   <p>Magic Post</p>
                 </div>
                 <p>
-                  {parcelInfo.senderInfo.address}, Ha Noi <FaArrowRight />{" "}
-                  {parcelInfo.recipientInfo.address}, Ha Noi
+                  {parcelInfo.centers[0]} <FaArrowRight />{" "}
+                  {parcelInfo.centers.pop()}
                 </p>
                 <div className="status">
-                  <p>{parcelInfo.delivered ? "Delivered at" : "Expected delivery"}</p>
+                  <p>
+                    {parcelInfo.delivered
+                      ? "Delivered at"
+                      : "Expected delivery"}
+                  </p>
                   <p>Nov 01 before 8:00 PM</p>
                 </div>
               </div>
               <div className="tracking-logs">
+                {parcelInfo.paths?.map((path, index) => 
+                  (path.isConfirmed && <div className="tracking-log">
+                  <FaCheck className="icon" />
+                  <h3>{`${index === 0? "Created at " : "Arrived at "} ${path.center_code}`}</h3>
+                  <p>{parcelInfo.centers[index]}</p>
+                  <p>
+                    <FaRegClock /> {path.time.timeArrived}
+                  </p>
+                </div>)
+                )}
                 <div className="tracking-log">
                   <FaCheck className="icon" />
                   <h3>Arrived At Post Office</h3>

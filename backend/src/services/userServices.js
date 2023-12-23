@@ -1,6 +1,8 @@
 import User from "../models/User";
 const jwt = require("jsonwebtoken");
 import Order from "../models/Order";
+import Center from "../models/Center";
+import _ from "lodash";
 
 const createToken = (role_name, user_name, center_name) => {
   return jwt.sign(
@@ -43,18 +45,25 @@ const loginUser = async (user_name, password) => {
 
 const getParcelById = async (id) => {
   try {
-    const result = await Order.findOne({ parcelId: id });
-    if (result) {
+    let result = await Order.findOne({ parcelId: id });
+    if (!result) {
       return {
-        errorCode: 0,
-        data: result,
-        message: "Parcel is found successfully",
+        errorCode: 1,
+        data: {},
+        message: "Parcel not found",
       };
     }
+    const centers = []
+    for (let i = 0; i < result.paths.length; i++) {
+      const center = await Center.findOne({
+        center_code: result.paths[i].center_code,
+      });
+      centers.push(center.name)
+    }
     return {
-      errorCode: 1,
-      data: {},
-      message: "Parcel not found",
+      errorCode: 0,
+      data: {parcel: result, centers},
+      message: "Parcel is found successfully",
     };
   } catch (error) {
     return {

@@ -28,7 +28,6 @@ const getAllEmployees = async () => {
     center_name: center_name,
     role_name: "GDV",
   });
-  console.log(result);
   return result;
 };
 

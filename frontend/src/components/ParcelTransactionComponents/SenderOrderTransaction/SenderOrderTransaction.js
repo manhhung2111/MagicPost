@@ -34,7 +34,8 @@ function SenderOrderTransaction({ show, setShow }) {
     nameAddress: "",
     phoneNum: "",
     customerID: "None",
-    address: "",
+    address: JSON.parse(localStorage.getItem("account"))?.user_info
+      ?.center_name,
   });
   const [recipientInfo, setRecipientInfo] = useState({
     nameAddress: "",
@@ -68,31 +69,25 @@ function SenderOrderTransaction({ show, setShow }) {
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await handleGetAllDistricts();
-      if (res.errorCode === 0) {
+      const result = await handleGetAllDistricts();
+      if (result.errorCode === 0) {
         setAllDistricts(
-          res.data.map((location) => ({
-            name: location.name,
-            value: `${location.full_name}`,
-            full_name: `${location.full_name}, ${
-              location.parent_center_name.split("_")[1]
-            }`,
+          result.data.map((center) => ({
+            value: center.center_code,
+            label: center.name,
+            postalCode: center.postalCode,
           }))
         );
-        setSenderInfo((prev) => ({
-          ...prev,
-          address: res.data.filter(
-            (location) =>
-              location.name ===
-              JSON.parse(localStorage.getItem("account"))?.user_info.center_name
-          )[0].full_name,
-        }));
       }
     };
     fetchData();
   }, []);
 
   useEffect(() => {
+    function onlyCapitalLetters(str) {
+      if (str === "Hanoi") return "HN";
+      return str.replace(/[^A-Z]+/g, "");
+    }
     if (
       senderInfo.nameAddress &&
       senderInfo.address &&
@@ -102,13 +97,11 @@ function SenderOrderTransaction({ show, setShow }) {
       recipientInfo.phoneNum
     ) {
       const serialNum = new ShortUniqueId({ length: 9 });
-      // const city = recipientInfo.address.split(" ");
-      const index = allDistricts.findIndex(
-        (district) => district.value === recipientInfo.address
-      );
-      if (index === -1) return;
-      const city = allDistricts[index].full_name.split(" ");
-      const parcelId = "MP" + serialNum.rnd() + `${city[city.length - 1]}`;
+
+      const parcelId =
+        "MP" +
+        serialNum.rnd() +
+        `${onlyCapitalLetters(recipientInfo.address.split("_").pop())}`;
       setRecipientInfo((prev) => ({ ...prev, parcelId: parcelId }));
     } else {
       setRecipientInfo((prev) => ({ ...prev, parcelId: "" }));
@@ -158,13 +151,11 @@ function SenderOrderTransaction({ show, setShow }) {
       nameAddress: "",
       phoneNum: "",
       customerID: "None",
-      address: allDistricts[0],
     });
     localStorage.setItem("id", recipientInfo.parcelId);
     setRecipientInfo({
       nameAddress: "",
       phoneNum: "",
-      address: allDistricts[0],
       parcelId: "",
     });
     setIsDocument(true);
@@ -380,11 +371,15 @@ function SenderOrderTransaction({ show, setShow }) {
     const parcel = {
       parcelId: parcelId,
       packageInfo: {
-        senderInfo: senderInfo,
+        senderInfo: {
+          ...senderInfo,
+          postalCode: allDistricts.find(district => district.value === senderInfo.address).postalCode,
+        },
         recipientInfo: {
           phoneNum,
           nameAddress,
           address,
+          postalCode: allDistricts.find(district => district.value === recipientInfo.address).postalCode,
         },
         typeOfParcel: {
           isDocument: isDocument,
@@ -421,6 +416,8 @@ function SenderOrderTransaction({ show, setShow }) {
       toast.success(result.message);
       setShowModal(true);
       setShow(false);
+    } else if (result.errorCode === 1) {
+      toast.warn(result.message);
     }
     setIsDisabledButton(false);
     resetAllInputs();
@@ -517,7 +514,10 @@ function SenderOrderTransaction({ show, setShow }) {
                             <Form.Select
                               aria-label="Floating label select example"
                               style={{ paddingBottom: "3px" }}
-                              value={""}
+                              value={
+                                JSON.parse(localStorage.getItem("account"))
+                                  ?.user_info?.center_name
+                              }
                               onChange={(e) =>
                                 handleChangeSenderInfo(
                                   e.target.value,
@@ -529,16 +529,16 @@ function SenderOrderTransaction({ show, setShow }) {
                               {allDistricts.map((district, index) => {
                                 return (
                                   <option
-                                    value={district.value}
+                                    // value={JSON.parse(localStorage.getItem("account"))?.user_info?.center_name}
                                     key={index}
                                     disabled={
-                                      district.name !==
+                                      district.value !==
                                       JSON.parse(
                                         localStorage.getItem("account")
-                                      )?.user_info.center_name
+                                      )?.user_info?.center_name
                                     }
                                   >
-                                    {district.full_name}
+                                    {district.label}
                                   </option>
                                 );
                               })}
@@ -632,7 +632,7 @@ function SenderOrderTransaction({ show, setShow }) {
                               {allDistricts.map((district, index) => {
                                 return (
                                   <option value={district.value} key={index}>
-                                    {district.full_name}
+                                    {district.label}
                                   </option>
                                 );
                               })}

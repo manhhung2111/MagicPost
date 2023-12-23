@@ -20,7 +20,7 @@ function TrackingParcelInformation({
   return (
     <div className="parcel-information">
       <h2>Parcel Information</h2>
-      
+
       <div className="boxes">
         <div className="box">
           <div className="header">
@@ -38,7 +38,7 @@ function TrackingParcelInformation({
                 <b>Customer Id:</b> {senderInfo.customerId}
               </p>
               <p>
-                <b>Postal Code:</b> 1000
+                <b>Postal Code:</b> {senderInfo.postalCode ?? "1000"}
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ function TrackingParcelInformation({
                 <b>Phone Number:</b> {recipientInfo.phoneNum}
               </p>
               <p>
-                <b>Postal Code:</b> 1000
+                <b>Postal Code:</b> {recipientInfo.postalCode ?? "1000"}
               </p>
             </div>
           </div>
@@ -104,8 +104,10 @@ function TrackingParcelInformation({
               <p>
                 <b>5. Additional / Special services</b>
               </p>
-              <p>{additionalService}</p>
-              <p style={{ fontSize: "1.2rem" }}>Contact Code: EMSC/PPA</p>
+              <p style={{ margin: "0", fontSize: "1.2rem" }}>
+                {additionalService}
+              </p>
+              {/* <p style={{ fontSize: "1.2rem" }}>Contact Code: EMSC/PPA</p> */}
             </div>
           </div>
           <div className="sender-instruction">
@@ -259,7 +261,7 @@ function TrackingParcelInformation({
               </div>
             </div>
           </div>
-          <div className="section">
+          <div className="section-2">
             <div className="parcel-approval">
               <p>
                 <b>13. Post office approval</b>
@@ -277,7 +279,7 @@ function TrackingParcelInformation({
               <p>{`${
                 delivered ? paths[3].time ?? "Delivered" : "Not delivered"
               }`}</p>
-              <p style={{fontSize: "1.1rem"}}>Recipient's signature</p>
+              <p style={{ fontSize: "1.1rem" }}>Recipient's signature</p>
               {delivered && (
                 <p>
                   <i>
@@ -289,13 +291,13 @@ function TrackingParcelInformation({
                 </p>
               )}
               <div className="qr-code">
-        <QRCode
-          size={64}
-          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-          value={`http://localhost:3000/tracking?parcelId=${parcelId}`}
-          viewBox={`0 0 256 256`}
-        />
-      </div>
+                <QRCode
+                  size={64}
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  value={`http://localhost:3000/tracking?parcelId=${parcelId}`}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -3,24 +3,19 @@ import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 import _ from "lodash";
 
-const createOrder = async (data, user) => {
-  const getCurrentTime = () => {
-    const currentdate = new Date();
-    const currentTime =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
-    return currentTime;
-  };
+const getCurrentTime = () => {
+  let date = new Date();
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const time = date.toLocaleTimeString(["en-US"], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${time}, ${month} ${day}, ${year}`;
+};
 
+const createOrder = async (data, user) => {
   const bfs = (allCenters, source, dest) => {
     let adjacencyGraph = new Map();
     let visited = new Map();
@@ -122,11 +117,16 @@ const getAllTransactionPoints = async () => {
     const regex = /^DGD/;
     const query = { name: { $regex: regex } };
 
-    const result = await Center.find(query, {
-      center_code: 1,
-      name: 1,
-      _id: 0,
-    });
+    const result = await Center.find(
+      query,
+      {
+        center_code: 1,
+        name: 1,
+        postalCode: 1,
+        _id: 0,
+      },
+      { sort: { postalCode: 1 } }
+    );
 
     return {
       errorCode: 0,
@@ -161,7 +161,7 @@ const getOrdersToCollectionHub = async (user) => {
     const center = await Center.findOne({ center_code: currentCenter });
     const data = {
       parcelIds: result.map((order) => order.parcelId),
-      nextCenter: center.nearby_center[0],
+      nextCenter: center?.nearby_center[0] ?? null,
     };
     return {
       errorCode: 0,
@@ -178,23 +178,6 @@ const getOrdersToCollectionHub = async (user) => {
 };
 
 const transferOrdersToCollectionHub = async (parcelIds, user) => {
-  const getCurrentTime = () => {
-    const currentdate = new Date();
-    const currentTime =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
-    return currentTime;
-  };
-
   try {
     const { center_name: currentCenter, user_name: currentUser } = user;
     const orders = await Order.find({
@@ -269,22 +252,6 @@ const getIncomingOrdersToConfirm = async (user) => {
 };
 
 const confirmOrderFromCollectionHub = async (parcelId, user) => {
-  const getCurrentTime = () => {
-    const currentdate = new Date();
-    const currentTime =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
-    return currentTime;
-  };
   try {
     const { center_name: currentCenter, user_name: currentUser } =
       user.center_name;
@@ -351,22 +318,6 @@ const getAllOrderToShip = async (user) => {
 };
 const createShipmentToRecipient = async (user, parcelId) => {
   try {
-    const getCurrentTime = () => {
-      const currentdate = new Date();
-      const currentTime =
-        currentdate.getDate() +
-        "/" +
-        (currentdate.getMonth() + 1) +
-        "/" +
-        currentdate.getFullYear() +
-        " " +
-        currentdate.getHours() +
-        ":" +
-        currentdate.getMinutes() +
-        ":" +
-        currentdate.getSeconds();
-      return currentTime;
-    };
     const { center_name: currentCenter, user_name } = user;
     const order = await Order.findOne({ parcelId: parcelId });
     if (!order) {
@@ -405,22 +356,6 @@ const createShipmentToRecipient = async (user, parcelId) => {
 
 const confirmRecipientShipment = async (parcelId, status) => {
   try {
-    const getCurrentTime = () => {
-      const currentdate = new Date();
-      const currentTime =
-        currentdate.getDate() +
-        "/" +
-        (currentdate.getMonth() + 1) +
-        "/" +
-        currentdate.getFullYear() +
-        " " +
-        currentdate.getHours() +
-        ":" +
-        currentdate.getMinutes() +
-        ":" +
-        currentdate.getSeconds();
-      return currentTime;
-    };
     const shipment = await Shipment.findOne({ parcelId });
     if (!shipment) {
       return {

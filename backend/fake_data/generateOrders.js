@@ -184,25 +184,25 @@ function generatePhone() {
 }
 
 const getCurrentTime = () => {
-  const currentdate = new Date();
-  const currentTime =
-    currentdate.getDate() +
-    "/" +
-    (currentdate.getMonth() + 1) +
-    "/" +
-    currentdate.getFullYear() +
-    " " +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
-  return currentTime;
+  let date = new Date();
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const time = date.toLocaleTimeString(["en-US"], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${time}, ${month} ${day}, ${year}`;
 };
-
 function onlyCapitalLetters(str) {
   if (str === "Hanoi") return "HN";
   return str.replace(/[^A-Z]+/g, "");
+}
+
+function getMultipleRandom(arr, num) {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+
+  return shuffled.slice(0, num);
 }
 
 const generateRandomOrder = () => {
@@ -292,7 +292,7 @@ const generateRandomOrder = () => {
       cod: Math.floor(Math.random() * 500).toString(),
       another: Math.floor(Math.random() * 500).toString(),
     },
-    parcelContentValue: items.filter((items) => Math.random() < 0.5),
+    parcelContentValue: getMultipleRandom(items, Math.floor(Math.random() * 4)),
     additionalService: services[Math.floor(Math.random() * services.length)],
     notes: notes[Math.floor(Math.random() * notes.length)],
   };
