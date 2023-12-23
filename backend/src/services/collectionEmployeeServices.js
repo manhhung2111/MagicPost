@@ -7,7 +7,6 @@ const confirmShipment = async () => {
   const currentCenter = req.user.center_name;
   const currentUser = req.user.user_name;
   const orderIDs = req.body.parcelIDs;
-  console.log(orderIDs, currentCenter, currentUser);
   for (let i = 0; i < orderIDs.length; i++) {
     const order = await Order.findOne({ parcelId: orderIDs[i] });
     const currentdate = new Date();

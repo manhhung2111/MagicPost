@@ -18,13 +18,19 @@ function OrderFromTransactionToCollection() {
     const fetchData = async () => {
       const result = await handleGetAllOrdersCreatedBy();
       if (result.errorCode === 0) {
-        const newOptions = result.data?.map((parcel) => {
+        const newOptions = result.data?.parcelIds.map((id) => {
           return {
-            value: parcel.parcelID,
-            label: parcel.parcelID,
+            value: id,
+            label: id,
           };
         });
         setOptions((prev) => newOptions);
+        if (result.data.nextCenter) {
+          setDestination({
+            value: result.data.nextCenter,
+            label: result.data.nextCenter,
+          });
+        }
       }
     };
     fetchData();
@@ -34,28 +40,23 @@ function OrderFromTransactionToCollection() {
   };
 
   const validate = () => {
-    if (parcelIds.length === 0 || !destination) {
-      toast.warn("Please fill all fields of the form");
+    if (parcelIds.length === 0) {
+      toast.warn("At least 1 order must be transfered!");
       return false;
     }
     return true;
   };
   const handleSubmit = async () => {
     if (!validate()) return;
-    const order = {
-      user_id: "GD1_S",
-      start: {
-        center_id: "GD1",
-        orders: parcelIds.map((id) => id.value),
-      },
-      destination: {
-        center_id: destination.value,
-      },
+    console.log(parcelIds);
+    const data = {
+      parcelIds: parcelIds.map((parcel) => {
+        return parcel.value;
+      }),
     };
-    const result = await handleCreateOrderFromTransactionToCollection(order);
+    const result = await handleCreateOrderFromTransactionToCollection(data);
     if (result?.errorCode === 0) {
       toast.success("Transfer parcels successfully");
-      setDestination({});
       setParcelIds([]);
     }
   };
@@ -98,11 +99,16 @@ function OrderFromTransactionToCollection() {
               className="select"
               value={destination}
               isClearable={true}
+              isDisabled={true}
             />
           </Col>
         </Row>
       </div>
-      <p className={`${parcelIds.length > 0? "active" : ""}`}>Expected next collection hub: DTK_DN</p>
+      <p>
+        {`${
+          options.length > 0 ? "" : "Please create new order(s) to transfer"
+        }`}
+      </p>
       <button className="button" onClick={() => handleSubmit()}>
         Confirm Transfer
       </button>

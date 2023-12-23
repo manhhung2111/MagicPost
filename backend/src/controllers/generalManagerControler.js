@@ -18,7 +18,6 @@ const handleGetDTK = async () => {
     })
   );
 
-  console.log(tmp);
   return tmp;
 };
 
