@@ -109,6 +109,9 @@ function CreateOrderFromCollectionToCollection() {
       setParcelIds([]);
     }
   };
+  const handleRefresh = async() => {
+    await fetchData()
+  }
   return (
     <Container className="create-order-from-collection-to-collection">
       {destOptions.length === 0 && <Loader />}
@@ -159,7 +162,7 @@ function CreateOrderFromCollectionToCollection() {
             <button className="button" onClick={() => handleSubmit()}>
               Confirm Transfer
             </button>
-            <button className="refresh-btn" type="button">
+            <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
               <svg
                 viewBox="0 0 16 16"
                 class="bi bi-arrow-repeat"
