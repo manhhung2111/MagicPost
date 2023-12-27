@@ -14,7 +14,7 @@ const getCurrentTime = () => {
   return `${time}, ${month} ${day}, ${year}`;
 };
 
-const getIncomingCollectionOrder = async (user) => {
+const getIncomingCollectionOrder = async (user, query) => {
   const isCollectionHub = (center_code) => {
     return center_code.split("_")[0] === "DTK";
   };
@@ -22,7 +22,8 @@ const getIncomingCollectionOrder = async (user) => {
   try {
     const { center_name: currentCenter } = user;
     const allOrders = await Order.find({});
-    const result = [];
+    let result = [];
+    const collectionHubs = [];
     allOrders.forEach((order) => {
       for (let index = 1; index < order.paths.length; index++) {
         if (order.paths[index].center_code === currentCenter) {
@@ -37,17 +38,45 @@ const getIncomingCollectionOrder = async (user) => {
               !order.paths[index].isConfirmed &&
               !order.paths[index].time.timeArrived
             ) {
-              result.push(order);
+              result.push({
+                parcelId: order.parcelId,
+                typeOfParcel: order.packageInfo.typeOfParcel,
+                sourceCenter: prevCenter.center_code,
+                pendingFrom: prevCenter.time.timeDeparted,
+              });
+              collectionHubs.push(prevCenter.center_code);
             }
           }
         }
       }
     });
 
+    if (query?.sort === "Date (asc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else if (query?.sort === "Date (desc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      });
+    }
+    if (query?.collectionHubs?.length > 0) {
+      result = result.filter((order) =>
+        query.collectionHubs?.includes(order.sourceCenter)
+      );
+    }
     return {
       errorCode: 0,
-      data: result,
-      message: `Load all parcels come to ${currentCenter} successfully`,
+      data: {
+        packages: result,
+        totalOrders: result.length,
+        collectionHubs: [...new Set(collectionHubs)],
+      },
+      message: `Load total ${result.length} parcels come to ${currentCenter} successfully`,
     };
   } catch (error) {
     return {
@@ -120,7 +149,7 @@ const getNearbyCollectionHubs = async (user) => {
 
 const getOrdersToTransferCollection = async (user) => {
   try {
-    const { center_name: currentCenter } = user;
+    const { center_name: currentCenter, user_name } = user;
     const orders = await Order.find({});
     const result = [];
     orders.forEach((order) => {
@@ -129,10 +158,15 @@ const getOrdersToTransferCollection = async (user) => {
         if (
           paths[i].center_code === currentCenter &&
           paths[i].isConfirmed &&
-          paths[i].user_name
+          paths[i].user_name === user_name &&
+          paths[i].time.timeArrived &&
+          !paths[i].time.timeDeparted
         ) {
           if (paths[i + 1].center_code.split("_")[0] === "DTK") {
-            result.push(order.parcelId);
+            result.push({
+              id: order.parcelId,
+              nextCenter: paths[i + 1].center_code,
+            });
           }
         }
       }
@@ -310,7 +344,7 @@ const getOrdersToTransferTransaction = async (user) => {
         if (
           paths[i].center_code === currentCenter &&
           paths[i].isConfirmed &&
-          paths[i].user_name &&
+          paths[i].user_name === user_name &&
           paths[i].time.timeArrived &&
           !paths[i].time.timeDeparted
         ) {

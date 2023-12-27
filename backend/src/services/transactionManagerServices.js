@@ -1,5 +1,4 @@
 import User from "../models/User";
-import Center from "../models/Center";
 
 const createNewEmployee = async (data, user) => {
   try {
@@ -22,13 +21,25 @@ const createNewEmployee = async (data, user) => {
   }
 };
 
-const getAllEmployees = async () => {
-  const center_name = "GD1";
-  const result = await User.find({
-    center_name: center_name,
-    role_name: "GDV",
-  });
-  return result;
+const getAllEmployees = async (user) => {};
+
+const updateEmployee = async (id, data) => {};
+
+const deleteEmployee = async (id) => {
+  // update deleted = true
 };
 
-export { createNewEmployee, getAllEmployees };
+const getIncomingParcels = async (user) => {};
+
+const getOutgoingParcels = async (user) => {};
+
+const getEmployeeContribution = async (user) => {};
+export {
+  createNewEmployee,
+  getAllEmployees,
+  updateEmployee,
+  deleteEmployee,
+  getIncomingParcels,
+  getOutgoingParcels,
+  getEmployeeContribution,
+};
