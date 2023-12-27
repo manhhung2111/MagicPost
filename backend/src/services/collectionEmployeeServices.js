@@ -335,7 +335,7 @@ const confirmIncomingTransactionOrder = async (parcelId, user) => {
 
 const getOrdersToTransferTransaction = async (user) => {
   try {
-    const { center_name: currentCenter } = user;
+    const { center_name: currentCenter, user_name } = user;
     const orders = await Order.find({});
     const result = [];
     orders.forEach((order) => {
