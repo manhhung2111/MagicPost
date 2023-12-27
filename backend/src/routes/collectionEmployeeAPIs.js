@@ -19,7 +19,7 @@ import {
 router.use(requireAuthNVDTK);
 
 // get and confirm incoming order from other collecion hubs
-router.get("/collection/incoming-order", handleGetIncomingCollectionOrder);
+router.post("/collection/incoming-order", handleGetIncomingCollectionOrder);
 router.put("/collection/incoming-order", handleConfirmIncomingCollectionOrder);
 
 // get all nearby collection hubs and transfer orders to collection hub
