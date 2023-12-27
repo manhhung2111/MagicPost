@@ -14,25 +14,25 @@ function OrderFromTransactionToCollection() {
   const [destination, setDestination] = useState(null);
   const [parcelIds, setParcelIds] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await handleGetAllOrdersCreatedBy();
-      if (result.errorCode === 0) {
-        const newOptions = result.data?.parcelIds.map((id) => {
-          return {
-            value: id,
-            label: id,
-          };
+  const fetchData = async () => {
+    const result = await handleGetAllOrdersCreatedBy();
+    if (result.errorCode === 0) {
+      const newOptions = result.data?.parcelIds.map((id) => {
+        return {
+          value: id,
+          label: id,
+        };
+      });
+      setOptions((prev) => newOptions);
+      if (result.data.nextCenter) {
+        setDestination({
+          value: result.data.nextCenter,
+          label: result.data.nextCenter,
         });
-        setOptions((prev) => newOptions);
-        if (result.data.nextCenter) {
-          setDestination({
-            value: result.data.nextCenter,
-            label: result.data.nextCenter,
-          });
-        }
       }
-    };
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
   const handleChangeOptions = (selectedOptions) => {
@@ -56,8 +56,9 @@ function OrderFromTransactionToCollection() {
     };
     const result = await handleCreateOrderFromTransactionToCollection(data);
     if (result?.errorCode === 0) {
-      toast.success("Transfer parcels successfully");
+      toast.success(result.message);
       setParcelIds([]);
+      fetchData();
     }
   };
   return (

@@ -48,12 +48,12 @@ function ParcelCollectionPage() {
         </div>
       </header>
       <div className="collection-hub-hub">
-        <ConfirmOrderFromCollectionToCollection />
+        <ConfirmOrderFromCollectionToCollection itemsPerPage={4}/>
         <CreateOrderFromCollectionToCollection />
       </div>
       <div className="transaction-to-collection">
         <CreateOrderFromCollectionToTransaction />
-        <ConfirmOrderFromTransactionToCollection />
+        <ConfirmOrderFromTransactionToCollection itemsPerPage={4}/>
       </div>
       <ParcelCollectionStatusStatistics />
     </Container>
