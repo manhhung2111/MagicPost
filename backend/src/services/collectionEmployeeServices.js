@@ -2,174 +2,428 @@ import Order from "../models/Order";
 import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 
-const confirmShipment = async () => {
-  // sửa order paths
-  const currentCenter = req.user.center_name;
-  const currentUser = req.user.user_name;
-  const orderIDs = req.body.parcelIDs;
-  for (let i = 0; i < orderIDs.length; i++) {
-    const order = await Order.findOne({ parcelId: orderIDs[i] });
-    const currentdate = new Date();
-    const currentTime =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
+const getCurrentTime = () => {
+  let date = new Date();
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const time = date.toLocaleTimeString(["en-US"], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${time}, ${month} ${day}, ${year}`;
+};
+
+const getIncomingCollectionOrder = async (user) => {
+  const isCollectionHub = (center_code) => {
+    return center_code.split("_")[0] === "DTK";
+  };
+
+  try {
+    const { center_name: currentCenter } = user;
+    const allOrders = await Order.find({});
+    const result = [];
+    allOrders.forEach((order) => {
+      for (let index = 1; index < order.paths.length; index++) {
+        if (order.paths[index].center_code === currentCenter) {
+          const prevCenter = order.paths[index - 1];
+          if (isCollectionHub(prevCenter.center_code)) {
+            if (
+              prevCenter.isConfirmed &&
+              prevCenter.time.timeArrived &&
+              prevCenter.time.timeDeparted &&
+              prevCenter.user_name &&
+              !order.paths[index].user_name &&
+              !order.paths[index].isConfirmed &&
+              !order.paths[index].time.timeArrived
+            ) {
+              result.push(order);
+            }
+          }
+        }
+      }
+    });
+
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Load all parcels come to ${currentCenter} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const confirmIncomingCollectionOrder = async (parcelId, user) => {
+  try {
+    const { center_name: currentCenter, user_name: currentUser } = user;
+    const order = await Order.findOne({ parcelId: parcelId });
+    const currentTime = getCurrentTime();
     for (let i = 0; i < order["paths"].length; i++) {
-      if (order["paths"][i]["center_name"] == currentCenter) {
+      if (order["paths"][i]["center_code"] == currentCenter) {
         order["paths"][i]["user_name"] = currentUser;
         order["paths"][i]["time"]["timeArrived"] = currentTime;
+        order["paths"][i].isConfirmed = true;
       }
     }
-    await Order.findOneAndUpdate({ parcelId: orderIDs[i] }, order, {
+    const result = await Order.findOneAndUpdate({ parcelId: parcelId }, order, {
       new: true,
     });
-  }
-
-  return "result";
-};
-
-const getAllTransactionAndCollectionsCenter = async () => {
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  const regex = /^DGD/;
-  const query = { name: { $regex: regex } };
-
-  const result = await Center.find(query, { name: 1, full_name: 1, _id: 0 });
-
-  if (result) {
     return {
       errorCode: 0,
       data: result,
-      message: `Load all locations successfully`,
+      message: "Confirm order successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
     };
   }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Cant all locations successfully`,
-  };
 };
 
-const getResponsibleOrders = async () => {
-  let result = [];
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  const allOrders = await Order.find();
-  for (let i = 0; i < allOrders.length; i++) {
-    const path = allOrders[i]["paths"];
-    for (let j = 0; j < path.length - 1; j++) {
-      if (
-        path[j]["user_name"] === user_name &&
-        path[j]["center_name"] === currentCenter &&
-        path[j + 1]["user_name"] === null
-      ) {
-        result.push({
-          parcelID: allOrders[i]["parcelId"],
-          expectedCenter: path[j + 1]["center_name"],
-        });
-      }
+const getNearbyCollectionHubs = async (user) => {
+  try {
+    const { center_name: currentCenter } = user;
+    const center = await Center.findOne({ center_code: currentCenter });
+    if (!center) {
+      return {
+        errorCode: 1,
+        data: {},
+        message: "Invalid center code!",
+      };
     }
+    const collectionHubs = [];
+    center.nearby_center?.forEach((element) => {
+      if (element.split("_")[0] === "DTK") {
+        collectionHubs.push(element);
+      }
+    });
+    return {
+      errorCode: 0,
+      data: collectionHubs,
+      message: "Get all nearby collection hubs successfully",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
   }
+};
 
-  if (result) {
+const getOrdersToTransferCollection = async (user) => {
+  try {
+    const { center_name: currentCenter } = user;
+    const orders = await Order.find({});
+    const result = [];
+    orders.forEach((order) => {
+      const paths = order.paths;
+      for (let i = 1; i < paths.length - 1; i++) {
+        if (
+          paths[i].center_code === currentCenter &&
+          paths[i].isConfirmed &&
+          paths[i].user_name
+        ) {
+          if (paths[i + 1].center_code.split("_")[0] === "DTK") {
+            result.push(order.parcelId);
+          }
+        }
+      }
+    });
     return {
       errorCode: 0,
       data: result,
-      message: `Load all parcel responsible by ${user_name} in ${currentCenter} successfully`,
+      message:
+        "Get all orders to transfer to next collection hub successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
     };
   }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Can't load all parcel responsible by ${user_name} in ${currentCenter}`,
-  };
 };
 
-const createShipmentToNextCenter = async () => {
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  let data = req.body;
-  data.start.center_id = currentCenter;
-  data.user_id = user_name;
-  const result = await Shipment.create(data);
-  const parcelIDs = req.body.start.orders;
-  for (let i = 0; i < parcelIDs.length; i++) {
-    const order = await Order.findOne({ parcelId: parcelIDs[i] });
-    const currentdate = new Date();
-    const currentTime =
-      currentdate.getDate() +
-      "/" +
-      (currentdate.getMonth() + 1) +
-      "/" +
-      currentdate.getFullYear() +
-      " " +
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
+const transferOrdersToCollectionHub = async (parcelIds, nextCenter, user) => {
+  try {
+    const { center_name: currentCenter, user_name: currentUser } = user;
+    const orders = await Order.find({
+      parcelId: { $in: parcelIds },
+    });
+    // update paths
+    let count = 0;
+    for (let i = 0; i < orders.length; i++) {
+      for (let index = 0; index < orders[i].paths.length; index++) {
+        if (
+          orders[i].paths[index].center_code === currentCenter &&
+          orders[i].paths[index].isConfirmed === true &&
+          orders[i].paths[index].user_name === currentUser &&
+          orders[i].paths[index]["time"].timeArrived &&
+          !orders[i].paths[index]["time"].timeDeparted
+        ) {
+          orders[i].paths[index]["time"].timeDeparted = getCurrentTime();
+          count++;
+        }
+      }
+
+      const result = await Order.findOneAndUpdate(
+        { parcelId: orders[i].parcelId },
+        orders[i],
+        {
+          new: true,
+        }
+      );
+    }
+
+    return {
+      errorCode: 0,
+      data: {},
+      message: `Transfer ${count} parcels successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const getIncomingTransactionOrder = async (user, query) => {
+  const isTransactionHub = (center_code) => {
+    return center_code.split("_")[0] === "DGD";
+  };
+
+  try {
+    const { center_name: currentCenter } = user;
+    const allOrders = await Order.find({}).sort({ parcelId: 1 });
+    let result = [];
+    const transactionHubs = [];
+    allOrders.forEach((order) => {
+      for (let index = 1; index < order.paths.length; index++) {
+        if (order.paths[index].center_code === currentCenter) {
+          const prevCenter = order.paths[index - 1];
+          if (isTransactionHub(prevCenter.center_code)) {
+            if (
+              prevCenter.isConfirmed &&
+              prevCenter.time.timeArrived &&
+              prevCenter.time.timeDeparted &&
+              prevCenter.user_name &&
+              !order.paths[index].user_name &&
+              !order.paths[index].isConfirmed &&
+              !order.paths[index].time.timeArrived
+            ) {
+              result.push({
+                parcelId: order.parcelId,
+                typeOfParcel: order.packageInfo.typeOfParcel,
+                sourceCenter: prevCenter.center_code,
+                pendingFrom: prevCenter.time.timeDeparted,
+              });
+              transactionHubs.push(prevCenter.center_code);
+            }
+          }
+        }
+      }
+    });
+
+    if (query?.sort === "Date (asc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else if (query?.sort === "Date (desc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      });
+    }
+    if (query?.transactionHubs?.length > 0) {
+      result = result.filter((order) =>
+        query.transactionHubs?.includes(order.sourceCenter)
+      );
+    }
+    return {
+      errorCode: 0,
+      data: {
+        packages: result,
+        totalOrders: result.length,
+        transactionHubs: [...new Set(transactionHubs)],
+      },
+      message: `Load total ${result.length} parcels come to ${currentCenter} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const confirmIncomingTransactionOrder = async (parcelId, user) => {
+  try {
+    const { center_name: currentCenter, user_name: currentUser } = user;
+    const order = await Order.findOne({ parcelId: parcelId });
+    const currentTime = getCurrentTime();
     for (let i = 0; i < order["paths"].length; i++) {
-      if (order["paths"][i]["center_name"] == currentCenter) {
-        order["paths"][i]["time"]["timeDeparted"] = currentTime;
-        order["paths"][i]["isSent"] = true;
+      if (order["paths"][i]["center_code"] == currentCenter) {
+        order["paths"][i]["user_name"] = currentUser;
+        order["paths"][i]["time"]["timeArrived"] = currentTime;
+        order["paths"][i].isConfirmed = true;
       }
     }
-    await Order.findOneAndUpdate({ parcelId: parcelIDs[i] }, order, {
+    const result = await Order.findOneAndUpdate({ parcelId: parcelId }, order, {
       new: true,
     });
-  }
-
-  if (result) {
-    return {
-      errorCode: 0,
-      data: "result",
-      message: `Create shipment to ${data["destination"]["center_id"]} successfully`,
-    };
-  }
-
-  return {
-    errorCode: 1,
-    data: `Can't create shipment to ${data["destination"]["center_id"]}`,
-  };
-};
-
-const getIncomingShipments = async () => {
-  let result = [];
-  const currentCenter = req.user.center_name;
-  const user_name = req.user.user_name;
-  const allShipment = await Shipment.find();
-  for (let i = 0; i < allShipment.length; i++) {
-    if (allShipment[i].destination.center_id === currentCenter) {
-      result.push(allShipment[i].start.orders);
-    }
-  }
-
-  if (result) {
     return {
       errorCode: 0,
       data: result,
-      message: `Load all parcel come to ${currentCenter} successfully`,
+      message: "Confirm order successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
     };
   }
-  return {
-    errorCode: 1,
-    data: "",
-    message: `Can't load all parcel come to ${currentCenter}`,
-  };
+};
+
+const getOrdersToTransferTransaction = async (user) => {
+  try {
+    const { center_name: currentCenter } = user;
+    const orders = await Order.find({});
+    const result = [];
+    orders.forEach((order) => {
+      const paths = order.paths;
+      for (let i = 1; i < paths.length - 1; i++) {
+        if (
+          paths[i].center_code === currentCenter &&
+          paths[i].isConfirmed &&
+          paths[i].user_name &&
+          paths[i].time.timeArrived &&
+          !paths[i].time.timeDeparted
+        ) {
+          if (paths[i + 1].center_code.split("_")[0] === "DGD") {
+            result.push({
+              id: order.parcelId,
+              nextCenter: paths[i + 1].center_code,
+            });
+          }
+        }
+      }
+    });
+    return {
+      errorCode: 0,
+      data: result,
+      message:
+        "Get all orders to transfer to next transaction hub successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const transferOrdersToTransactionHub = async (parcelIds, nextCenter, user) => {
+  try {
+    const { center_name: currentCenter, user_name: currentUser } = user;
+    const orders = await Order.find({
+      parcelId: { $in: parcelIds },
+    });
+    // update paths
+    let count = 0;
+    for (let i = 0; i < orders.length; i++) {
+      for (let index = 0; index < orders[i].paths.length; index++) {
+        if (
+          orders[i].paths[index].center_code === currentCenter &&
+          orders[i].paths[index].isConfirmed === true &&
+          orders[i].paths[index].user_name === currentUser &&
+          orders[i].paths[index]["time"].timeArrived &&
+          !orders[i].paths[index]["time"].timeDeparted
+        ) {
+          orders[i].paths[index]["time"].timeDeparted = getCurrentTime();
+          count++;
+          break;
+        }
+      }
+
+      const result = await Order.findOneAndUpdate(
+        { parcelId: orders[i].parcelId },
+        orders[i],
+        {
+          new: true,
+        }
+      );
+    }
+
+    return {
+      errorCode: 0,
+      data: {},
+      message: `Transfer ${count} parcels successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const getNearbyTransactionHubs = async (user) => {
+  try {
+    const { center_name: currentCenter } = user;
+    const center = await Center.findOne({ center_code: currentCenter });
+    if (!center) {
+      return {
+        errorCode: 1,
+        data: {},
+        message: "Invalid center code!",
+      };
+    }
+    const transactionHubs = [];
+    center.nearby_center?.forEach((element) => {
+      if (element.split("_")[0] === "DGD") {
+        transactionHubs.push(element);
+      }
+    });
+    return {
+      errorCode: 0,
+      data: transactionHubs,
+      message: "Get all nearby transaction hubs successfully",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
 };
 
 export {
-  confirmShipment,
-  getAllTransactionAndCollectionsCenter,
-  getResponsibleOrders,
-  createShipmentToNextCenter,
-  getIncomingShipments,
+  getIncomingCollectionOrder,
+  confirmIncomingCollectionOrder,
+  getNearbyTransactionHubs,
+  getNearbyCollectionHubs,
+  getOrdersToTransferCollection,
+  transferOrdersToCollectionHub,
+  getIncomingTransactionOrder,
+  confirmIncomingTransactionOrder,
+  getOrdersToTransferTransaction,
+  transferOrdersToTransactionHub,
 };

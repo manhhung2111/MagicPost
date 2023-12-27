@@ -5,78 +5,93 @@ import Select from "react-select";
 import "./CreateOrderFromCollectionToTransaction.scss";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  handleGetNearbyTransactionHubs,
+  handleGetTransferTransactionOrders,
+  handleTransferOrdersToTransactionHub,
+} from "../../../services/collectionServices";
 
 function CreateOrderFromCollectionToTransaction() {
-  const [options, setOptions] = useState([]);
   const [destination, setDestination] = useState(null);
   const [parcelIds, setParcelIds] = useState([]);
+  const [parcelIdsOptions, setParcelIdsOptions] = useState([]);
+  const [destOptions, setDestOptions] = useState([]);
+
+  const fetchData = async () => {
+    const transactionHubs = await handleGetNearbyTransactionHubs();
+    if (transactionHubs?.errorCode === 0) {
+      const newOptions = transactionHubs.data?.map((hub) => {
+        return {
+          value: hub,
+          label: hub,
+        };
+      });
+      setDestOptions((prev) => newOptions);
+    }
+    const fetchParcelIds = await handleGetTransferTransactionOrders();
+    if (fetchParcelIds?.errorCode === 0) {
+      const newOptions = fetchParcelIds.data?.map((parcel) => {
+        return {
+          value: parcel,
+          label: parcel.id,
+        };
+      });
+      setParcelIdsOptions((prev) => newOptions);
+    }
+  };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const result = await handleGetAllOrdersCreatedBy();
-    //   if (result.errorCode === 0) {
-    //     const newOptions = result.data?.map((id) => {
-    //       return {
-    //         value: id,
-    //         label: id,
-    //       };
-    //     });
-    //     setOptions((prev) => newOptions);
-    //   }
-    // };
-    // fetchData();
+    fetchData();
   }, []);
-  
-  const handleChangeOptions = (selectedOptions) => {
-    setParcelIds(selectedOptions);
-  };
 
   const validate = () => {
     if (parcelIds.length === 0 || !destination) {
-      toast.warn("Please fill all fields of the form");
+      toast.warn("Transfer parcelIds and destination transaction hub must not be empty!");
+      return false;
+    }
+    const isOneHub = parcelIds.every(
+      (parcel) => parcel.nextCenter === destination.value
+    );
+    if (!isOneHub) {
+      toast.warn(
+        "All transfered parcel must transfer to their expected next transaction hub"
+      );
       return false;
     }
     return true;
   };
   const handleSubmit = async () => {
     if (!validate()) return;
-    // const order = {
-    //   user_id: "GD1_S",
-    //   start: {
-    //     center_id: "GD1",
-    //     orders: parcelIds.map((id) => id.value),
-    //   },
-    //   destination: {
-    //     center_id: destination.value,
-    //   },
-    // };
-    // const result = await handleCreateOrderFromTransactionToCollection(order);
-    // if (result?.errorCode === 0) {
-    //   toast.success("Transfer parcels successfully");
-    //   setDestination({});
-    //   setParcelIds([]);
-    // }
+    const result = await handleTransferOrdersToTransactionHub(
+      parcelIds.map((parcel) => parcel.id)
+    );
+    if (result?.errorCode === 0) {
+      toast.success("Transfer parcels successfully");
+      setDestination(null);
+      setParcelIds([]);
+    }
   };
   return (
     <Container className="create-order-from-collection-to-transaction">
       <div className="top">
         <h2>Transfer order(s) to transaction hub</h2>
         <Select
-          defaultValue={[]}
+          defaultValue={parcelIds}
           isMulti
-          options={options}
+          options={parcelIdsOptions}
           className="multi-select"
           value={parcelIds}
-          onChange={handleChangeOptions}
-          placeholder={"Select the parcel Ids"}
+          onChange={setParcelIds}
+          placeholder={"Select/search parcel ids"}
+          isClearable={true}
         />
         <h3>Select the transfer hub</h3>
         <Row className="g-2 mt-2 custom-row">
-          <Col>
+          <Col xs={4}>
             <Select
-              onChange={handleChangeOptions}
               placeholder={
-                JSON.parse(localStorage.getItem("account"))?.center_name
+                JSON.parse(localStorage.getItem("account"))?.user_info
+                  ?.center_name
               }
               className="select"
               value={JSON.parse(localStorage.getItem("account"))?.center_name}
@@ -84,13 +99,10 @@ function CreateOrderFromCollectionToTransaction() {
             />
           </Col>
           To
-          <Col>
+          <Col xs={7}>
             <Select
-              options={[
-                { label: "TK1", value: "TK1" },
-                { label: "TK2", value: "TK2" },
-              ]}
-              onChange={(option) => setDestination(option)}
+              options={destOptions}
+              onChange={setDestination}
               placeholder={"Destination hub"}
               className="select"
               value={destination}
