@@ -4,7 +4,8 @@ import {
   updateEmployee,
   deleteEmployee,
   getIncomingParcels,
-  getOutgoingParcels, getEmployeeContribution
+  getOutgoingParcels,
+  getEmployeeContribution,
 } from "../services/transactionManagerServices";
 
 const handleCreateNewEmployee = async (req, res) => {
@@ -52,7 +53,7 @@ const handleDeleteEmployee = async (req, res) => {
 };
 
 const handleGetIncomingParcels = async (req, res) => {
-  const { user } = req.user;
+  const user = req.user;
   const result = await getIncomingParcels(user);
 
   const statusCode =
@@ -63,7 +64,7 @@ const handleGetIncomingParcels = async (req, res) => {
 };
 
 const handleGetOutgoingParcels = async (req, res) => {
-  const { user } = req.user;
+  const user = req.user;
   const result = await getOutgoingParcels(user);
 
   const statusCode =
@@ -82,12 +83,13 @@ const handleGetEmployeeContribution = async (req, res) => {
   return res.status(statusCode).json({
     ...result,
   });
-}
+};
 export {
   handleCreateNewEmployee,
   handleGetAllEmployees,
   handleUpdateEmployee,
   handleDeleteEmployee,
   handleGetIncomingParcels,
-  handleGetOutgoingParcels, handleGetEmployeeContribution
+  handleGetOutgoingParcels,
+  handleGetEmployeeContribution,
 };

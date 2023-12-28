@@ -10,7 +10,9 @@ import {
   handleGetIncomingOrders,
   handleTransferOrdersToCollectionHub,
   handleConfirmRecipientShipment,
-  handleGetAllOrderToShip
+  handleGetAllOrderToShip,
+  handleGetAllSuccessOrders,
+  handleGetAllUnsuccessOrders,
 } from "../controllers/transactionEmployeeController";
 
 // AUTHENTICATION
@@ -32,5 +34,9 @@ router.get("/shipment", handleGetAllOrderToShip)
 router.post("/shipment", handleCreateShipmentToRecipient);
 //update shipment status
 router.put("/shipment", handleConfirmRecipientShipment);
+
+// get success and unsuccess orders
+router.get("/order/success", handleGetAllSuccessOrders);
+router.get("/order/unsuccess", handleGetAllUnsuccessOrders);
 
 export default router;
