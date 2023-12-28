@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Order from "../models/Order";
 
 const createNewEmployee = async (data, user) => {
   try {
@@ -21,17 +22,139 @@ const createNewEmployee = async (data, user) => {
   }
 };
 
-const getAllEmployees = async (user) => {};
+const getAllEmployees = async (user) => {
+  try {
+    const curCenter = user.center_name;
 
-const updateEmployee = async (id, data) => {};
-
-const deleteEmployee = async (id) => {
-  // update deleted = true
+    const result = await User.find({
+      center_name: curCenter,
+      role_name: "GDV",
+    }).select("name address phone -_id");
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Get all employee from center ${curCenter} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
 };
 
-const getIncomingParcels = async (user) => {};
+const updateEmployee = async (id, data) => {
+  try {
+    const result = await User.updateOne({ _id: id }, data);
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Update employee has ${id} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
 
-const getOutgoingParcels = async (user) => {};
+const deleteEmployee = async (id) => {
+  try {
+    const result = await User.updateOne(
+      { _id: id },
+      { $set: { deleted: true } }
+    );
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Delete employee  successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+// đơn hàng đến : đơn hàng dc chuyển đi
+const getIncomingParcels = async (user) => {
+  try {
+    const curCenter = user.center_name;
+
+    const allOrders = await Order.find();
+    let result = [];
+    for (let i = 0; i < allOrders.length; i++) {
+      const paths = allOrders[i].paths;
+      for (let j = 1; j < paths.length; j++) {
+        const previous = paths[j - 1];
+        if (previous.isConfirmed && paths[j].center_code == curCenter) {
+          result.push(allOrders[i]);
+          break;
+        }
+      }
+    }
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Get all incoming parcel to center ${curCenter} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const getOutgoingParcels = async (user) => {
+  // outgoing : có path là cetner hiện tại và time departed true
+  // tổng số đơn hàng outgoing
+  try {
+    const curCenter = user.center_name;
+
+    const allOrders = await Order.find();
+    let result = [];
+    for (let i = 0; i < allOrders.length; i++) {
+      const paths = allOrders[i].paths;
+      for (let j = 0; j < paths.length; j++) {
+        if (
+          paths[j].center_code == curCenter &&
+          paths[j].time.timeDeparted != ""
+        ) {
+          let dest = "";
+          if (paths[j + 1].center_code) {
+            dest = paths[j + 1].center_code;
+          }
+
+          const data = {
+            parcel_id: allOrders[i].parcelId,
+            destination: dest,
+            dispatch_date: paths[j].time.timeDeparted,
+          };
+          result.push(data);
+          break;
+        }
+      }
+    }
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Get all outgoing parcel from center ${curCenter} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
 
 const getEmployeeContribution = async (user) => {};
 export {
