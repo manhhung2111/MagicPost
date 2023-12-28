@@ -22,17 +22,23 @@ const createNewEmployee = async (data, user) => {
   }
 };
 
-const getAllEmployees = async (user) => {
+const getAllEmployees = async (user, sort) => {
   try {
     const curCenter = user.center_name;
 
     const result = await User.find({
       center_name: curCenter,
       role_name: "GDV",
-    }).select("name address phone -_id");
+    })
+      .select("name address phone email user_name -_id")
+      .sort({ name: 1 });
+
+    // if (sort === "Username") {
+    //   result.sort({ user_name: 1 });
+    // }
     return {
       errorCode: 0,
-      data: result,
+      data: { packages: result, totalEmployee: result.length },
       message: `Get all employee from center ${curCenter} successfully`,
     };
   } catch (error) {
@@ -44,13 +50,14 @@ const getAllEmployees = async (user) => {
   }
 };
 
-const updateEmployee = async (id, data) => {
+const updateEmployee = async (data) => {
   try {
-    const result = await User.updateOne({ _id: id }, data);
+    const { user_name, email, name, phone, address } = data;
+    const result = await User.findOneAndUpdate({ user_name: user_name }, data);
     return {
       errorCode: 0,
       data: result,
-      message: `Update employee has ${id} successfully`,
+      message: `Update ${user_name} info successfully`,
     };
   } catch (error) {
     return {
@@ -61,16 +68,16 @@ const updateEmployee = async (id, data) => {
   }
 };
 
-const deleteEmployee = async (id) => {
+const deleteEmployee = async (user_name) => {
   try {
     const result = await User.updateOne(
-      { _id: id },
+      { user_name: user_name },
       { $set: { deleted: true } }
     );
     return {
       errorCode: 0,
       data: result,
-      message: `Delete employee  successfully`,
+      message: `Delete ${user_name} successfully`,
     };
   } catch (error) {
     return {
@@ -82,10 +89,9 @@ const deleteEmployee = async (id) => {
 };
 
 // đơn hàng đến : đơn hàng dc chuyển đi
-const getIncomingParcels = async (user) => {
+const getIncomingParcels = async (user, sort) => {
   try {
     const curCenter = user.center_name;
-
     const allOrders = await Order.find();
     let result = [];
     for (let i = 0; i < allOrders.length; i++) {
@@ -93,14 +99,36 @@ const getIncomingParcels = async (user) => {
       for (let j = 1; j < paths.length; j++) {
         const previous = paths[j - 1];
         if (previous.isConfirmed && paths[j].center_code == curCenter) {
-          result.push(allOrders[i]);
+          result.push({
+            parcelId: allOrders[i].parcelId,
+            source: previous.center_code,
+            service: allOrders[i].packageInfo.additionalService,
+            status: paths[j].isConfirmed ? "Confirmed" : "Pending",
+          });
           break;
         }
       }
     }
+    if (sort && sort === "Status") {
+      result.sort(function compareStatus(order1, order2) {
+        return order1.status > order2.status
+          ? 1
+          : order1.status < order2.status
+          ? -1
+          : 0;
+      });
+    } else {
+      result.sort(function compareId(order1, order2) {
+        return order1.parcelId > order2.parcelId
+          ? 1
+          : order1.parcelId < order2.parcelId
+          ? -1
+          : 0;
+      });
+    }
     return {
       errorCode: 0,
-      data: result,
+      data: { packages: result, totalOrders: result.length },
       message: `Get all incoming parcel to center ${curCenter} successfully`,
     };
   } catch (error) {
@@ -112,7 +140,7 @@ const getIncomingParcels = async (user) => {
   }
 };
 
-const getOutgoingParcels = async (user) => {
+const getOutgoingParcels = async (user, sort) => {
   // outgoing : có path là cetner hiện tại và time departed true
   // tổng số đơn hàng outgoing
   try {
@@ -128,23 +156,42 @@ const getOutgoingParcels = async (user) => {
           paths[j].time.timeDeparted != ""
         ) {
           let dest = "";
-          if (paths[j + 1].center_code) {
+          if (j + 1 < paths.length && paths[j + 1].center_code) {
             dest = paths[j + 1].center_code;
           }
-
+          const dispatch_date =
+            paths[j].time.timeDeparted.split(",")[1] +
+            ", " +
+            paths[j].time.timeDeparted.split(",")[2];
           const data = {
-            parcel_id: allOrders[i].parcelId,
-            destination: dest,
-            dispatch_date: paths[j].time.timeDeparted,
+            parcelId: allOrders[i].parcelId,
+            destination: dest || curCenter,
+            dispatch_date: dispatch_date,
+            service: allOrders[i].packageInfo.additionalService,
           };
           result.push(data);
           break;
         }
       }
     }
+    if (sort && sort === "Date") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.dispatch_date);
+        const date2 = new Date(order2.dispatch_date);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else {
+      result.sort(function compareDest(order1, order2) {
+        return order1.destination > order2.destination
+          ? 1
+          : order1.destination < order2.destination
+          ? -1
+          : 0;
+      });
+    }
     return {
       errorCode: 0,
-      data: result,
+      data: { packages: result, totalOrders: result.length },
       message: `Get all outgoing parcel from center ${curCenter} successfully`,
     };
   } catch (error) {
@@ -156,7 +203,12 @@ const getOutgoingParcels = async (user) => {
   }
 };
 
-const getEmployeeContribution = async (user) => {};
+const getEmployeeContribution = async (user) => {
+  // tong don hang cua moi employee incoming va outgoing
+  // center {icomgin: 12, outgoing: 12}
+};
+
+
 export {
   createNewEmployee,
   getAllEmployees,

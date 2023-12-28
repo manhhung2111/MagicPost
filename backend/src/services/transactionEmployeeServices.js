@@ -582,6 +582,8 @@ const getAllRecipientShipment = async (user, query) => {
     };
   }
 };
+
+// so don hang success va unsucess 1 ham
 export {
   createOrder,
   confirmOrderFromCollectionHub,
