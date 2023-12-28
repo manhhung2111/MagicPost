@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { requireAuthTDGD } = require("../middlewares/requireAuthDGD");
+const { requireAuthTDTK } = require("../middlewares/requireAuthDTK");
 import {
   handleCreateNewEmployee,
   handleGetAllEmployees,
@@ -9,10 +9,10 @@ import {
   handleGetIncomingParcels,
   handleGetOutgoingParcels,
   handleGetEmployeeContribution,
-} from "../controllers/transactionManagerController";
+} from "../controllers/collectionManagerController";
 
 // AUTHENTICATION
-router.use(requireAuthTDGD);
+router.use(requireAuthTDTK);
 
 router.get("/employee", handleGetAllEmployees);
 router.put("/employee", handleUpdateEmployee);

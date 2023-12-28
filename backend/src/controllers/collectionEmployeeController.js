@@ -8,7 +8,9 @@ import {
   getIncomingTransactionOrder,
   confirmIncomingTransactionOrder,
   getOrdersToTransferTransaction,
-  transferOrdersToTransactionHub
+  transferOrdersToTransactionHub,
+  getSuccessOrders,
+  getUnsuccessOrders,
 } from "../services/collectionEmployeeServices";
 
 const handleGetIncomingCollectionOrder = async (req, res) => {
@@ -74,7 +76,7 @@ const handleTransferOrdersToCollectionHub = async (req, res) => {
 
 const handleGetIncomingTransactionOrder = async (req, res) => {
   const user = req.user;
-  const {query} = req.body;
+  const { query } = req.body;
   const result = await getIncomingTransactionOrder(user, query);
 
   const statusCode =
@@ -134,6 +136,26 @@ const handleTransferOrdersToTransactionHub = async (req, res) => {
   });
 };
 
+const handleGetAllSuccessOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getSuccessOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllUnsuccessOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getUnsuccessOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
 export {
   handleConfirmIncomingCollectionOrder,
   handleGetIncomingCollectionOrder,
@@ -145,4 +167,6 @@ export {
   handleConfirmIncomingTransactionOrder,
   handleGetOrdersToTransferTransaction,
   handleGetOrdersToTransferCollection,
+  handleGetAllSuccessOrders,
+  handleGetAllUnsuccessOrders,
 };

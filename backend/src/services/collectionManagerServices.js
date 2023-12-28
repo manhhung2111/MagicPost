@@ -1,31 +1,17 @@
-import Center from "../models/Center";
 import User from "../models/User";
 import Order from "../models/Order";
 
-const createNewCenter = async (data) => {
+const createNewEmployee = async (data, user) => {
   try {
-    const result = await Center.create({ ...data });
-    return {
-      errorCode: 0,
-      data: result,
-      message: "Create new center successfully!",
-    };
-  } catch (error) {
-    return {
-      errorCode: -1,
-      data: {},
-      message: "Something's wrong",
-    };
-  }
-};
+    const curCenter = user.center_name;
+    data["center_name"] = curCenter;
+    data["role_name"] = "TKV";
 
-const getAllDGDs = async () => {
-  try {
-    const result = await Center.find({ center_code: /^DGD/ });
+    const result = await User.create(data);
     return {
       errorCode: 0,
       data: result,
-      message: "Get all DGD successfully!",
+      message: "Create new employee successfully",
     };
   } catch (error) {
     return {
@@ -36,13 +22,18 @@ const getAllDGDs = async () => {
   }
 };
 
-const getAllDTKs = async () => {
+const getAllEmployees = async (user) => {
   try {
-    const result = await Center.find({ center_code: /^DTK/ });
+    const curCenter = user.center_name;
+
+    const result = await User.find({
+      center_name: curCenter,
+      role_name: "TKV",
+    }).select("name address phone -_id");
     return {
       errorCode: 0,
       data: result,
-      message: "Get all DTK successfully!",
+      message: `Get all employee from center ${curCenter} successfully`,
     };
   } catch (error) {
     return {
@@ -53,13 +44,13 @@ const getAllDTKs = async () => {
   }
 };
 
-const getAllTDGDs = async () => {
+const updateEmployee = async (id, data) => {
   try {
-    const result = await User.find({ role_name: "GDT" });
+    const result = await User.updateOne({ _id: id }, data);
     return {
       errorCode: 0,
       data: result,
-      message: "Get all TDGD successfully!",
+      message: `Update employee has ${id} successfully`,
     };
   } catch (error) {
     return {
@@ -70,13 +61,16 @@ const getAllTDGDs = async () => {
   }
 };
 
-const getAllTDTKs = async () => {
+const deleteEmployee = async (id) => {
   try {
-    const result = await User.find({ role_name: "TKT" });
+    const result = await User.updateOne(
+      { _id: id },
+      { $set: { deleted: true } }
+    );
     return {
       errorCode: 0,
       data: result,
-      message: "Get all TDTK successfully!",
+      message: `Delete employee  successfully`,
     };
   } catch (error) {
     return {
@@ -87,15 +81,17 @@ const getAllTDTKs = async () => {
   }
 };
 
-const getAllIncoming = async (name_center) => {
+const getIncomingParcels = async (user) => {
   try {
+    const curCenter = user.center_name;
+
     const allOrders = await Order.find();
     let result = [];
     for (let i = 0; i < allOrders.length; i++) {
       const paths = allOrders[i].paths;
       for (let j = 1; j < paths.length; j++) {
         const previous = paths[j - 1];
-        if (previous.isConfirmed && paths[j].center_code == name_center) {
+        if (previous.isConfirmed && paths[j].center_code == curCenter) {
           result.push(allOrders[i]);
           break;
         }
@@ -104,7 +100,7 @@ const getAllIncoming = async (name_center) => {
     return {
       errorCode: 0,
       data: result,
-      message: `Get all incoming parcel to center ${name_center} successfully`,
+      message: `Get all incoming parcel to center ${curCenter} successfully`,
     };
   } catch (error) {
     return {
@@ -115,21 +111,24 @@ const getAllIncoming = async (name_center) => {
   }
 };
 
-const getAllOutgoing = async (name_center) => {
+const getOutgoingParcels = async (user) => {
   try {
+    const curCenter = user.center_name;
+
     const allOrders = await Order.find();
     let result = [];
     for (let i = 0; i < allOrders.length; i++) {
       const paths = allOrders[i].paths;
       for (let j = 0; j < paths.length; j++) {
         if (
-          paths[j].center_code == name_center &&
+          paths[j].center_code == curCenter &&
           paths[j].time.timeDeparted != ""
         ) {
           let dest = "";
           if (i + 1 < paths.length && paths[j + 1].center_code) {
             dest = paths[j + 1].center_code;
           }
+
           const data = {
             parcel_id: allOrders[i].parcelId,
             destination: dest,
@@ -143,7 +142,7 @@ const getAllOutgoing = async (name_center) => {
     return {
       errorCode: 0,
       data: result,
-      message: `Get all outgoing parcel from center ${name_center} successfully`,
+      message: `Get all outgoing parcel from center ${curCenter} successfully`,
     };
   } catch (error) {
     return {
@@ -154,12 +153,13 @@ const getAllOutgoing = async (name_center) => {
   }
 };
 
+const getEmployeeContribution = async (user) => {};
 export {
-  createNewCenter,
-  getAllDGDs,
-  getAllDTKs,
-  getAllTDGDs,
-  getAllTDTKs,
-  getAllIncoming,
-  getAllOutgoing,
+  createNewEmployee,
+  getAllEmployees,
+  updateEmployee,
+  deleteEmployee,
+  getIncomingParcels,
+  getOutgoingParcels,
+  getEmployeeContribution,
 };

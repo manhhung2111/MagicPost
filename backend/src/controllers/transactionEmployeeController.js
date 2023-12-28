@@ -9,6 +9,8 @@ import {
   transferOrdersToCollectionHub,
   getAllOrderToShip,
   getAllRecipientShipment,
+  getSuccessOrders,
+  getUnsuccessOrders,
 } from "../services/transactionEmployeeServices";
 
 const handleCreateOrder = async (req, res) => {
@@ -112,6 +114,26 @@ const handleConfirmRecipientShipment = async (req, res) => {
   });
 };
 
+const handleGetAllSuccessOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getSuccessOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllUnsuccessOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getUnsuccessOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
 export {
   handleCreateOrder,
   handleConfirmOrder,
@@ -123,4 +145,6 @@ export {
   handleTransferOrdersToCollectionHub,
   handleGetAllOrderToShip,
   handleGetAllRecipientShipment,
+  handleGetAllSuccessOrders,
+  handleGetAllUnsuccessOrders,
 };
