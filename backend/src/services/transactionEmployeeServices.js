@@ -222,24 +222,59 @@ const transferOrdersToCollectionHub = async (parcelIds, user) => {
   }
 };
 
-const getIncomingOrdersToConfirm = async (user) => {
+const getIncomingOrdersToConfirm = async (user, query) => {
   try {
     const { center_name: currentCenter } = user;
-    const allOrders = await Order.find({});
-    const result = allOrders.filter(
-      (order) =>
+    const allOrders = await Order.find({}).sort({ parcelId: 1 });
+    let result = [];
+
+    allOrders.forEach((order) => {
+      if (
         order.paths.length > 1 &&
         order.paths[order.paths.length - 1].center_code === currentCenter &&
         order.paths[order.paths.length - 1].user_name === null &&
+        !order.paths[order.paths.length - 1].isConfirmed &&
+        !order.paths[order.paths.length - 1].time.timeArrived &&
         order.paths[order.paths.length - 2].user_name !== null &&
         order.paths[order.paths.length - 2].isConfirmed === true &&
         order.paths[order.paths.length - 2].time.timeArrived &&
         order.paths[order.paths.length - 2].time.timeDeparted
-    );
+      ) {
+        result.push({
+          parcelId: order.parcelId,
+          typeOfParcel: order.packageInfo.typeOfParcel,
+          sourceCenter: order.paths[order.paths.length - 2].center_code,
+          pendingFrom: order.paths[order.paths.length - 2].time.timeDeparted,
+          notes: order.packageInfo.notes,
+        });
+      }
+    });
 
+    if (query?.sort === "Date (asc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else if (query?.sort === "Date (desc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      });
+    }
+
+    if (query?.parcelType && query.parcelType !== "Both") {
+      result = result.filter((order) => {
+        const parcelType = order.typeOfParcel?.isDocument
+          ? "Document"
+          : "Package";
+        return parcelType === query.parcelType;
+      });
+    }
     return {
       errorCode: 0,
-      data: result,
+      data: { packages: result },
       message: `Load all parcels come to ${currentCenter} successfully`,
     };
   } catch (error) {
@@ -264,15 +299,14 @@ const confirmOrderFromCollectionHub = async (parcelId, user) => {
         message: "Confirm unsuccessfully. Parcel not found!",
       };
     }
-    const newPaths = order.paths.map((path, index) => {
+    order.paths.forEach((path, index) => {
       if (path.center_code === currentCenter) {
         path.user_name = currentUser;
         path.time.timeArrived = getCurrentTime();
         path.isConfirmed = true;
       }
-      return path;
     });
-    order.paths = newPaths;
+
     const result = await Order.findOneAndUpdate({ parcelId }, order, {
       new: true,
     });
@@ -291,21 +325,61 @@ const confirmOrderFromCollectionHub = async (parcelId, user) => {
   }
 };
 
-const getAllOrderToShip = async (user) => {
+const getAllOrderToShip = async (user, query) => {
   try {
     const { center_name: currentCenter, user_name } = user;
-    const allOrders = await Order.find({});
-    const result = allOrders.filter(
-      (order) =>
+    const allOrders = await Order.find({}).sort({ parcelId: 1 });
+    let result = [];
+
+    allOrders.forEach((order) => {
+      if (
+        order.paths.length > 0 &&
         order.paths[order.paths.length - 1].center_code === currentCenter &&
         order.paths[order.paths.length - 1].user_name === user_name &&
         order.paths[order.paths.length - 1].isConfirmed === true &&
-        order.paths[order.paths.length - 1].time.timeArrived !== null
-    );
+        order.paths[order.paths.length - 1].time.timeArrived &&
+        !order.paths[order.paths.length - 1].time.timeDeparted
+      ) {
+        result.push({
+          parcelId: order.parcelId,
+          typeOfParcel: order.packageInfo.typeOfParcel,
+          recipientAddress: order.packageInfo.recipientInfo.nameAddress,
+          phoneNum: order.packageInfo.recipientInfo.phoneNum,
+          pendingFrom:
+            order.paths.length > 1
+              ? order.paths[order.paths.length - 2].time.timeDeparted
+              : order.paths[order.paths.length - 1].time.timeArrived,
+          service: order.packageInfo.additionalService,
+        });
+      }
+    });
+
+    if (query?.sort === "Date (asc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else if (query?.sort === "Date (desc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      });
+    }
+
+    if (query?.parcelType && query.parcelType !== "Both") {
+      result = result.filter((order) => {
+        const parcelType = order.typeOfParcel?.isDocument
+          ? "Document"
+          : "Package";
+        return parcelType === query.parcelType;
+      });
+    }
 
     return {
       errorCode: 0,
-      data: result,
+      data: { packages: result },
       message: `Load all parcels ready to ship of ${currentCenter} center successfully`,
     };
   } catch (error) {
@@ -316,6 +390,7 @@ const getAllOrderToShip = async (user) => {
     };
   }
 };
+
 const createShipmentToRecipient = async (user, parcelId) => {
   try {
     const { center_name: currentCenter, user_name } = user;

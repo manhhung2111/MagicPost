@@ -76,7 +76,7 @@ function OrderFromCollectionToCollection({ itemsPerPage }) {
         <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
           <svg
             viewBox="0 0 16 16"
-            class="bi bi-arrow-repeat"
+            className="bi bi-arrow-repeat"
             fill="currentColor"
             height="16"
             width="16"
@@ -108,7 +108,7 @@ function OrderFromCollectionToCollection({ itemsPerPage }) {
             <p>Sort by</p>
             <div className="group-loader">
               {isDisableConfirm && (
-                <div class="loading">
+                <div className="loading">
                   <span></span>
                   <span></span>
                   <span></span>

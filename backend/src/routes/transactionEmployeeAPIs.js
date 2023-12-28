@@ -24,11 +24,11 @@ router.get("/order/collection", handleGetOrdersToTranferToCollectionHub);
 router.put("/order/collection", handleTransferOrdersToCollectionHub);
 
 //get and confirm incoming parcels
-router.get("/order/incoming", handleGetIncomingOrders);
+router.post("/order/incoming", handleGetIncomingOrders);
 router.put("/order/incoming", handleConfirmOrder);
 
 //create new shipment to recipient
-router.get("/shipment", handleGetAllOrderToShip)
+router.post("/ready-shipment", handleGetAllOrderToShip)
 router.post("/shipment", handleCreateShipmentToRecipient);
 //update shipment status
 router.put("/shipment", handleConfirmRecipientShipment);

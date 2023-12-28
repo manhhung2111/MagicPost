@@ -164,7 +164,7 @@ function CreateOrderFromCollectionToTransaction() {
             <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
               <svg
                 viewBox="0 0 16 16"
-                class="bi bi-arrow-repeat"
+                className="bi bi-arrow-repeat"
                 fill="currentColor"
                 height="16"
                 width="16"
