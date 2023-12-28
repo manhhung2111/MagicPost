@@ -1,11 +1,44 @@
 import User from "../models/User";
 import Order from "../models/Order";
+import bcrypt from 'bcrypt'
+
+// const createNewEmployee = async (data, user) => {
+//   try {
+//     const curCenter = user.center_name;
+//     data["center_name"] = curCenter;
+//     data["role_name"] = "GDV";
+
+//     const result = await User.create(data);
+//     return {
+//       errorCode: 0,
+//       data: result,
+//       message: "Create new employee successfully",
+//     };
+//   } catch (error) {
+//     return {
+//       errorCode: -1,
+//       data: {},
+//       message: error.message,
+//     };
+//   }
+// };
 
 const createNewEmployee = async (data, user) => {
   try {
+    const user_name = data["user_name"]
+    const exists = await User.findOne({user_name : user_name})
+    if (exists) {
+        throw Error('Username already in use')
+    }
+
     const curCenter = user.center_name;
     data["center_name"] = curCenter;
     data["role_name"] = "GDV";
+
+    const raw_pass = data["password"]
+    const salt = await bcrypt.genSalt(10)
+    const encrypted_pass = await bcrypt.hash(raw_pass, salt)
+    data["password"] = encrypted_pass
 
     const result = await User.create(data);
     return {
