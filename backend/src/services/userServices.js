@@ -1,8 +1,9 @@
 import User from "../models/User";
-const jwt = require("jsonwebtoken");
 import Order from "../models/Order";
 import Center from "../models/Center";
 import _ from "lodash";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createToken = (role_name, user_name, center_name) => {
   return jwt.sign(
@@ -13,16 +14,18 @@ const createToken = (role_name, user_name, center_name) => {
 
 const loginUser = async (user_name, password) => {
   try {
-    const user = await User.findOne({
-      user_name: user_name,
-      password: password,
-    });
+    if (!user_name || !password) {
+      throw Error("All fields must be filled");
+    }
+
+    const user = await User.findOne({ user_name: user_name });
     if (!user) {
-      return {
-        errorCode: 1,
-        data: {},
-        message: "Wrong username or password!",
-      };
+      throw Error("Incorrect username");
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw Error("Incorrect password");
     }
 
     const token = createToken(user.role_name, user_name, user.center_name);
@@ -53,16 +56,16 @@ const getParcelById = async (id) => {
         message: "Parcel not found",
       };
     }
-    const centers = []
+    const centers = [];
     for (let i = 0; i < result.paths.length; i++) {
       const center = await Center.findOne({
         center_code: result.paths[i].center_code,
       });
-      centers.push(center.name)
+      centers.push(center.name);
     }
     return {
       errorCode: 0,
-      data: {parcel: result, centers},
+      data: { parcel: result, centers },
       message: "Parcel is found successfully",
     };
   } catch (error) {
