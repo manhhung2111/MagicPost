@@ -14,6 +14,7 @@ import AccessDeny from "./components/Utils/403Page/AccessDeny";
 import ParcelCollectionPage from "./pages/ParcelColllectionPage";
 import CollectionManagementPage from "./pages/CollectionManagementPage";
 import PrivateRoute from "./components/Utils/PrivateRoute";
+import ShipmentPage from "./pages/ShipmentPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -28,6 +29,14 @@ root.render(
             element={
               <PrivateRoute expectedRole={"GDV"}>
                 <ParcelTransactionPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="shipment"
+            element={
+              <PrivateRoute expectedRole={"GDV"}>
+                <ShipmentPage />
               </PrivateRoute>
             }
           />

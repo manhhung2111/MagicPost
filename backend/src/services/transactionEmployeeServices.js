@@ -288,8 +288,7 @@ const getIncomingOrdersToConfirm = async (user, query) => {
 
 const confirmOrderFromCollectionHub = async (parcelId, user) => {
   try {
-    const { center_name: currentCenter, user_name: currentUser } =
-      user.center_name;
+    const { center_name: currentCenter, user_name: currentUser } = user;
     const order = await Order.findOne({ parcelId });
     // update paths
     if (!order) {
@@ -299,17 +298,21 @@ const confirmOrderFromCollectionHub = async (parcelId, user) => {
         message: "Confirm unsuccessfully. Parcel not found!",
       };
     }
-    order.paths.forEach((path, index) => {
-      if (path.center_code === currentCenter) {
-        path.user_name = currentUser;
-        path.time.timeArrived = getCurrentTime();
-        path.isConfirmed = true;
+    for (let index = 0; index < order.paths.length; index++) {
+      if (order.paths[index].center_code === currentCenter) {
+        order.paths[index].user_name = currentUser;
+        order.paths[index].time.timeArrived = getCurrentTime();
+        order.paths[index].isConfirmed = true;
       }
-    });
+    }
 
-    const result = await Order.findOneAndUpdate({ parcelId }, order, {
-      new: true,
-    });
+    const result = await Order.findOneAndUpdate(
+      { parcelId: parcelId },
+      order,
+      {
+        new: true,
+      }
+    );
 
     return {
       errorCode: 0,
@@ -450,6 +453,7 @@ const confirmRecipientShipment = async (parcelId, status) => {
       });
     } else if (status === "Deliverd unsuccessfully") {
       shipment.status = status;
+      shipment.timeDelivered = getCurrentTime();
     }
     const result = await Shipment.findOneAndUpdate({ parcelId }, shipment, {
       new: true,
@@ -468,6 +472,58 @@ const confirmRecipientShipment = async (parcelId, status) => {
   }
 };
 
+const getAllRecipientShipment = async (user, query) => {
+  try {
+    const { user_name } = user;
+    const allShipments = await Shipment.find({ user_name: user_name }).sort({
+      parcelId: 1,
+    });
+    let result = [];
+    for (let index = 0; index < allShipments.length; index++) {
+      const shipment = allShipments[index];
+      const order = await Order.findOne({ parcelId: shipment.parcelId });
+      result.push({
+        parcelId: shipment.parcelId,
+        recipientNameAddress: order.packageInfo.recipientInfo.nameAddress,
+        typeOfParcel: order.packageInfo.typeOfParcel,
+        pendingFrom: order.paths[order.paths.length - 1].time.timeDeparted,
+        status: shipment.status,
+        deliveredAt: shipment.timeDelivered,
+      });
+    }
+    if (query?.sort === "Date (asc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 > date2 ? 1 : date1 < date2 ? -1 : 0;
+      });
+    } else if (query?.sort === "Date (desc)") {
+      result.sort(function compareDates(order1, order2) {
+        const date1 = new Date(order1.pendingFrom);
+        const date2 = new Date(order2.pendingFrom);
+        return date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      });
+    }
+
+    if (query?.status?.length > 0) {
+      result = result.filter((shipment) =>
+        query.status?.includes(shipment.status)
+      );
+    }
+
+    return {
+      errorCode: 0,
+      data: { packages: result },
+      message: "Get all shipments successfully",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
 export {
   createOrder,
   confirmOrderFromCollectionHub,
@@ -478,4 +534,5 @@ export {
   transferOrdersToCollectionHub,
   confirmRecipientShipment,
   getAllOrderToShip,
+  getAllRecipientShipment,
 };

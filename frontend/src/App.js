@@ -117,6 +117,11 @@ function App() {
                       Parcel Transaction
                     </NavLink>
                   )}
+                  {isAuthenticated === "GDV" && (
+                    <NavLink to={"/shipment"} className="nav-link">
+                      Shipment
+                    </NavLink>
+                  )}
                   {isAuthenticated === "GDT" && (
                     <NavLink
                       to={"/transaction-management"}

@@ -10,7 +10,8 @@ import {
   handleGetIncomingOrders,
   handleTransferOrdersToCollectionHub,
   handleConfirmRecipientShipment,
-  handleGetAllOrderToShip
+  handleGetAllOrderToShip,
+  handleGetAllRecipientShipment,
 } from "../controllers/transactionEmployeeController";
 
 // AUTHENTICATION
@@ -28,9 +29,10 @@ router.post("/order/incoming", handleGetIncomingOrders);
 router.put("/order/incoming", handleConfirmOrder);
 
 //create new shipment to recipient
-router.post("/ready-shipment", handleGetAllOrderToShip)
+router.post("/ready-shipment", handleGetAllOrderToShip);
 router.post("/shipment", handleCreateShipmentToRecipient);
 //update shipment status
-router.put("/shipment", handleConfirmRecipientShipment);
+router.put("/recipient-shipment", handleConfirmRecipientShipment);
+router.post("/recipient-shipment", handleGetAllRecipientShipment);
 
 export default router;

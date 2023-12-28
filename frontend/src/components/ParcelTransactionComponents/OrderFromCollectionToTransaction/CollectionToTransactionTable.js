@@ -16,6 +16,8 @@ function CollectionToTransactionTable({
         setIsDisableConfirm(false);
         fetchData();
       }, 2000);
+    } else {
+      toast.error(result?.message);
     }
   };
   return (
