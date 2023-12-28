@@ -21,7 +21,8 @@ const handleCreateNewEmployee = async (req, res) => {
 
 const handleGetAllEmployees = async (req, res) => {
   const user = req.user;
-  const result = await getAllEmployees(user);
+  const {sort} = req.body;
+  const result = await getAllEmployees(user, sort);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -31,8 +32,7 @@ const handleGetAllEmployees = async (req, res) => {
 };
 
 const handleUpdateEmployee = async (req, res) => {
-  const { id, data } = req.body;
-  const result = await updateEmployee(id, data);
+  const result = await updateEmployee(req.body);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -42,8 +42,8 @@ const handleUpdateEmployee = async (req, res) => {
 };
 
 const handleDeleteEmployee = async (req, res) => {
-  const { id } = req.body;
-  const result = await deleteEmployee(id);
+  const {user_name} = req.body;
+  const result = await deleteEmployee(user_name);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -54,7 +54,8 @@ const handleDeleteEmployee = async (req, res) => {
 
 const handleGetIncomingParcels = async (req, res) => {
   const user = req.user;
-  const result = await getIncomingParcels(user);
+  const {sort} = req.body;
+  const result = await getIncomingParcels(user, sort);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -65,7 +66,9 @@ const handleGetIncomingParcels = async (req, res) => {
 
 const handleGetOutgoingParcels = async (req, res) => {
   const user = req.user;
-  const result = await getOutgoingParcels(user);
+
+  const {sort} = req.body;
+  const result = await getOutgoingParcels(user, sort);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;

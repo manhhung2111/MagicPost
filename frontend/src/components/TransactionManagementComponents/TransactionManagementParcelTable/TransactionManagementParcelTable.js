@@ -6,8 +6,8 @@ function TransactionManagementParcelTable({ orders, isIncoming }) {
           <th>#</th>
           <th>Parcel ID</th>
           <th>{isIncoming ? "Source" : "Dest"}</th>
-          <th>Dispatch Date</th>
-          <th>Status</th>
+          <th>{isIncoming ? "Service" : "Issued date"}</th>
+          <th>{isIncoming ? "Status" : "Service"}</th>
         </tr>
       </thead>
       <tbody>
@@ -16,17 +16,21 @@ function TransactionManagementParcelTable({ orders, isIncoming }) {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{order.parcelId}</td>
-              <td>{isIncoming ? order.from : order.to}</td>
-              <td className="amount">{order.date}</td>
+              <td>{isIncoming ? order.source : order.destination}</td>
+              <td className="amount">
+                {isIncoming ? order.service || "None" : order.dispatch_date}
+              </td>
               <td>
                 <p
-                  className={`status ${
-                    order.status === "Pending"
-                      ? "status-pending"
-                      : "status-paid"
+                  className={`${
+                    order?.status === "Pending"
+                      ? "status status-pending"
+                      : order?.status === "Confirmed"
+                      ? "status status-paid"
+                      : ""
                   }`}
                 >
-                  {order.status}
+                  {isIncoming ? order.status : order.service || "None"}
                 </p>
               </td>
             </tr>
