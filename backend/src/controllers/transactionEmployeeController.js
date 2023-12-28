@@ -8,6 +8,7 @@ import {
   confirmRecipientShipment,
   transferOrdersToCollectionHub,
   getAllOrderToShip,
+  getAllRecipientShipment,
 } from "../services/transactionEmployeeServices";
 
 const handleCreateOrder = async (req, res) => {
@@ -31,7 +32,7 @@ const handleGetAllTransactionPoints = async (req, res) => {
 };
 
 const handleGetIncomingOrders = async (req, res) => {
-  const {query} = req.body;
+  const { query } = req.body;
   const result = await getIncomingOrdersToConfirm(req.user, query);
 
   const statusCode =
@@ -72,7 +73,7 @@ const handleTransferOrdersToCollectionHub = async (req, res) => {
 };
 
 const handleGetAllOrderToShip = async (req, res) => {
-  const {query} = req.body;
+  const { query } = req.body;
   const result = await getAllOrderToShip(req.user, query);
 
   const statusCode = result.errorCode === 0 ? 200 : 500;
@@ -84,6 +85,16 @@ const handleCreateShipmentToRecipient = async (req, res) => {
   const { parcelId } = req.body;
   const result = await createShipmentToRecipient(req.user, parcelId);
 
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllRecipientShipment = async (req, res) => {
+  const { query } = req.body;
+  const result = await getAllRecipientShipment(req.user, query);
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
   return res.status(statusCode).json({
@@ -111,4 +122,5 @@ export {
   handleConfirmRecipientShipment,
   handleTransferOrdersToCollectionHub,
   handleGetAllOrderToShip,
+  handleGetAllRecipientShipment,
 };

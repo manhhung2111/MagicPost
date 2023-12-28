@@ -54,6 +54,25 @@ const handleCreateShipmentToRecipient = async (parcelId) => {
   return result;
 };
 
+const handleGettAllRecipientShipment = async (sort, status) => {
+  const data = {
+    query: {
+      sort,
+      status: status,
+    },
+  };
+  const result = await axios.post("trans-emp/recipient-shipment", data);
+  return result;
+};
+
+const handleConfirmRecipientShipmentStatus = async (parcelId, status) => {
+  const result = await axios.put("trans-emp/recipient-shipment", {
+    parcelId,
+    status,
+  });
+  return result;
+};
+
 export {
   handleGetAllDistricts,
   handleCreateSenderOrder,
@@ -63,4 +82,6 @@ export {
   handleConfirmOrdersFromCollectionHub,
   handleGetAllOrdersToShip,
   handleCreateShipmentToRecipient,
+  handleGettAllRecipientShipment,
+  handleConfirmRecipientShipmentStatus
 };

@@ -233,6 +233,9 @@
         font-weight: 500;
         color: $color_1;
         z-index: 1;
+        &[disabled] {
+          cursor: not-allowed;
+        }
         &:before {
           content: "";
           position: absolute;
