@@ -31,7 +31,8 @@ const handleGetAllTransactionPoints = async (req, res) => {
 };
 
 const handleGetIncomingOrders = async (req, res) => {
-  const result = await getIncomingOrdersToConfirm(req.user);
+  const {query} = req.body;
+  const result = await getIncomingOrdersToConfirm(req.user, query);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -71,7 +72,8 @@ const handleTransferOrdersToCollectionHub = async (req, res) => {
 };
 
 const handleGetAllOrderToShip = async (req, res) => {
-  const result = await getAllOrderToShip(req.user);
+  const {query} = req.body;
+  const result = await getAllOrderToShip(req.user, query);
 
   const statusCode = result.errorCode === 0 ? 200 : 500;
   return res.status(statusCode).json({

@@ -72,8 +72,8 @@ function ParcelTransactionPage() {
         </div>
       </div>
       <div className="confirm-create-collection-recipient">
-        <OrderFromCollectionToTransaction />
-        <RecipientOrderTransaction />
+        <OrderFromCollectionToTransaction itemsPerPage={4}/>
+        <RecipientOrderTransaction itemsPerPage={4}/>
       </div>
       <ParcelTransactionStatusStatistics />
       <SenderOrderTransaction

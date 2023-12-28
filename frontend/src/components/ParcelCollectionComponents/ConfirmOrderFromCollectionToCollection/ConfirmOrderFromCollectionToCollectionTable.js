@@ -27,7 +27,7 @@ function ConfirmOrderFromCollectionToCollectionTable({
             <th>Parcel ID</th>
             <th>Type</th>
             <th>From</th>
-            <th>Pending Date</th>
+            <th>Pending From</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -63,7 +63,9 @@ function ConfirmOrderFromCollectionToCollectionTable({
             })}
         </tbody>
       </table>
-      {orders?.length === 0 && <div className="no-orders">No orders from other collection hubs</div>}
+      {orders?.length === 0 && (
+        <div className="no-orders">No orders from other collection hubs</div>
+      )}
     </>
   );
 }
