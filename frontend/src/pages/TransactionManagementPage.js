@@ -14,7 +14,6 @@ import ReactPaginate from "react-paginate";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Loader from "../components/Utils/Loader/Loader";
 import {
-  handleGetAllEmployee,
   handleGetIncomingParcels,
   handleGetOutgoingParcels,
 } from "../services/transactionManagementServices";
