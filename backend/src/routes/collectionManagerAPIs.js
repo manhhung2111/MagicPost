@@ -17,10 +17,10 @@ router.use(requireAuthTDTK);
 router.get("/employee", handleGetAllEmployees);
 router.put("/employee", handleUpdateEmployee);
 router.post("/employee", handleCreateNewEmployee);
-router.delete("/employee", handleDeleteEmployee);
+router.put("/employee-delete", handleDeleteEmployee);
 
-router.get("/incoming-order", handleGetIncomingParcels);
-router.get("/outgoing-parcel", handleGetOutgoingParcels);
+router.post("/incoming-order", handleGetIncomingParcels);
+router.post("/outgoing-order", handleGetOutgoingParcels);
 router.get("/employee-contribution", handleGetEmployeeContribution);
 
 export default router;

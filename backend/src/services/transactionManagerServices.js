@@ -98,7 +98,11 @@ const getIncomingParcels = async (user, sort) => {
       const paths = allOrders[i].paths;
       for (let j = 1; j < paths.length; j++) {
         const previous = paths[j - 1];
-        if (previous.isConfirmed && paths[j].center_code == curCenter) {
+        if (
+          previous.isConfirmed &&
+          previous.time.timeDeparted != "" &&
+          paths[j].center_code == curCenter
+        ) {
           result.push({
             parcelId: allOrders[i].parcelId,
             source: previous.center_code,
@@ -207,7 +211,6 @@ const getEmployeeContribution = async (user) => {
   // tong don hang cua moi employee incoming va outgoing
   // center {icomgin: 12, outgoing: 12}
 };
-
 
 export {
   createNewEmployee,
