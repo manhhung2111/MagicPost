@@ -449,6 +449,64 @@ const getNearbyTransactionHubs = async (user) => {
   }
 };
 
+const getSuccessOrders = async (user) => {
+  try {
+    const user_name = user.user_name;
+    const allShipments = await Shipment.find();
+    let successOrders = 0;
+    for (let i = 0; i < allShipments.length; i++) {
+      if (
+        allShipments[i].user_name === user_name &&
+        allShipments[i].status === "Delivered successfully"
+      ) {
+        successOrders += 1;
+      }
+    }
+    return {
+      errorCode: 0,
+      data: {
+        no_of_success: successOrders,
+      },
+      message: `Get order successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
+const getUnsuccessOrders = async (user) => {
+  try {
+    const user_name = user.user_name;
+    const allShipments = await Shipment.find();
+    let unsuccessOrders = 0;
+    for (let i = 0; i < allShipments.length; i++) {
+      if (
+        allShipments[i].user_name === user_name &&
+        allShipments[i].status === "Delivered unsuccessfully"
+      ) {
+        unsuccessOrders += 1;
+      }
+    }
+    return {
+      errorCode: 0,
+      data: {
+        no_of_unsuccess: unsuccessOrders,
+      },
+      message: `Get order successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
 export {
   getIncomingCollectionOrder,
   confirmIncomingCollectionOrder,
@@ -460,4 +518,6 @@ export {
   confirmIncomingTransactionOrder,
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
+  getSuccessOrders,
+  getUnsuccessOrders,
 };

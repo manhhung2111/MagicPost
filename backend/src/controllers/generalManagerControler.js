@@ -2,7 +2,15 @@ import Center from "../models/Center";
 import Order from "../models/Order";
 import User from "../models/User";
 import _ from "lodash";
-import { createNewCenter } from "../services/generalManagerServices";
+import {
+  createNewCenter,
+  getAllDGDs,
+  getAllDTKs,
+  getAllTDGDs,
+  getAllTDTKs,
+  getAllIncoming,
+  getAllOutgoing,
+} from "../services/generalManagerServices";
 
 const handleGetDTK = async () => {
   let result = await Center.find({ parent_center_name: null });
@@ -33,4 +41,69 @@ const handleCreateNewCenter = async (req, res) => {
   });
 };
 
-export { handleGetDTK, handleCreateNewCenter };
+const handleGetAllDGDs = async (req, res) => {
+  const result = await getAllDGDs();
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllDTKs = async (req, res) => {
+  const result = await getAllDTKs();
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllTDGDs = async (req, res) => {
+  const result = await getAllTDGDs();
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllTDTKs = async (req, res) => {
+  const result = await getAllTDTKs();
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllIncoming = async (req, res) => {
+  const { center_name } = req.body;
+  const result = await getAllIncoming(center_name);
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetAllOutgoing = async (req, res) => {
+  const { center_name } = req.body;
+  const result = await getAllOutgoing(center_name);
+
+  const statusCode = result.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+export {
+  handleGetDTK,
+  handleCreateNewCenter,
+  handleGetAllDGDs,
+  handleGetAllDTKs,
+  handleGetAllTDGDs,
+  handleGetAllTDTKs,
+  handleGetAllIncoming,
+  handleGetAllOutgoing,
+};
