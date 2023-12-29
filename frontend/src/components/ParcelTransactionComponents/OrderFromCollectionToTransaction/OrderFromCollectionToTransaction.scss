@@ -49,7 +49,7 @@
       font-weight: 600;
       font-size: 1.1rem;
       margin-top: 1rem;
-      @media screen and (max-width: 450px) {
+      @media screen and (max-width: 1000px) {
         display: none;
       }
       .multi-select {
@@ -166,7 +166,7 @@
         letter-spacing: 0.1rem;
         font-size: 1rem;
         font-weight: 700;
-        @media screen and (max-width: 450px) {
+        @media screen and (max-width: 1000px) {
           &:nth-child(3),
           &:nth-child(4),
           &:nth-child(5),
@@ -186,7 +186,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        @media screen and (max-width: 450px) {
+        @media screen and (max-width: 1000px) {
           &:nth-child(3),
           &:nth-child(4),
           &:nth-child(5),

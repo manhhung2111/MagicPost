@@ -4,7 +4,7 @@
   }
   display: grid;
   grid-template-columns: 3.5fr 6.5fr;
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 1000px) {
    grid-template-columns: 1fr;
   }
   gap: 2rem;
@@ -15,7 +15,7 @@
     margin-top: 2rem;
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    @media screen and (max-width: 450px) {
+    @media screen and (max-width: 1000px) {
       display: flex;
       justify-content: center;
       align-items: center;

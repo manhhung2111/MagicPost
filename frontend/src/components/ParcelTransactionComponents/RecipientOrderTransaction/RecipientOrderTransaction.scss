@@ -43,7 +43,7 @@
     .filter {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      @media screen and (max-width: 450px) {
+      @media screen and (max-width: 1000px) {
         display: none;
       }
       gap: 5rem;
@@ -165,7 +165,7 @@
       letter-spacing: 0.1rem;
       font-size: 1rem;
       font-weight: 700;
-      @media screen and (max-width: 450px) {
+      @media screen and (max-width: 1000px) {
         &:nth-child(3),
         &:nth-child(4),
         &:nth-child(5),
@@ -179,7 +179,7 @@
       padding: 1rem 2rem;
       font-size: 1.1rem;
       font-weight: 500;
-      @media screen and (max-width: 450px) {
+      @media screen and (max-width: 1000px) {
         &:nth-child(3),
         &:nth-child(4),
         &:nth-child(5),
