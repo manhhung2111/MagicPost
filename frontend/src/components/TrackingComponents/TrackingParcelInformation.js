@@ -277,7 +277,7 @@ function TrackingParcelInformation({
                 <b>14. Received date</b>
               </p>
               <p>{`${
-                delivered ? paths[3].time ?? "Delivered" : "Not delivered"
+                delivered ? paths?.pop()?.time?.timeDeparted ?? "Delivered" : "Not delivered"
               }`}</p>
               <p style={{ fontSize: "1.1rem" }}>Recipient's signature</p>
               {delivered && (
