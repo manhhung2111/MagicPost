@@ -243,6 +243,9 @@
           align-items: center;
           justify-content: space-between;
           padding-right: 5%;
+          @media screen and (max-width: 1200px) {
+            padding-right: 1%;
+          }
           .date-added {
             display: -webkit-box;
             -webkit-line-clamp: 2;

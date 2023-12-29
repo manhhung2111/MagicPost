@@ -511,6 +511,9 @@
                   p {
                     margin: 0;
                     font-size: 1.2rem;
+                    @media screen and (max-width: 1200px) {
+                      font-size: 1rem;
+                    }
                   }
                 }
               }
@@ -882,6 +885,9 @@
     margin-top: 3rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
     .top {
       background-color: #fff;
@@ -1278,12 +1284,18 @@
     display: grid;
     grid-template-columns: 1.9fr 1fr;
     gap: 2rem;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .transaction-to-collection {
     margin-top: 3rem;
     display: grid;
     grid-template-columns: 1fr 1.9fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
   }
 }
@@ -1399,6 +1411,9 @@
     margin-top: 3rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
     .top {
       background-color: #fff;
@@ -2074,6 +2089,9 @@
     margin-top: 3rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
     .top {
       background-color: #fff;
