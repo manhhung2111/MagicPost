@@ -59,7 +59,7 @@
           color: white;
           transition: all 0.5s ease-in-out;
         }
-        @media screen and (max-width: 450px) {
+        @media screen and (max-width: 1000px) {
           display: none;
         }
       }
@@ -192,7 +192,7 @@
         grid-template-columns: 0.7fr 1fr 1fr;
         align-items: center;
         gap: 0;
-        @media screen and (max-width: 450px) {
+        @media screen and (max-width: 1000px) {
           display: none;
         }
         // justify-content: space-between;
@@ -235,7 +235,7 @@
       .right-content {
         display: grid;
         grid-template-columns: 0.7fr 1fr 1fr;
-        @media screen and (max-width: 450px) {
+        @media screen and (max-width: 1000px) {
           display: none;
         }
         align-items: center;
