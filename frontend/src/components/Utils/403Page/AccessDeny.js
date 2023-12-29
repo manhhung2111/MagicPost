@@ -1,5 +1,5 @@
 import "./AccessDeny.scss";
-import {  FaLock } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 function AccessDeny() {
   const navigate = useNavigate();
