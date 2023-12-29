@@ -12,8 +12,7 @@ import {
   handleConfirmRecipientShipment,
   handleGetAllOrderToShip,
   handleGetAllRecipientShipment,
-  handleGetAllSuccessOrders,
-  handleGetAllUnsuccessOrders,
+  handleGetStatsOrders,
 } from "../controllers/transactionEmployeeController";
 
 // AUTHENTICATION
@@ -38,7 +37,6 @@ router.put("/recipient-shipment", handleConfirmRecipientShipment);
 router.post("/recipient-shipment", handleGetAllRecipientShipment);
 
 // get success and unsuccess orders
-router.get("/order/success", handleGetAllSuccessOrders);
-router.get("/order/unsuccess", handleGetAllUnsuccessOrders);
+router.get("/order/stats", handleGetStatsOrders);
 
 export default router;

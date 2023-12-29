@@ -97,6 +97,20 @@ const handleGetAllOutgoing = async (req, res) => {
   });
 };
 
+const handleGetAllIncomingAndOutgoing = async (req, res) => {
+  const { center_name } = req.body;
+  const allOut = await getAllOutgoing(center_name);
+  const allIn = await getAllIncoming(center_name);
+  const result = {};
+  result["total_incoming"] = allIn.data.length;
+  result["total_outgoing"] = allOut.data.length;
+  const statusCode =
+    allOut.errorCode === 0 && allIn.errorCode === 0 ? 200 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
 export {
   handleGetDTK,
   handleCreateNewCenter,
@@ -106,4 +120,5 @@ export {
   handleGetAllTDTKs,
   handleGetAllIncoming,
   handleGetAllOutgoing,
+  handleGetAllIncomingAndOutgoing,
 };

@@ -9,6 +9,7 @@ import {
   handleGetAllTDTKs,
   handleGetAllIncoming,
   handleGetAllOutgoing,
+  handleGetAllIncomingAndOutgoing,
 } from "../controllers/generalManagerControler";
 import { requireAuthGD } from "../middlewares/requireAuthGD";
 
@@ -23,5 +24,6 @@ router.get("/tdgd", handleGetAllTDGDs);
 router.get("/tdtk", handleGetAllTDTKs);
 router.get("/incoming-orders", handleGetAllIncoming);
 router.get("/outgoing-orders", handleGetAllOutgoing);
+router.get("/stats", handleGetAllIncomingAndOutgoing);
 
 export default router;
