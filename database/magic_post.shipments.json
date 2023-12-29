@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "658cd9737354fbb4abb30c82"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPC34Zz53YcHN",
+  "status": "Delivered successfully",
+  "timeDelivered": "12:00 PM, December 28, 2023",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658d1d70131467225f99d8ae"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MP9IVXXniG8HN",
+  "status": "In transit",
+  "timeDelivered": null,
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658d1df8131467225f9b845b"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPNux65gLOAHN",
+  "status": "In transit",
+  "timeDelivered": null,
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658e3e44d28bc4e2c0747ae1"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPER1KD0FdbHN",
+  "status": "In transit",
+  "timeDelivered": null,
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658e4518d28bc4e2c075c265"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPP1eViE3wiHN",
+  "status": "Deliverd unsuccessfully",
+  "timeDelivered": "12:23 PM, December 29, 2023",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658e78de12ad1801363ecb65"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPPYbqbs63QHN",
+  "status": "Delivered successfully",
+  "timeDelivered": "02:45 PM, December 29, 2023",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658e7c0d12ad1801364451dd"
+  },
+  "user_name": "DGD_VL_ThanhHoa_Employee1",
+  "dispatchedCenter": "DGD_VL_ThanhHoa",
+  "parcelId": "MPRGXCZdcNiTH",
+  "status": "Delivered successfully",
+  "timeDelivered": "02:58 PM, December 29, 2023",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658e9afff26d288f73167a98"
+  },
+  "user_name": "DGD_VL_ThanhHoa_Employee1",
+  "dispatchedCenter": "DGD_VL_ThanhHoa",
+  "parcelId": "MPDS5R1FYgzTH",
+  "status": "Delivered successfully",
+  "timeDelivered": "05:10 PM, December 29, 2023",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ed08d1fd76128c976ad4c"
+  },
+  "user_name": "DGD_TX_Hanoi_Employee1",
+  "dispatchedCenter": "DGD_TX_Hanoi",
+  "parcelId": "MPQ13K7S43HHN",
+  "status": "In transit",
+  "timeDelivered": null,
+  "deleted": false,
+  "__v": 0
+}]
