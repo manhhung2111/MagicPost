@@ -61,11 +61,6 @@ const getAllEmployees = async (user, sort) => {
 
 const updateEmployee = async (data) => {
   try {
-    const raw_pass = data["password"]
-    const salt = await bcrypt.genSalt(10)
-    const encrypted_pass = await bcrypt.hash(raw_pass, salt)
-    data["password"] = encrypted_pass
-    
     const result = await User.updateOne({ _id: id }, data);
     return {
       errorCode: 0,
