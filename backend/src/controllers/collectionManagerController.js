@@ -77,7 +77,7 @@ const handleGetOutgoingParcels = async (req, res) => {
 };
 
 const handleGetEmployeeContribution = async (req, res) => {
-  const { user } = req.user;
+  const user = req.user;
   const result = await getEmployeeContribution(user);
 
   const statusCode =

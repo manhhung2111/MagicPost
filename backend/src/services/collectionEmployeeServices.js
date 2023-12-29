@@ -449,23 +449,30 @@ const getNearbyTransactionHubs = async (user) => {
   }
 };
 
-const getSuccessOrders = async (user) => {
+const getStatsOrders = async (user) => {
   try {
     const user_name = user.user_name;
     const allShipments = await Shipment.find();
     let successOrders = 0;
+    let unsuccessOrders = 0;
     for (let i = 0; i < allShipments.length; i++) {
       if (
         allShipments[i].user_name === user_name &&
         allShipments[i].status === "Delivered successfully"
       ) {
         successOrders += 1;
+      } else if (
+        allShipments[i].user_name === user_name &&
+        allShipments[i].status === "Delivered unsuccessfully"
+      ) {
+        unsuccessOrders += 1;
       }
     }
     return {
       errorCode: 0,
       data: {
         no_of_success: successOrders,
+        no_of_unsuccess: unsuccessOrders,
       },
       message: `Get order successfully`,
     };
@@ -478,25 +485,28 @@ const getSuccessOrders = async (user) => {
   }
 };
 
-const getUnsuccessOrders = async (user) => {
+const getAllIncomingAndOutGoing = async (user) => {
   try {
     const user_name = user.user_name;
-    const allShipments = await Shipment.find();
-    let unsuccessOrders = 0;
-    for (let i = 0; i < allShipments.length; i++) {
-      if (
-        allShipments[i].user_name === user_name &&
-        allShipments[i].status === "Delivered unsuccessfully"
-      ) {
-        unsuccessOrders += 1;
+    const allOrder = await Order.find();
+    let totalInAndOut = 0;
+    for (let i = 0; i < allOrder.length; i++) {
+      const paths = allOrder[i].paths;
+      for (let j = 0; j < paths.length; j++) {
+        if (
+          paths[j].user_name == user_name &&
+          (paths[j].time.timeArrived != "" || paths[j].time.timeDeparted != "")
+        ) {
+          totalInAndOut += 1;
+        }
       }
     }
     return {
       errorCode: 0,
       data: {
-        no_of_unsuccess: unsuccessOrders,
+        total_in_out: totalInAndOut,
       },
-      message: `Get order successfully`,
+      message: `Get all incoming and outgoing order by ${user} successfully`,
     };
   } catch (error) {
     return {
@@ -518,6 +528,6 @@ export {
   confirmIncomingTransactionOrder,
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
-  getSuccessOrders,
-  getUnsuccessOrders,
+  getStatsOrders,
+  getAllIncomingAndOutGoing,
 };
