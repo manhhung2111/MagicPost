@@ -12,7 +12,7 @@ function PrivateRoute({ expectedRole, children }) {
       }
     };
     verify();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return children;
 }

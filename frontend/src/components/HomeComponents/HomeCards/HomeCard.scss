@@ -4,6 +4,9 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
   .home-card {
     flex: 1;
     position: relative;
@@ -13,13 +16,11 @@
     &:hover {
       transform: scale(1.05);
       transform-origin: center;
-
     }
     .img {
       width: 100%;
       aspect-ratio: 3/2;
       // object-fit: cover;
-
     }
     .info {
       .title {

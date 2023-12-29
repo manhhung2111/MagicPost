@@ -15,7 +15,7 @@ function HomePage() {
       }
     };
     scrollToSection("home-page");
-  }, [])
+  }, []);
   return (
     <div id="home-page">
       <Slider />

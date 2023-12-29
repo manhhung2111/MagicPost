@@ -17,7 +17,34 @@ import {
 } from "chart.js";
 import { Chart, Doughnut } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useState, useEffect } from "react";
+import {
+  handleGetContribution,
+  handleGetOrderStatistics,
+} from "../../../services/transactionServices";
 function ParcelTransactionStatusStatistics() {
+  const [order, setOrders] = useState({ no_of_success: 0, no_of_unsuccess: 0 });
+  const [contribution, setContribution] = useState({
+    contribution: 0,
+    total: 0,
+  });
+  const fetchOrders = async () => {
+    const result = await handleGetOrderStatistics();
+    if (result?.errorCode === 0) {
+      setOrders((prev) => result.data);
+    }
+  };
+  const fetchContribution = async () => {
+    const result = await handleGetContribution();
+    if (result?.errorCode === 0) {
+      setContribution((prev) => result.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    fetchContribution();
+  }, []);
   ChartJS.register(
     LinearScale,
     CategoryScale,
@@ -53,62 +80,32 @@ function ParcelTransactionStatusStatistics() {
         beginAtZero: true,
       },
     },
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
     tension: 0.3,
   };
-  const labels = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const labels = ["Delivery successful", "Delivery unsucessful"];
   const parcelsData = {
     labels,
     datasets: [
       {
-        type: "line",
-        label: "Successfully Delivered",
-        borderColor: " rgb(19, 195, 107)",
-        backgroundColor: " rgba(19, 195, 107, 0.2)",
-        data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
-        stack: "Stack 2",
+        type: "bar",
+        label: "Total orders",
+        borderColor: "rgba(255, 196, 54, 0.7)",
+        backgroundColor: "rgba(255, 196, 54, 0.7)",
+        data: [order.no_of_success, order.no_of_unsuccess],
         fill: "origin",
       },
-      {
-        type: "line",
-        label: "Unsuccessfully Delivered",
-        borderColor: "rgba(255, 105, 105, 1)",
-        backgroundColor: "rgba(255, 105, 105, 0.2)",
-        data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
-        stack: "Stack 1",
-        fill: "origin",
-      },
-      // {
-      //   label: "Total parcels",
-      //   data: labels.map(() => Math.floor(Math.random() * (100 - 50) + 50)),
-      //   backgroundColor: "rgba(255, 196, 54, 0.7)",
-      //   stack: "Stack 0",
-      // },
     ],
   };
 
   const employeeData = {
-    labels: ["Hoang Manh Hung", "Others"],
+    labels: [
+      JSON.parse(localStorage.getItem("account"))?.user_info?.name,
+      "Others",
+    ],
     datasets: [
       {
         label: "# of Parcels",
-        data: [369, 400],
+        data: [contribution.contribution, contribution.total],
         backgroundColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
         borderColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
         borderWidth: 1,
@@ -170,11 +167,7 @@ function ParcelTransactionStatusStatistics() {
         />
       </div>
       <div className="bar-chart">
-        <Chart
-          type="bar"
-          data={parcelsData}
-          options={options}
-        />
+        <Chart type="bar" data={parcelsData} options={options} />
       </div>
     </Container>
   );

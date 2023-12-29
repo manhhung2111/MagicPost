@@ -11,7 +11,7 @@ import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
 import avatar from "./assets/programmer.png";
 import { useNavigate } from "react-router-dom";
 import AccountInfo from "./components/HomeComponents/AccountInfo/AccountInfo";
-import axios from './config/axiosConfig'
+import axios from "./config/axiosConfig";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
@@ -57,11 +57,8 @@ function App() {
     setIsShowSetting(false);
     setShowLoginModal(false);
     localStorage.clear();
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer`;
+    axios.defaults.headers.common["Authorization"] = `Bearer`;
     navigate("/");
-    
   };
 
   return (
@@ -117,7 +114,12 @@ function App() {
                       Parcel Transaction
                     </NavLink>
                   )}
-                  {isAuthenticated === "TDGD" && (
+                  {isAuthenticated === "GDV" && (
+                    <NavLink to={"/shipment"} className="nav-link">
+                      Shipment
+                    </NavLink>
+                  )}
+                  {isAuthenticated === "GDT" && (
                     <NavLink
                       to={"/transaction-management"}
                       className="nav-link"
@@ -125,14 +127,19 @@ function App() {
                       Transaction Management
                     </NavLink>
                   )}
-                  {isAuthenticated === "DTKV" && (
+                  {isAuthenticated === "TKV" && (
                     <NavLink to={"/parcel-collection"} className="nav-link">
                       Parcel Collection
                     </NavLink>
                   )}
-                  {isAuthenticated === "TDTK" && (
+                  {isAuthenticated === "TKT" && (
                     <NavLink to={"/collection-management"} className="nav-link">
                       Collection Management
+                    </NavLink>
+                  )}
+                  {isAuthenticated === "TGD" && (
+                    <NavLink to={"/general-management"} className="nav-link">
+                      General Management
                     </NavLink>
                   )}
                   {headerColor === "blur" && !isAuthenticated && (
@@ -189,6 +196,7 @@ function App() {
       <AccountInfo
         showModal={showAccountModal}
         setShowModal={setIsShowAccountModal}
+        isAuthenticated={isAuthenticated}
       />
     </div>
   );

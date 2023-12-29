@@ -17,7 +17,7 @@ const requireAuthGD = async (req, res, next) => {
       process.env.SECRET
     );
 
-    if (role_name == "GD") {
+    if (role_name == "TGD") {
       req.role_name = role_name;
       req.user_name = user_name;
       req.center_name = center_name;
