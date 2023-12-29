@@ -4,13 +4,48 @@
   border-radius: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-  h2 {
-    font-weight: bold;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h2 {
+      font-weight: bold;
+    }
+    .refresh-btn {
+      color: white;
+      background-color: #79ac78;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      padding: 0.7rem 2rem;
+      display: flex;
+      align-items: center;
+      border: none;
+      gap: 3px;
+      &:hover {
+        background-color: #79ac78cb;
+        svg {
+          transform: rotate(360deg);
+        }
+      }
+      & svg {
+        display: inline;
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-right: 0.75rem;
+        color: white;
+        transition: all 0.5s ease-in-out;
+      }
+    }
   }
   .pending-confirmation-orders {
     .filter {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      @media screen and (max-width: 1000px) {
+        display: none;
+      }
       gap: 5rem;
       font-weight: 600;
       font-size: 1.1rem;
@@ -33,9 +68,62 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        .group-loader {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          div.loading {
+            --speed-of-animation: 0.9s;
+            --gap: 6px;
+            --first-color: #4c86f9;
+            --second-color: #49a84c;
+            --third-color: #f6bb02;
+            --fourth-color: #f6bb02;
+            --fifth-color: #2196f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            gap: 6px;
+            height: 80%;
+            span {
+              width: 4px;
+              height: 60%;
+              background: var(--first-color);
+              animation: scale var(--speed-of-animation) ease-in-out infinite;
+            }
+            span:nth-child(2) {
+              background: var(--second-color);
+              animation-delay: -0.8s;
+            }
+            span:nth-child(3) {
+              background: var(--third-color);
+              animation-delay: -0.7s;
+            }
+            span:nth-child(4) {
+              background: var(--fourth-color);
+              animation-delay: -0.6s;
+            }
+            span:nth-child(5) {
+              background: var(--fifth-color);
+              animation-delay: -0.5s;
+            }
+            @keyframes scale {
+              0%,
+              40%,
+              100% {
+                transform: scaleY(0.05);
+              }
+
+              20% {
+                transform: scaleY(1);
+              }
+            }
+          }
+        }
       }
     }
-    .collection-to-transaction-table {
+    .collection-to-collection-table {
       $clr-primary: #81d4fa;
       $clr-primary-light: #e1f5fe;
       $clr-primary-dark: #4fc3f7;
@@ -63,6 +151,7 @@
       width: 100%;
       margin: 1rem 0 2rem;
       border-radius: $radius;
+      // height: 210px;
       thead {
         box-shadow: 0 5px 10px $clr-gray300;
       }
@@ -73,12 +162,26 @@
         letter-spacing: 0.1rem;
         font-size: 1rem;
         font-weight: 700;
+        @media screen and (max-width: 1000px) {
+          &:nth-child(4),
+          &:nth-child(5),
+          &:nth-child(6) {
+            display: none;
+          }
+        }
       }
 
       td {
         padding: 1rem 2rem;
         font-size: 1.1rem;
         font-weight: 500;
+        @media screen and (max-width: 1000px) {
+          &:nth-child(4),
+          &:nth-child(5),
+          &:nth-child(6) {
+            display: none;
+          }
+        }
       }
 
       a {
@@ -107,6 +210,12 @@
           background-color: $clr-unpaid;
           color: $clr-unpaid-font;
         }
+      }
+
+      .amount {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       //Color alternating rows
@@ -173,6 +282,68 @@
           }
         }
       }
+    }
+    .paginate {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .info {
+        margin: 0;
+        color: #878a99;
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+      ul {
+        display: flex;
+        list-style: none;
+        gap: 7px;
+        font-size: 1.3rem;
+        color: black;
+        font-weight: 500;
+        margin: 0;
+        padding: 0;
+        .page-item {
+          border: none;
+          outline: none;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          cursor: pointer;
+          .page-link {
+            padding: 5px 10px;
+            // border: 1px solid black;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            .icon {
+              font-weight: 100;
+              // font-size: 2rem;
+            }
+          }
+          &.disabled {
+            background-color: rgba(128, 128, 128, 0.253);
+            cursor: not-allowed;
+          }
+          &.active {
+            background-color: #79ac78;
+            color: whitesmoke;
+            font-weight: bold;
+          }
+          &:hover:not(.disabled, .active) {
+            background-color: rgba(128, 128, 128, 0.123);
+          }
+        }
+      }
+    }
+    .no-orders {
+      font-size: 1.6rem;
+      text-align: center;
     }
   }
 }

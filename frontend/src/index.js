@@ -14,6 +14,8 @@ import AccessDeny from "./components/Utils/403Page/AccessDeny";
 import ParcelCollectionPage from "./pages/ParcelColllectionPage";
 import CollectionManagementPage from "./pages/CollectionManagementPage";
 import PrivateRoute from "./components/Utils/PrivateRoute";
+import ShipmentPage from "./pages/ShipmentPage";
+import GeneralManagementPage from "./pages/GeneralManagementPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -32,9 +34,17 @@ root.render(
             }
           />
           <Route
+            path="shipment"
+            element={
+              <PrivateRoute expectedRole={"GDV"}>
+                <ShipmentPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="transaction-management"
             element={
-              <PrivateRoute expectedRole={"TDGD"}>
+              <PrivateRoute expectedRole={"GDT"}>
                 <TransactionManagementPage />
               </PrivateRoute>
             }
@@ -42,7 +52,7 @@ root.render(
           <Route
             path="parcel-collection"
             element={
-              <PrivateRoute expectedRole={"DTKV"}>
+              <PrivateRoute expectedRole={"TKV"}>
                 <ParcelCollectionPage />
               </PrivateRoute>
             }
@@ -50,11 +60,19 @@ root.render(
           <Route
             path="collection-management"
             element={
-              <PrivateRoute expectedRole={"TDTK"}>
+              <PrivateRoute expectedRole={"TKT"}>
                 <CollectionManagementPage />
               </PrivateRoute>
             }
           ></Route>
+          <Route
+            path="general-management"
+            element={
+              <PrivateRoute expectedRole={"TGD"}>
+                <GeneralManagementPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route path="access-deny" element={<AccessDeny />} />
         <Route path="*" element={<PageNotFound />} />

@@ -8,6 +8,7 @@ import transactionManagerRouter from "./routes/transactionManagerAPIs";
 import collectionEmployeeRouter from "./routes/collectionEmployeeAPIs";
 import userRouter from "./routes/userAPIs";
 import generalManagerRouter from "./routes/generalManagerAPIs";
+import collectionManagerRouter from "./routes/collectionManagerAPIs";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/general", userRouter);
 app.use("/trans-emp", transactionEmployeeRouter);
 app.use("/trans-mana", transactionManagerRouter);
 app.use("/collection-emp", collectionEmployeeRouter);
+app.use("/collection-mana", collectionManagerRouter);
 app.use("/general-mana", generalManagerRouter);
 
 (async function () {
