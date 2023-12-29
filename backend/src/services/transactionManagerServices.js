@@ -1,12 +1,23 @@
 import User from "../models/User";
 import Order from "../models/Order";
-import { getAllIncomingAndOutGoing } from "../services/transactionEmployeeServices";
+import bcrypt from 'bcrypt'
 
 const createNewEmployee = async (data, user) => {
   try {
+    const user_name = data["user_name"]
+    const exists = await User.findOne({user_name : user_name})
+    if (exists) {
+        throw Error('Username already in use')
+    }
+
     const curCenter = user.center_name;
     data["center_name"] = curCenter;
     data["role_name"] = "GDV";
+
+    const raw_pass = data["password"]
+    const salt = await bcrypt.genSalt(10)
+    const encrypted_pass = await bcrypt.hash(raw_pass, salt)
+    data["password"] = encrypted_pass
 
     const result = await User.create(data);
     return {
@@ -50,8 +61,7 @@ const getAllEmployees = async (user, sort) => {
 
 const updateEmployee = async (data) => {
   try {
-    const { user_name, email, name, phone, address } = data;
-    const result = await User.findOneAndUpdate({ user_name: user_name }, data);
+    const result = await User.updateOne({ _id: id }, data);
     return {
       errorCode: 0,
       data: result,

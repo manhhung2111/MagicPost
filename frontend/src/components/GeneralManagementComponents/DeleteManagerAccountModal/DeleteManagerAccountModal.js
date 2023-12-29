@@ -6,7 +6,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { toast } from "react-toastify";
-import { handleDeleteEmployee } from "../../../services/collectionManagementServices";
+import { handleDeleteManager } from "../../../services/generalManagementServices";
 import { FaRegTrashAlt } from "react-icons/fa";
 function DeleteManagerAccountModal({ show, setShow, user_name, fetchData }) {
   const [username, setUsername] = useState(user_name);
@@ -23,7 +23,7 @@ function DeleteManagerAccountModal({ show, setShow, user_name, fetchData }) {
   };
 
   const handleSubmit = async () => {
-    const result = await handleDeleteEmployee(user_name);
+    const result = await handleDeleteManager(user_name);
     if (result?.errorCode === 0) {
       toast.success(result.message);
       fetchData();

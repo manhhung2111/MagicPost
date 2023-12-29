@@ -1,6 +1,7 @@
 import Center from "../models/Center";
 import User from "../models/User";
 import Order from "../models/Order";
+import bcrypt from "bcrypt";
 
 const createNewCenter = async (data) => {
   try {
@@ -156,6 +157,17 @@ const getAllOutgoing = async (name_center) => {
 
 const createNewManager = async (data) => {
   try {
+    const user_name = data["user_name"];
+    const exists = await User.findOne({ user_name: user_name });
+    if (exists) {
+      throw Error("Username already in use");
+    }
+
+    const raw_pass = data["password"];
+    const salt = await bcrypt.genSalt(10);
+    const encrypted_pass = await bcrypt.hash(raw_pass, salt);
+    data["password"] = encrypted_pass;
+
     const result = await User.create(data);
     return {
       errorCode: 0,
