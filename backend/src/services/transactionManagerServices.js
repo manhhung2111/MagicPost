@@ -1,5 +1,6 @@
 import User from "../models/User";
 import Order from "../models/Order";
+import { getAllIncomingAndOutGoing } from "../services/transactionEmployeeServices";
 
 const createNewEmployee = async (data, user) => {
   try {
@@ -210,6 +211,31 @@ const getOutgoingParcels = async (user, sort) => {
 const getEmployeeContribution = async (user) => {
   // tong don hang cua moi employee incoming va outgoing
   // center {icomgin: 12, outgoing: 12}
+
+  try {
+    const allEmployees = (await getAllEmployees(user)).data.packages;
+    console.log(allEmployees);
+    const result = {};
+    let total = 0;
+    for (let i = 0; i < allEmployees.length; i++) {
+      const in_out = (await getAllIncomingAndOutGoing(allEmployees[i])).data
+        .total_in_out;
+      result[allEmployees[i].name] = in_out;
+      total += in_out;
+    }
+    result["total"] = total;
+    return {
+      errorCode: 0,
+      data: result,
+      message: `Get all contribution of employees from center ${user.center_name} successfully`,
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
 };
 
 export {

@@ -10,11 +10,6 @@ import {
   getAllTDTKs,
   getAllIncoming,
   getAllOutgoing,
-  createNewManager,
-  updateManager,
-  deleteManager,
-  getAllCentersInfo,
-  getAllManager, getCollectionStatistics, getTransactionStatistics
 } from "../services/generalManagerServices";
 
 const handleGetDTK = async () => {
@@ -39,36 +34,6 @@ const handleGetAllOrders = async () => {};
 const handleCreateNewCenter = async (req, res) => {
   const data = req.body;
   const result = await createNewCenter(data);
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleCreateNewManager = async (req, res) => {
-  const data = req.body;
-  const result = await createNewManager(data);
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleUpdateManager = async (req, res) => {
-  const data = req.body;
-  const result = await updateManager(data);
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleDeleteManager = async (req, res) => {
-  const { user_name } = req.body;
-  const result = await deleteManager(user_name);
 
   const statusCode = result.errorCode === 0 ? 200 : 500;
   return res.status(statusCode).json({
@@ -132,42 +97,6 @@ const handleGetAllOutgoing = async (req, res) => {
   });
 };
 
-const handleGetCentersInfo = async (req, res) => {
-  const result = await getAllCentersInfo();
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleGetAllManager = async (req, res) => {
-  const result = await getAllManager();
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleGetCollectionStatistics = async (req, res) => {
-  const result = await getCollectionStatistics();
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
-const handleGetTransactionStatistics = async (req, res) => {
-  const result = await getTransactionStatistics();
-
-  const statusCode = result.errorCode === 0 ? 200 : 500;
-  return res.status(statusCode).json({
-    ...result,
-  });
-};
-
 export {
   handleGetDTK,
   handleCreateNewCenter,
@@ -177,11 +106,4 @@ export {
   handleGetAllTDTKs,
   handleGetAllIncoming,
   handleGetAllOutgoing,
-  handleCreateNewManager,
-  handleDeleteManager,
-  handleUpdateManager,
-  handleGetCentersInfo,
-  handleGetAllManager,
-  handleGetCollectionStatistics,
-  handleGetTransactionStatistics,
 };
