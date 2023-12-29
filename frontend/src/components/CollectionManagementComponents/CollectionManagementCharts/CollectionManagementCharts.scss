@@ -3,6 +3,9 @@
   display: grid;
   grid-template-columns: 6.5fr 3.5fr;
   gap: 2rem;
+  @media screen and (max-width: 450px) {
+    grid-template-columns: 1fr;
+  }
   .left-content,
   .right-content {
     padding: 10px;
@@ -11,6 +14,9 @@
     // height: fit-content;
     background-color: #fff;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    @media screen and (max-width: 450px) {
+      padding: 10px;
+    }
   }
 
   .left-content {

@@ -1,6 +1,10 @@
 .shipment-status-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  @media screen and (max-width: 450px) {
+    grid-template-columns: 1fr;
+    padding: 10px;
+   }
   gap: 2rem;
   margin-top: 2rem;
   margin-bottom: 1rem;

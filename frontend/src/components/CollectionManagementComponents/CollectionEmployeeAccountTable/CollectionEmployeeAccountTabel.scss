@@ -1,5 +1,6 @@
 .collection-employee-account-table {
   margin-top: 3rem;
+  padding: 0 10px;
   .top {
     background-color: #fff;
     padding: 10px;
@@ -27,6 +28,7 @@
     }
     .right-content {
       display: flex;
+      // flex-direction: column;
       justify-content: flex-end;
       align-items: center;
       gap: 7px;
@@ -56,6 +58,9 @@
           margin-right: 0.75rem;
           color: white;
           transition: all 0.5s ease-in-out;
+        }
+        @media screen and (max-width: 450px) {
+          display: none;
         }
       }
       ul {
@@ -92,6 +97,7 @@
           border-radius: 5px;
           font-size: 1.2rem;
           font-weight: 500;
+          // border-bottom: 1px solid black;
           &:hover {
             background-color: #e9ebec;
           }
@@ -109,6 +115,7 @@
               content: "";
               transform: translateX(10px) rotate(-45deg);
               transform-origin: left bottom;
+              // transform: translateY(-50%);
             }
             &::after {
               position: absolute;
@@ -185,6 +192,9 @@
         grid-template-columns: 0.7fr 1fr 1fr;
         align-items: center;
         gap: 0;
+        @media screen and (max-width: 450px) {
+          display: none;
+        }
         // justify-content: space-between;
       }
     }
@@ -225,6 +235,9 @@
       .right-content {
         display: grid;
         grid-template-columns: 0.7fr 1fr 1fr;
+        @media screen and (max-width: 450px) {
+          display: none;
+        }
         align-items: center;
         .address {
           display: -webkit-box;
@@ -240,6 +253,9 @@
           align-items: center;
           justify-content: space-between;
           padding-right: 10%;
+          @media screen and (max-width: 1200px) {
+            padding-right: 1%;
+          }
           .date-added {
             display: -webkit-box;
             -webkit-line-clamp: 2;

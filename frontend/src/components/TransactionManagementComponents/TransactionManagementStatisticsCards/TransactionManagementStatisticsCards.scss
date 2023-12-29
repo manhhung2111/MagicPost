@@ -3,6 +3,10 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 2rem;
   margin-top: 1.5rem;
+  @media screen and (max-width: 450px) {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
   .transaction-management-statistic-card {
     display: flex;
     padding: 10px;

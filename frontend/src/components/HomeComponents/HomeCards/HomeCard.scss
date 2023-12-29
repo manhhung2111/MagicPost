@@ -4,6 +4,9 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  @media screen and (max-width: 450px) {
+    flex-direction: column;
+  }
   .home-card {
     flex: 1;
     position: relative;
