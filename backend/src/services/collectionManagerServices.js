@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Order from "../models/Order";
 import { getAllIncomingAndOutGoing } from "../services/collectionEmployeeServices";
+import bcrypt from "bcrypt"
 
 const createNewEmployee = async (data, user) => {
   try {
@@ -61,11 +62,6 @@ const getAllEmployees = async (user) => {
 
 const updateEmployee = async (data) => {
   try {
-    const raw_pass = data["password"]
-    const salt = await bcrypt.genSalt(10)
-    const encrypted_pass = await bcrypt.hash(raw_pass, salt)
-    data["password"] = encrypted_pass
-    
     const result = await User.updateOne({ _id: id }, data);
     return {
       errorCode: 0,
