@@ -15,7 +15,7 @@ function TrackingParcelInformation({
   recipientFare,
   parcelId,
   paths,
-  delivered,
+  shipment,
 }) {
   return (
     <div className="parcel-information">
@@ -277,10 +277,12 @@ function TrackingParcelInformation({
                 <b>14. Received date</b>
               </p>
               <p>{`${
-                delivered ? paths?.pop()?.time?.timeDeparted ?? "Delivered" : "Not delivered"
+                shipment?.status === "Delivered successfully"
+                  ? shipment.timeDelivered.split(",").slice(1).join(",")
+                  : "Not delivered"
               }`}</p>
               <p style={{ fontSize: "1.1rem" }}>Recipient's signature</p>
-              {delivered && (
+              {shipment?.status === "Delivered successfully" && (
                 <p>
                   <i>
                     {recipientInfo.nameAddress
