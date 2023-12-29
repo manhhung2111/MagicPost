@@ -15,6 +15,7 @@ import ParcelCollectionPage from "./pages/ParcelColllectionPage";
 import CollectionManagementPage from "./pages/CollectionManagementPage";
 import PrivateRoute from "./components/Utils/PrivateRoute";
 import ShipmentPage from "./pages/ShipmentPage";
+import GeneralManagementPage from "./pages/GeneralManagementPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -64,6 +65,14 @@ root.render(
               </PrivateRoute>
             }
           ></Route>
+          <Route
+            path="general-management"
+            element={
+              <PrivateRoute expectedRole={"TGD"}>
+                <GeneralManagementPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route path="access-deny" element={<AccessDeny />} />
         <Route path="*" element={<PageNotFound />} />

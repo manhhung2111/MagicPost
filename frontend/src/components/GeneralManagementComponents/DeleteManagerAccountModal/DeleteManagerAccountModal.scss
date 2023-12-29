@@ -1,0 +1,69 @@
+.add-employee-account-modal {
+  .body {
+    .input-control {
+      position: relative;
+      .label {
+        font-weight: 600;
+        font-size: 1.1rem;
+        user-select: none;
+      }
+      .input {
+        padding-right: 20px;
+      }
+      .icon {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        border: none;
+        padding: 3px;
+        font-size: 2rem;
+        border-radius: 50%;
+        cursor: pointer;
+        &:hover {
+            background-color: #eeeeee;
+        }
+      }
+    }
+    p {
+      font-size: 1.5rem;
+      text-align: center;
+      margin: 0;
+    }
+  }
+  .footer {
+    .button {
+      display: flex;
+      align-items: center;
+      padding: 7px 10px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+
+      gap: 3px;
+      font-weight: 500;
+      width: fit-content;
+      transition: all 0.4s ease-in-out;
+      .icon {
+        font-size: 1.1rem;
+        font-weight: bolder;
+      }
+      &.cancel {
+        color: black;
+        background-color: #eeeeee;
+        &:hover {
+          color: white;
+          background-color: grey;
+        }
+      }
+      &.delete {
+        color: rgba(220, 134, 134, 1);
+        background-color: rgba(220, 134, 134, 0.4);;
+        &:hover {
+          color: white;
+          background-color: rgba(220, 134, 134, 1);
+        }
+      }
+    }
+  }
+}

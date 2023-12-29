@@ -146,7 +146,7 @@ function TransactionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
         {!Object.keys(employeeList).length && <Loader />}
         {Object.keys(employeeList).length > 0 && (
           <main>
-            {employeeList?.packages?.map((employee, index) => {
+            {currentItems?.map((employee, index) => {
               return (
                 <div key={index} className="table-row">
                   <div className="left-content">
