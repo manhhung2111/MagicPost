@@ -1,0 +1,548 @@
+[{
+  "_id": {
+    "$oid": "657fa26e2499448204a6b3a1"
+  },
+  "center_code": "DGD_TX_Hanoi",
+  "name": "DGD Thanh Xuân, Hà Nội",
+  "location": "Số 51 Vũ Trọng Phụng Thanh Xuân, Hà Nội",
+  "phone": "0898466792",
+  "email": "dgdthanhxuan@gmail.com",
+  "nearby_center": [
+    "DTK_Hanoi"
+  ],
+  "postalCode": "1003",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa2f32499448204a6b3a3"
+  },
+  "center_code": "DGD_HD_Hanoi",
+  "name": "DGD Hà Đông, Hà Nội",
+  "location": "Lô E4 Autozone Phường Hà Cầu, Hà Nội",
+  "phone": "0564243269",
+  "email": "dgdhadong@gmail.com",
+  "nearby_center": [
+    "DTK_Hanoi"
+  ],
+  "postalCode": "1001",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa39f2499448204a6b3a5"
+  },
+  "center_code": "DGD_HK_Hanoi",
+  "name": "DGD Hoàn Kiếm, Hà Nội",
+  "location": "75 Đinh Tiên Hoàng, Tràng Tiền, Hà Nội",
+  "phone": "0564907340",
+  "email": "dgdhoankiem@gmail.com",
+  "nearby_center": [
+    "DTK_Hanoi"
+  ],
+  "postalCode": "1002",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa4a72499448204a6b3a7"
+  },
+  "center_code": "DTK_Hanoi",
+  "name": "DTK Hà Nội",
+  "location": "Thành phố Hà Nội, Việt Nam",
+  "phone": "0586073704",
+  "email": "dtkhanoi@gmail.com",
+  "nearby_center": [
+    "DTK_HaiPhong",
+    "DTK_NamDinh",
+    "DGD_TX_Hanoi",
+    "DGD_HD_Hanoi",
+    "DGD_HK_Hanoi"
+  ],
+  "postalCode": "1000",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa6452499448204a6b3a9"
+  },
+  "center_code": "DTK_HaiPhong",
+  "name": "DTK Hải Phòng",
+  "location": "Thành phố Hải Phòng, Việt Nam",
+  "phone": "0564243269",
+  "email": "dtkhaiphong@gmail.com",
+  "nearby_center": [
+    "DTK_Hanoi",
+    "DTK_NamDinh",
+    "DGD_HB_HaiPhong",
+    "DGD_NQ_HaiPhong",
+    "DGD_LC_HaiPhong"
+  ],
+  "postalCode": "1100",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa6a62499448204a6b3ab"
+  },
+  "center_code": "DGD_HB_HaiPhong",
+  "name": "DGD Hồng Bàng, Hải Phòng",
+  "location": "Số 5 Nguyễn Tri Phương, Minh Khai, Hải Phòng",
+  "phone": "02253842999",
+  "email": "dgdhongbang@gmail.com",
+  "nearby_center": [
+    "DTK_HaiPhong"
+  ],
+  "postalCode": "1101",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa6f42499448204a6b3ad"
+  },
+  "center_code": "DGD_NQ_HaiPhong",
+  "name": "DGD Ngô Quyền, Hải Phòng",
+  "location": "Số 3 Đường Võ Thị Sáu, p.Máy Tơ, Hải Phòng",
+  "phone": "02253686042",
+  "email": "dgdngoquyen@gmail.com",
+  "nearby_center": [
+    "DTK_HaiPhong"
+  ],
+  "postalCode": "1102",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa7292499448204a6b3af"
+  },
+  "center_code": "DGD_LC_HaiPhong",
+  "name": "DGD Lê Chân, Hải Phòng",
+  "location": "69 Đường Trần Nguyên Hãn, Phường Cát Dài, Hải Phòng",
+  "phone": "02253719325",
+  "email": "dgdlechan@gmail.com",
+  "nearby_center": [
+    "DTK_HaiPhong"
+  ],
+  "postalCode": "1103",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa8592499448204a6b3b1"
+  },
+  "center_code": "DTK_NamDinh",
+  "name": "DTK Nam Định",
+  "location": "Thành phố Nam Định, Việt Nam",
+  "phone": "02253576566",
+  "email": "dtknamdinh@gmail.com",
+  "nearby_center": [
+    "DTK_Hanoi",
+    "DTK_HaiPhong",
+    "DTK_ThanhHoa",
+    "DGD_ML_NamDinh",
+    "DGD_NH_NamDinh",
+    "DGD_XT_NamDinh"
+  ],
+  "postalCode": "1200",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa9002499448204a6b3b3"
+  },
+  "center_code": "DGD_ML_NamDinh",
+  "name": "DGD Mỹ Lộc, Nam Định",
+  "location": "Thôn Tuộc, TT Mỹ Lộc, Nam Định",
+  "phone": "02253576567",
+  "email": "dgdmyloc@gmail.com",
+  "nearby_center": [
+    "DTK_NamDinh"
+  ],
+  "postalCode": "1201",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa9342499448204a6b3b5"
+  },
+  "center_code": "DGD_NH_NamDinh",
+  "name": "DGD Nghĩa Hưng, Nam Định",
+  "location": "Khu 1, TT Liễu Đề, Nam Định",
+  "phone": "02283871101",
+  "email": "dgdnghiahung@gmail.com",
+  "nearby_center": [
+    "DTK_NamDinh"
+  ],
+  "postalCode": "1202",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fa9682499448204a6b3b7"
+  },
+  "center_code": "DGD_XT_NamDinh",
+  "name": "DGD Xuân Trường, Nam Định",
+  "location": "Tổ 18, TT Xuân Trường, Nam Định",
+  "phone": "02283886944",
+  "email": "dgdxuantruong@gmail.com",
+  "nearby_center": [
+    "DTK_NamDinh"
+  ],
+  "postalCode": "1203",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fab612499448204a6b3b9"
+  },
+  "center_code": "DTK_ThanhHoa",
+  "name": "DTK Thanh Hoá",
+  "location": "Thành phố Thanh Hoá, Việt Nam",
+  "phone": "02253576566",
+  "email": "dtkthanhoa@gmail.com",
+  "nearby_center": [
+    "DTK_NamDinh",
+    "DTK_DaNang",
+    "DGD_SS_ThanhHoa",
+    "DGD_HT_ThanhHoa",
+    "DGD_VL_ThanhHoa"
+  ],
+  "postalCode": "1300",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fabdd2499448204a6b3bb"
+  },
+  "center_code": "DGD_SS_ThanhHoa",
+  "name": "DGD Sầm Sơn, Thanh Hoá",
+  "location": "Đường Nguyễn Du, Phường Trường Sơn, Thanh Hoá",
+  "phone": "02373821490",
+  "email": "dgdsamson@gmail.com",
+  "nearby_center": [
+    "DTK_ThanhHoa"
+  ],
+  "postalCode": "1301",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fac0e2499448204a6b3bd"
+  },
+  "center_code": "DGD_HT_ThanhHoa",
+  "name": "DGD Hà Trung, Thanh Hoá",
+  "location": "Tiểu Khu 6, Thị Trấn Hà Trung, Thanh Hoá",
+  "phone": "02373620016",
+  "email": "dgdhatrung@gmail.com",
+  "nearby_center": [
+    "DTK_ThanhHoa"
+  ],
+  "postalCode": "1302",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fac3a2499448204a6b3bf"
+  },
+  "center_code": "DGD_VL_ThanhHoa",
+  "name": "DGD Vĩnh Lộc, Thanh Hoá",
+  "location": "Khu phố 2, Thị Trấn Vĩnh Lộc, Thanh Hoá",
+  "phone": "02373870135",
+  "email": "dgdvinhloc@gmail.com",
+  "nearby_center": [
+    "DTK_ThanhHoa"
+  ],
+  "postalCode": "1303",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fae3e2499448204a6b3c1"
+  },
+  "center_code": "DTK_DaNang",
+  "name": "DTK Đà Nẵng",
+  "location": "Thành phố Đà Nẵng, Việt Nam",
+  "phone": "02253576903",
+  "email": "dtkdanang@gmail.com",
+  "nearby_center": [
+    "DTK_ThanhHoa",
+    "DTK_KonTum",
+    "DTK_KhanhHoa",
+    "DGD_ST_DaNang",
+    "DGD_CL_DaNang",
+    "DGD_HC_DaNang"
+  ],
+  "postalCode": "1400",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fae9a2499448204a6b3c3"
+  },
+  "center_code": "DGD_ST_DaNang",
+  "name": "DGD Sơn Trà, Đà Nẵng",
+  "location": "924 Ngô Quyền, phường An Hải Bắc, Đà Nẵng",
+  "phone": "3932636",
+  "email": "dgdsontra@gmail.com",
+  "nearby_center": [
+    "DTK_DaNang"
+  ],
+  "postalCode": "1401",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657faecb2499448204a6b3c5"
+  },
+  "center_code": "DGD_CL_DaNang",
+  "name": "DGD Cẩm Lệ, Đà Nẵng",
+  "location": "296 CMT8, P Hòa Thọ Đông, Đà Nẵng",
+  "phone": "3673230",
+  "email": "dgdcamle@gmail.com",
+  "nearby_center": [
+    "DTK_DaNang"
+  ],
+  "postalCode": "1402",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657faf292499448204a6b3c7"
+  },
+  "center_code": "DGD_HC_DaNang",
+  "name": "DGD Hải Châu, Đà Nẵng",
+  "location": "271 Nguyễn Văn Linh - Phường Vĩnh Trung, Đà Nẵng",
+  "phone": "3832299",
+  "email": "dgdhaichau@gmail.com",
+  "nearby_center": [
+    "DTK_DaNang"
+  ],
+  "postalCode": "1403",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb14b2499448204a6b3c9"
+  },
+  "center_code": "DTK_KonTum",
+  "name": "DTK Kon Tum",
+  "location": "Thành phố Kon Tum, Việt Nam",
+  "phone": "02253206903",
+  "email": "dtkkontum@gmail.com",
+  "nearby_center": [
+    "DTK_DaNang",
+    "DTK_HoChiMinh",
+    "DTK_KhanhHoa",
+    "DGD_DH_KonTum",
+    "DGD_NH_KonTum",
+    "DGD_DG_KonTum"
+  ],
+  "postalCode": "1500",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb1a22499448204a6b3cb"
+  },
+  "center_code": "DGD_DH_KonTum",
+  "name": "DGD Đắk Hà, Kon Tum",
+  "location": "212 Đường Hùng Vương, Thị Trấn Đắk Hà, Kon Tum",
+  "phone": "02603822143",
+  "email": "dgddakha@gmail.com",
+  "nearby_center": [
+    "DTK_KonTum"
+  ],
+  "postalCode": "1501",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb1cb2499448204a6b3cd"
+  },
+  "center_code": "DGD_NH_KonTum",
+  "name": "DGD Ngọc Hồi, Kon Tum",
+  "location": "35 Đường Hùng vương, Thị Trấn Plei Kần, Kon Tum",
+  "phone": "02603832241",
+  "email": "dgdngochoi@gmail.com",
+  "nearby_center": [
+    "DTK_KonTum"
+  ],
+  "postalCode": "1502",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb1f22499448204a6b3cf"
+  },
+  "center_code": "DGD_DG_KonTum",
+  "name": "DGD Đắk Glei, Kon Tum",
+  "location": "455 Đường Hùng Vương, Thị Trấn Đắk Glei, Kon Tum",
+  "phone": "02603834111",
+  "email": "dgddakglei@gmail.com",
+  "nearby_center": [
+    "DTK_KonTum"
+  ],
+  "postalCode": "1503",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb30e2499448204a6b3d1"
+  },
+  "center_code": "DTK_KhanhHoa",
+  "name": "DTK Khánh Hoà",
+  "location": "Thành phố Khánh Hoà, Việt Nam",
+  "phone": "02220036903",
+  "email": "dtkkhanhhoa@gmail.com",
+  "nearby_center": [
+    "DTK_DaNang",
+    "DTK_HoChiMinh",
+    "DTK_KonTum",
+    "DGD_NT_KhanhHoa",
+    "DGD_VN_KhanhHoa",
+    "DGD_CR_KhanhHoa"
+  ],
+  "postalCode": "1600",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb3652499448204a6b3d3"
+  },
+  "center_code": "DGD_NT_KhanhHoa",
+  "name": "DGD Nha Trang, Khánh Hoà",
+  "location": "12 Trần Quý Cáp Phường Vạn Thạnh, Khánh Hoà",
+  "phone": "02583824203",
+  "email": "dgdnhatrang@gmail.com",
+  "nearby_center": [
+    "DTK_KhanhHoa"
+  ],
+  "postalCode": "1601",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb39f2499448204a6b3d5"
+  },
+  "center_code": "DGD_VN_KhanhHoa",
+  "name": "DGD Vạn Ninh, Khánh Hoà",
+  "location": "186 Hùng Vương, Thị trấn Vạn Giã, Khánh Hoà",
+  "phone": "02583850206",
+  "email": "dgdvanninh@gmail.com",
+  "nearby_center": [
+    "DTK_KhanhHoa"
+  ],
+  "postalCode": "1602",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb3da2499448204a6b3d7"
+  },
+  "center_code": "DGD_CR_KhanhHoa",
+  "name": "DGD Cam Ranh, Khánh Hoà",
+  "location": "253 Nguyễn Trọng Kỷ, Phường Cam Lợi, Khánh Hoà",
+  "phone": "02583857378",
+  "email": "dgdcamranh@gmail.com",
+  "nearby_center": [
+    "DTK_KhanhHoa"
+  ],
+  "postalCode": "1603",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb4ab2499448204a6b3d9"
+  },
+  "center_code": "DTK_HoChiMinh",
+  "name": "DTK Hồ Chí Minh",
+  "location": "Thành phố Hồ Chí Minh, Việt Nam",
+  "phone": "0828481258",
+  "email": "dtkhochiminh@gmail.com",
+  "nearby_center": [
+    "DTK_KhanhHoa",
+    "DTK_KonTum",
+    "DGD_BT_HoChiMinh",
+    "DGD_TD_HoChiMinh",
+    "DGD_Q1_HoChiMinh"
+  ],
+  "postalCode": "1700",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb5012499448204a6b3db"
+  },
+  "center_code": "DGD_BT_HoChiMinh",
+  "name": "DGD Bình Thạnh, Hồ Chí Minh",
+  "location": "23, Xô Viết Nghệ Tĩnh, Phường 17, Hồ Chí Minh",
+  "phone": "38992243",
+  "email": "dgdbinhthanh@gmail.com",
+  "nearby_center": [
+    "DTK_HoChiMinh"
+  ],
+  "postalCode": "1701",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb52b2499448204a6b3dd"
+  },
+  "center_code": "DGD_TD_HoChiMinh",
+  "name": "DGD Thủ Đức, Hồ Chí Minh",
+  "location": "128A, Kha Vạn Cân, P. Trường Thọ, Q. Thủ Đức, Hồ Chí Minh",
+  "phone": "38968703",
+  "email": "dgdthuduc@gmail.com",
+  "nearby_center": [
+    "DTK_HoChiMinh"
+  ],
+  "postalCode": "1702",
+  "deleted": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657fb5542499448204a6b3df"
+  },
+  "center_code": "DGD_Q1_HoChiMinh",
+  "name": "DGD Quận 1, Hồ Chí Minh",
+  "location": "02 Công Xã Paris, Phường Bến Nghé, Quận 1, Hồ Chí Minh",
+  "phone": "38271259",
+  "email": "dgdquan1@gmail.com",
+  "nearby_center": [
+    "DTK_HoChiMinh"
+  ],
+  "postalCode": "1703",
+  "deleted": false,
+  "__v": 0
+}]
