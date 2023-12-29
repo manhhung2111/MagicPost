@@ -73,6 +73,15 @@ const handleConfirmRecipientShipmentStatus = async (parcelId, status) => {
   return result;
 };
 
+const handleGetOrderStatistics = async () => {
+  const result = await axios.get("trans-emp/order/stats");
+  return result;
+};
+
+const handleGetContribution = async () => {
+  const result = await axios.get("trans-emp/contribution");
+  return result;
+}
 export {
   handleGetAllDistricts,
   handleCreateSenderOrder,
@@ -83,5 +92,6 @@ export {
   handleGetAllOrdersToShip,
   handleCreateShipmentToRecipient,
   handleGettAllRecipientShipment,
-  handleConfirmRecipientShipmentStatus
+  handleConfirmRecipientShipmentStatus,
+  handleGetOrderStatistics, handleGetContribution
 };

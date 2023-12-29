@@ -483,7 +483,7 @@ const getStatsOrders = async (user) => {
         successOrders += 1;
       } else if (
         allShipments[i].user_name === user_name &&
-        allShipments[i].status === "Delivered unsuccessfully"
+        allShipments[i].status === "Deliverd unsuccessfully"
       ) {
         unsuccessOrders += 1;
       }
@@ -590,6 +590,35 @@ const getAllRecipientShipment = async (user, query) => {
   }
 };
 
+const getContribution = async (user) => {
+  try {
+    const { center_name: center, user_name } = user;
+    const result = await Order.find({ "paths.center_code": center });
+    let count = 0;
+    result.forEach((order) => {
+      order.paths.forEach((path) => {
+        if (path.center_code === center && path.user_name === user_name) {
+          count += 1;
+        }
+      });
+    });
+    return {
+      errorCode: 0,
+      data: {
+        contribution: count,
+        total: result.length,
+      },
+      message: "Get your contribution successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
+
 export {
   createOrder,
   confirmOrderFromCollectionHub,
@@ -602,5 +631,5 @@ export {
   getAllOrderToShip,
   getAllRecipientShipment,
   getStatsOrders,
-  getAllIncomingAndOutGoing,
+  getAllIncomingAndOutGoing, getContribution
 };

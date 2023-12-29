@@ -76,6 +76,16 @@ const handleTransferOrdersToCollectionHub = async (parcelIds) => {
   return result;
 };
 
+const handleGetOrderStatistics = async () => {
+  const result = await axios.get("collection-emp/order/stats");
+  return result;
+};
+
+const handleGetContribution = async () => {
+  const result = await axios.get("collection-emp/contribution");
+  return result;
+};
+
 export {
   handleGetOrdersFromTransactionHubs,
   handleConfirmOrderFromTransactionHubs,
@@ -87,4 +97,6 @@ export {
   handleGetNearbyCollectionHubs,
   handleGetTransferCollectionOrders,
   handleTransferOrdersToCollectionHub,
+  handleGetOrderStatistics,
+  handleGetContribution,
 };

@@ -9,7 +9,7 @@ import {
   confirmIncomingTransactionOrder,
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
-  getStatsOrders,
+  getStatsOrders, getContribution
 } from "../services/collectionEmployeeServices";
 
 const handleGetIncomingCollectionOrder = async (req, res) => {
@@ -145,6 +145,16 @@ const handleGetStatsOrders = async (req, res) => {
   });
 };
 
+const handleGetContribution = async (req, res) => {
+  const user = req.user;
+  const result = await getContribution(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+}
+
 export {
   handleConfirmIncomingCollectionOrder,
   handleGetIncomingCollectionOrder,
@@ -156,5 +166,5 @@ export {
   handleConfirmIncomingTransactionOrder,
   handleGetOrdersToTransferTransaction,
   handleGetOrdersToTransferCollection,
-  handleGetStatsOrders,
+  handleGetStatsOrders, handleGetContribution
 };
