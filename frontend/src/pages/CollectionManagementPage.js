@@ -206,7 +206,12 @@ function CollectionManagementPage() {
         itemsPerPage={4}
         setCardsStatistics={setCardsStatistics}
       />
-      <CollectionManagementCharts />
+      <CollectionManagementCharts
+        order={{
+          incomingOrders: incomingParcels?.totalOrders,
+          outgoingOrders: outgoingParcels?.totalOrders,
+        }}
+      />
       <div className="collection-management-tables" id="tables">
         <div className="left-content">
           <div className="top">

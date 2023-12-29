@@ -214,16 +214,12 @@ const getEmployeeContribution = async (user) => {
 
   try {
     const allEmployees = (await getAllEmployees(user)).data.packages;
-    console.log(allEmployees);
-    const result = {};
-    let total = 0;
+    const result = [];
     for (let i = 0; i < allEmployees.length; i++) {
       const in_out = (await getAllIncomingAndOutGoing(allEmployees[i])).data
         .total_in_out;
-      result[allEmployees[i].name] = in_out;
-      total += in_out;
+      result.push({name: allEmployees[i].name, parcel: in_out});
     }
-    result["total"] = total;
     return {
       errorCode: 0,
       data: result,
