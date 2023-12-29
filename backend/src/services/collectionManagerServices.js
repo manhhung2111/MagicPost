@@ -1,6 +1,6 @@
 import User from "../models/User";
 import Order from "../models/Order";
-import {getAllIncomingAndOutGoing} from "../services/collectionEmployeeServices"
+import { getAllIncomingAndOutGoing } from "../services/collectionEmployeeServices";
 
 const createNewEmployee = async (data, user) => {
   try {
@@ -208,17 +208,13 @@ const getEmployeeContribution = async (user) => {
   // center {icomgin: 12, outgoing: 12}
 
   try {
-    const allEmployees = (await getAllEmployees(user)).data;
-    console.log(allEmployees);
-    const result = {};
-    let total = 0;
+    const allEmployees = (await getAllEmployees(user)).data.packages;
+    const result = [];
     for (let i = 0; i < allEmployees.length; i++) {
       const in_out = (await getAllIncomingAndOutGoing(allEmployees[i])).data
         .total_in_out;
-      result[allEmployees[i].name] = in_out;
-      total += in_out;
+      result.push({ name: allEmployees[i].name, parcel: in_out });
     }
-    result["total"] = total;
     return {
       errorCode: 0,
       data: result,

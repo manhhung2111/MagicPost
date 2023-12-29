@@ -51,7 +51,7 @@ function TransactionManagementPage() {
     if (Object.keys(incomingParcels).length > 0) {
       setIncomingParcels({});
     }
-    const sortBy = sortIncoming.filter(sort => sort.isSelected)[0].value
+    const sortBy = sortIncoming.filter((sort) => sort.isSelected)[0].value;
     const result = await handleGetIncomingParcels(sortBy);
     if (result.errorCode === 0) {
       setIncomingParcels((prev) => result.data);
@@ -63,7 +63,7 @@ function TransactionManagementPage() {
     if (Object.keys(outgoingParcels).length > 0) {
       setOutgoingParcels({});
     }
-    const sortBy = sortOutgoing.filter(sort => sort.isSelected)[0].value
+    const sortBy = sortOutgoing.filter((sort) => sort.isSelected)[0].value;
     const result = await handleGetOutgoingParcels(sortBy);
     if (result.errorCode === 0) {
       setOutgoingParcels((prev) => result.data);
@@ -207,7 +207,12 @@ function TransactionManagementPage() {
         itemsPerPage={4}
         setCardsStatistics={setCardsStatistics}
       />
-      <TransactionManagementCharts />
+      <TransactionManagementCharts
+        order={{
+          incomingOrders: incomingParcels?.totalOrders,
+          outgoingOrders: outgoingParcels?.totalOrders,
+        }}
+      />
       <div className="transaction-management-tables" id="tables">
         <div className="left-content">
           <div className="top">
