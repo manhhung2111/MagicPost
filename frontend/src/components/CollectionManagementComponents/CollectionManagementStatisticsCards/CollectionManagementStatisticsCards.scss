@@ -1,6 +1,12 @@
 .collection-management-statistic-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  
+  @media screen and (max-width: 450px) {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
   gap: 2rem;
   margin-top: 1.5rem;
   .collection-management-statistic-card {

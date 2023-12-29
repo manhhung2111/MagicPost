@@ -43,6 +43,9 @@
     .filter {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      @media screen and (max-width: 450px) {
+        display: none;
+      }
       gap: 5rem;
       font-weight: 600;
       font-size: 1.1rem;
@@ -162,12 +165,28 @@
       letter-spacing: 0.1rem;
       font-size: 1rem;
       font-weight: 700;
+      @media screen and (max-width: 450px) {
+        &:nth-child(3),
+        &:nth-child(4),
+        &:nth-child(5),
+        &:nth-child(6) {
+          display: none;
+        }
+      }
     }
 
     td {
       padding: 1rem 2rem;
       font-size: 1.1rem;
       font-weight: 500;
+      @media screen and (max-width: 450px) {
+        &:nth-child(3),
+        &:nth-child(4),
+        &:nth-child(5),
+        &:nth-child(6) {
+          display: none;
+        }
+      }
     }
 
     a {

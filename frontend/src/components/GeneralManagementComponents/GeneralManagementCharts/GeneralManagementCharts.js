@@ -75,7 +75,7 @@ function GeneralManagementCharts({ centers }) {
         type: "line",
         label: "Outgoing parcels",
         borderColor: "rgb(47, 128, 208)",
-        backgroundColor: "  rgba(47, 128, 208, 0.2)",
+        backgroundColor: "rgba(47, 128, 208, 0.2)",
         data: centers?.map((center) => center?.totalOutgoingOrders),
         stack: "Stack 1",
         fill: "origin",

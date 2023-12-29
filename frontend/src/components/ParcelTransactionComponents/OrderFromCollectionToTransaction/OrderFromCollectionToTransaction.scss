@@ -49,7 +49,9 @@
       font-weight: 600;
       font-size: 1.1rem;
       margin-top: 1rem;
-
+      @media screen and (max-width: 450px) {
+        display: none;
+      }
       .multi-select {
         z-index: 3;
         width: 60%;
@@ -164,6 +166,14 @@
         letter-spacing: 0.1rem;
         font-size: 1rem;
         font-weight: 700;
+        @media screen and (max-width: 450px) {
+          &:nth-child(3),
+          &:nth-child(4),
+          &:nth-child(5),
+          &:nth-child(6) {
+            display: none;
+          }
+        }
       }
 
       td {
@@ -175,6 +185,14 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        @media screen and (max-width: 450px) {
+          &:nth-child(3),
+          &:nth-child(4),
+          &:nth-child(5),
+          &:nth-child(6) {
+            display: none;
+          }
         }
       }
 
