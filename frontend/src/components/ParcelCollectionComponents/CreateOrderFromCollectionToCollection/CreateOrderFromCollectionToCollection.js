@@ -165,7 +165,7 @@ function CreateOrderFromCollectionToCollection() {
             <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
               <svg
                 viewBox="0 0 16 16"
-                classNam="bi bi-arrow-repeat"
+                className="bi bi-arrow-repeat"
                 fill="currentColor"
                 height="16"
                 width="16"

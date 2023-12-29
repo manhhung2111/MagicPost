@@ -452,29 +452,25 @@ const getNearbyTransactionHubs = async (user) => {
 const getStatsOrders = async (user) => {
   try {
     const user_name = user.user_name;
-    const allShipments = await Shipment.find();
-    let successOrders = 0;
-    let unsuccessOrders = 0;
-    for (let i = 0; i < allShipments.length; i++) {
-      if (
-        allShipments[i].user_name === user_name &&
-        allShipments[i].status === "Delivered successfully"
-      ) {
-        successOrders += 1;
-      } else if (
-        allShipments[i].user_name === user_name &&
-        allShipments[i].status === "Delivered unsuccessfully"
-      ) {
-        unsuccessOrders += 1;
-      }
-    }
+    const center = user.center_name;
+    const allOrder = await Order.find({ "paths.center_code": center });
+    let incomingOrders = 0,
+      outGoingOrders = 0;
+    allOrder.forEach((order) => {
+      order.paths.forEach((path) => {
+        if (path.center_code === center && path.user_name === user_name) {
+          if (path.isConfirmed) incomingOrders++;
+          if (path.time.timeDeparted) outGoingOrders++;
+        }
+      });
+    });
     return {
       errorCode: 0,
       data: {
-        no_of_success: successOrders,
-        no_of_unsuccess: unsuccessOrders,
+        incomingOrders,
+        outGoingOrders,
       },
-      message: `Get order successfully`,
+      message: `Get all incoming and outgoing order by ${user} successfully`,
     };
   } catch (error) {
     return {
@@ -517,6 +513,34 @@ const getAllIncomingAndOutGoing = async (user) => {
   }
 };
 
+const getContribution = async (user) => {
+  try {
+    const { center_name: center, user_name } = user;
+    const result = await Order.find({ "paths.center_code": center });
+    let count = 0;
+    result.forEach((order) => {
+      order.paths.forEach((path) => {
+        if (path.center_code === center && path.user_name === user_name) {
+          count += 1;
+        }
+      });
+    });
+    return {
+      errorCode: 0,
+      data: {
+        contribution: count,
+        total: result.length,
+      },
+      message: "Get your contribution successfully!",
+    };
+  } catch (error) {
+    return {
+      errorCode: -1,
+      data: {},
+      message: error.message,
+    };
+  }
+};
 export {
   getIncomingCollectionOrder,
   confirmIncomingCollectionOrder,
@@ -529,5 +553,5 @@ export {
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
   getStatsOrders,
-  getAllIncomingAndOutGoing,
+  getAllIncomingAndOutGoing, getContribution
 };

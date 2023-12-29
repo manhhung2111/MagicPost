@@ -67,7 +67,10 @@ function ShipmentStatusCard({
               <div className="button-group">
                 <button
                   className="btn btn-success"
-                  disabled={isDisableConfirm || shipment.status !== "In transit"}
+                  disabled={
+                    isDisableConfirm ||
+                    shipment.status === "Delivered successfully"
+                  }
                   onClick={() =>
                     handleButtonClick(
                       shipment.parcelId,
@@ -79,7 +82,10 @@ function ShipmentStatusCard({
                 </button>
                 <button
                   className="btn btn-fail"
-                  disabled={isDisableConfirm || shipment.status !== "In transit"}
+                  disabled={
+                    isDisableConfirm ||
+                    shipment.status === "Delivered successfully"
+                  }
                   onClick={() =>
                     handleButtonClick(
                       shipment.parcelId,

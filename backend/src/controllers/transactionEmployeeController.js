@@ -10,6 +10,7 @@ import {
   getAllOrderToShip,
   getAllRecipientShipment,
   getStatsOrders,
+  getContribution,
 } from "../services/transactionEmployeeServices";
 
 const handleCreateOrder = async (req, res) => {
@@ -123,6 +124,15 @@ const handleGetStatsOrders = async (req, res) => {
   });
 };
 
+const handleGetContribution = async (req, res) => {
+  const user = req.user;
+  const result = await getContribution(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+}
 export {
   handleCreateOrder,
   handleConfirmOrder,
@@ -134,5 +144,5 @@ export {
   handleTransferOrdersToCollectionHub,
   handleGetAllOrderToShip,
   handleGetAllRecipientShipment,
-  handleGetStatsOrders,
+  handleGetStatsOrders, handleGetContribution
 };
