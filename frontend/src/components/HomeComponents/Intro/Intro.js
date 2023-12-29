@@ -1,6 +1,9 @@
 import IntroCardInfo from "./IntroCardInfo";
 import "./Intro.scss";
 import Container from "react-bootstrap/Container";
+import hhm from "../../../assets/hhm.jpg";
+import hmh from "../../../assets/hmh.jpg";
+import pad from "../../../assets/pad.jpg";
 
 function Intro() {
   return (
@@ -13,9 +16,17 @@ function Intro() {
           successful and profitable.
         </p>
         <div className="info-cards">
-          <IntroCardInfo name={"Hoang Manh Hung"} position={"Co-founder"} />
-          <IntroCardInfo name={"Hoang Hung Manh"} position={"Ceo"} />
-          <IntroCardInfo name={"Phan Anh Duc"} position={"Co-founder"} />
+          <IntroCardInfo
+            name={"Hoang Manh Hung"}
+            position={"Co-founder"}
+            src={hmh}
+          />
+          <IntroCardInfo name={"Hoang Hung Manh"} position={"Ceo"} src={hhm} />
+          <IntroCardInfo
+            name={"Phan Anh Duc"}
+            position={"Co-founder"}
+            src={pad}
+          />
         </div>
       </div>
       <div className="right-content">
