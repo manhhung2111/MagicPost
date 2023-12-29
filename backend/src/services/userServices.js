@@ -1,9 +1,10 @@
 import User from "../models/User";
-const jwt = require("jsonwebtoken");
 import Order from "../models/Order";
 import Center from "../models/Center";
 import Shipment from "../models/Shipment";
 import _ from "lodash";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createToken = (role_name, user_name, center_name) => {
   return jwt.sign(
@@ -14,16 +15,18 @@ const createToken = (role_name, user_name, center_name) => {
 
 const loginUser = async (user_name, password) => {
   try {
-    const user = await User.findOne({
-      user_name: user_name,
-      password: password,
-    });
+    if (!user_name || !password) {
+      throw Error("All fields must be filled");
+    }
+
+    const user = await User.findOne({ user_name: user_name });
     if (!user) {
-      return {
-        errorCode: 1,
-        data: {},
-        message: "Wrong username or password!",
-      };
+      throw Error("Incorrect username");
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw Error("Incorrect password");
     }
 
     const token = createToken(user.role_name, user_name, user.center_name);
@@ -65,21 +68,7 @@ const getParcelById = async (id) => {
         message: "Parcel not found",
       };
     }
-    const shipment = await Shipment.findOne({ parcelId: id });
-    const date = new Date(result.paths[0].time.timeArrived);
-    const afterDate = getCurrentTime(new Date().setDate(date.getDate() + 30));
-    const status = {
-      timeDelivered: afterDate,
-      status: "In transit",
-    };
-    if (shipment) {
-      if (status.status !== shipment.status) {
-        status.status = shipment.status;
-        status.timeDelivered = shipment.timeDelivered;
-      }
-    }
-
-    const centers = [];
+    const centers = []
     for (let i = 0; i < result.paths.length; i++) {
       const center = await Center.findOne({
         center_code: result.paths[i].center_code,
@@ -89,7 +78,7 @@ const getParcelById = async (id) => {
 
     return {
       errorCode: 0,
-      data: { parcel: result, status: { ...status, centers: centers } },
+      data: {  parcel: result, status: { ...status, centers: centers }  },
       message: "Parcel is found successfully",
     };
   } catch (error) {
