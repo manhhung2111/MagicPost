@@ -16,7 +16,7 @@ const requireAuthTDGD = async (req, res, next) => {
       token,
       process.env.SECRET
     );
-    if (role_name == "TDGD") {
+    if (role_name == "GDT") {
       req.user = {
         role_name: role_name,
         user_name: user_name,

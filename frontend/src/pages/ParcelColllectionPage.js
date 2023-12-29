@@ -21,7 +21,8 @@ function ParcelCollectionPage() {
   const getGreetingMessage = () => {
     const today = new Date();
     const userName =
-      (JSON.parse(localStorage.getItem("account")))?.user_info?.name ?? "Manh Hung";
+      JSON.parse(localStorage.getItem("account"))?.user_info?.name ??
+      "Manh Hung";
     if (today.getHours() >= 0 && today.getHours() < 12)
       return `Good morning, ${userName}!`;
     else if (today.getHours() <= 18) return `Good afternoon, ${userName}!`;
@@ -35,7 +36,7 @@ function ParcelCollectionPage() {
   };
   return (
     <Container className="parcel-collection-page" id="parcel-collection-page">
-      <header className="header" >
+      <header className="header">
         <div className="left">
           <h3>{getGreetingMessage()}</h3>
           <p>Welcome back, let's begin your work at collection hub here.</p>
@@ -48,12 +49,12 @@ function ParcelCollectionPage() {
         </div>
       </header>
       <div className="collection-hub-hub">
-        <ConfirmOrderFromCollectionToCollection />
+        <ConfirmOrderFromCollectionToCollection itemsPerPage={4} />
         <CreateOrderFromCollectionToCollection />
       </div>
       <div className="transaction-to-collection">
         <CreateOrderFromCollectionToTransaction />
-        <ConfirmOrderFromTransactionToCollection />
+        <ConfirmOrderFromTransactionToCollection itemsPerPage={4} />
       </div>
       <ParcelCollectionStatusStatistics />
     </Container>

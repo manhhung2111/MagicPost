@@ -20,14 +20,14 @@ const orderSchema = new mongoose.Schema({
       nameAddress: { type: String, defaul: null },
       address: { type: String, defaul: null },
       phoneNum: { type: String, defaul: null },
-      zipcode: { type: String, defaul: "10000" },
+      postalCode: { type: String, defaul: "1000" },
       customerID: { type: String, default: null },
     },
     recipientInfo: {
       nameAddress: { type: String, defaul: null },
       address: { type: String, defaul: null },
       phoneNum: { type: String, defaul: null },
-      zipcode: { type: String, defaul: "10000" },
+      postalCode: { type: String, defaul: "1000" },
     },
     additionalService: { type: String, default: null },
     sender_instruction: {

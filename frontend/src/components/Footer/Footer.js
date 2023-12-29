@@ -1,6 +1,6 @@
 import "./Footer.scss";
 import { BiPackage, BiHomeAlt } from "react-icons/bi";
-import {AiTwotonePhone, AiOutlineMail} from "react-icons/ai"
+import { AiTwotonePhone, AiOutlineMail } from "react-icons/ai";
 function Footer() {
   return (
     <div className="footer-custom">
@@ -29,9 +29,21 @@ function Footer() {
       </div>
       <div className="section">
         <h2>Contacts</h2>
-        <p className="contact"> <BiHomeAlt />144 Xuan Thuy, Dich Vong Hau, Ha Noi</p>
-        <p className="contact"> <AiOutlineMail />magicpost@logistics.vn</p>
-        <p className="contact"> <AiTwotonePhone />+84 123-456-789</p>
+        <p className="contact">
+          {" "}
+          <BiHomeAlt />
+          144 Xuan Thuy, Dich Vong Hau, Ha Noi
+        </p>
+        <p className="contact">
+          {" "}
+          <AiOutlineMail />
+          magicpost@logistics.vn
+        </p>
+        <p className="contact">
+          {" "}
+          <AiTwotonePhone />
+          +84 123-456-789
+        </p>
       </div>
     </div>
   );

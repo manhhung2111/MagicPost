@@ -17,7 +17,7 @@ const requireAuthTDTK = async (req, res, next) => {
       process.env.SECRET
     );
 
-    if (role_name == "TDTK") {
+    if (role_name == "TKT") {
       req.user = {
         role_name: role_name,
         user_name: user_name,
@@ -51,7 +51,7 @@ const requireAuthNVDTK = async (req, res, next) => {
       process.env.SECRET
     );
 
-    if (role_name == "NVDTK") {
+    if (role_name == "TKV") {
       req.user = {
         role_name: role_name,
         user_name: user_name,

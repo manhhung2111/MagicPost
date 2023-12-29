@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { FaEye, FaEyeSlash, FaRegCheckCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { handleCreateNewEmployee } from "../../../services/collectionManagementServices";
 function AddCollectionEmployeeAccountModal({ show, setShow }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -73,10 +74,23 @@ function AddCollectionEmployeeAccountModal({ show, setShow }) {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateInputs()) return;
-    const userInfo = { username, email, name, phoneNum, address, password };
-    console.log(userInfo);
+    const userInfo = {
+      user_name: username,
+      email,
+      name,
+      phone: phoneNum,
+      address,
+      password,
+    };
+    const result = await handleCreateNewEmployee(userInfo);
+    if (result?.errorCode === 0) {
+      toast.success("Create new employee successfully");
+      handleClose();
+    } else {
+      toast.warn("Username is existed. Please try another username");
+    }
   };
   return (
     <Modal

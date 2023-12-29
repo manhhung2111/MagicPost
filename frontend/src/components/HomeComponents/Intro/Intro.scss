@@ -1,6 +1,9 @@
 .intro-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
   gap: 2rem;
   margin-top: 10rem;
   .left-content {
@@ -14,9 +17,10 @@
       font-size: 1.6rem;
     }
     .info-cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      
+      gap: 1.5rem;
       .card-info {
         display: flex;
         align-items: center;
@@ -40,6 +44,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+    }
     gap: 1.5rem;
     p {
       font-size: 1.5rem;

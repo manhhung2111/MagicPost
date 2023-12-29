@@ -1,16 +1,54 @@
 .collection-management-charts {
-    margin-top: 3rem;
-    display: grid;
-    grid-template-columns: 6.5fr 3.5fr;
-    gap: 2rem;
-    .left-content,
-    .right-content {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 6.5fr 3.5fr;
+  gap: 2rem;
+  @media screen and (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
+  .left-content,
+  .right-content {
+    padding: 10px;
+    border-radius: 5px;
+    // border: 2px solid black;
+    // height: fit-content;
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    @media screen and (max-width: 1000px) {
       padding: 10px;
-      border-radius: 5px;
-      // border: 2px solid black;
-      // height: fit-content;
-      background-color: #fff;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     }
   }
-  
+
+  .left-content {
+    position: relative;
+    .refresh-btn {
+      position: absolute;
+      right: 10px;
+      color: white;
+      background-color: #79ac78;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      padding: 0.4rem 1.3rem;
+      display: flex;
+      align-items: center;
+      border: none;
+      gap: 3px;
+      &:hover {
+        background-color: #79ac78cb;
+        svg {
+          transform: rotate(360deg);
+        }
+      }
+      & svg {
+        display: inline;
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-right: 0.75rem;
+        color: white;
+        transition: all 0.5s ease-in-out;
+      }
+    }
+  }
+}

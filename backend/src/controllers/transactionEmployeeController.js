@@ -8,6 +8,9 @@ import {
   confirmRecipientShipment,
   transferOrdersToCollectionHub,
   getAllOrderToShip,
+  getAllRecipientShipment,
+  getStatsOrders,
+  getContribution,
 } from "../services/transactionEmployeeServices";
 
 const handleCreateOrder = async (req, res) => {
@@ -31,7 +34,8 @@ const handleGetAllTransactionPoints = async (req, res) => {
 };
 
 const handleGetIncomingOrders = async (req, res) => {
-  const result = await getIncomingOrdersToConfirm(req.user);
+  const { query } = req.body;
+  const result = await getIncomingOrdersToConfirm(req.user, query);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -71,7 +75,8 @@ const handleTransferOrdersToCollectionHub = async (req, res) => {
 };
 
 const handleGetAllOrderToShip = async (req, res) => {
-  const result = await getAllOrderToShip(req.user);
+  const { query } = req.body;
+  const result = await getAllOrderToShip(req.user, query);
 
   const statusCode = result.errorCode === 0 ? 200 : 500;
   return res.status(statusCode).json({
@@ -89,6 +94,16 @@ const handleCreateShipmentToRecipient = async (req, res) => {
   });
 };
 
+const handleGetAllRecipientShipment = async (req, res) => {
+  const { query } = req.body;
+  const result = await getAllRecipientShipment(req.user, query);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
 const handleConfirmRecipientShipment = async (req, res) => {
   const { parcelId, status } = req.body;
   const result = await confirmRecipientShipment(parcelId, status);
@@ -99,6 +114,25 @@ const handleConfirmRecipientShipment = async (req, res) => {
   });
 };
 
+const handleGetStatsOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getStatsOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetContribution = async (req, res) => {
+  const user = req.user;
+  const result = await getContribution(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
 export {
   handleCreateOrder,
   handleConfirmOrder,
@@ -109,4 +143,7 @@ export {
   handleConfirmRecipientShipment,
   handleTransferOrdersToCollectionHub,
   handleGetAllOrderToShip,
+  handleGetAllRecipientShipment,
+  handleGetStatsOrders,
+  handleGetContribution,
 };

@@ -17,6 +17,11 @@ import {
 } from "chart.js";
 import { Chart, Doughnut } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useState, useEffect } from "react";
+import {
+  handleGetContribution,
+  handleGetOrderStatistics,
+} from "../../../services/collectionServices";
 function ParcelCollectionStatusStatistics() {
   ChartJS.register(
     LinearScale,
@@ -32,6 +37,27 @@ function ParcelCollectionStatusStatistics() {
     ArcElement,
     Filler
   );
+  const [order, setOrders] = useState({ incomingOrders: 0, outGoingOrders: 0 });
+  const [contribution, setContribution] = useState({
+    contribution: 0,
+    total: 0,
+  });
+  const fetchOrders = async () => {
+    const result = await handleGetOrderStatistics();
+    if (result?.errorCode === 0) {
+      setOrders((prev) => result.data);
+    }
+  };
+  const fetchContribution = async () => {
+    const result = await handleGetContribution();
+    if (result?.errorCode === 0) {
+      setContribution((prev) => result.data);
+    }
+  };
+  useEffect(() => {
+    fetchOrders();
+    fetchContribution();
+  }, []);
   const options = {
     responsive: true,
     plugins: {
@@ -59,56 +85,30 @@ function ParcelCollectionStatusStatistics() {
     },
     tension: 0.3,
   };
-  const labels = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const labels = ["Incoming orders", "Outgoing orders"];
   const parcelsData = {
     labels,
     datasets: [
       {
-        type: "line",
-        label: "Incoming Parcels",
-        borderColor: " rgb(19, 195, 107)",
-        backgroundColor: " rgba(19, 195, 107, 0.2)",
-        data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
-        stack: "Stack 2",
-        fill: "origin",
-      },
-      {
-        type: "line",
-        label: "Outgoing Parcels",
-        borderColor: "rgba(47, 128, 208, 1)",
-        backgroundColor: "rgba(47, 128, 208, 0.2)",
-        data: labels.map(() => Math.floor(Math.random() * (300 - 50) + 50)),
-        stack: "Stack 1",
-        fill: "origin",
-      },
-      {
-        label: "Your total parcels",
-        data: labels.map(() => Math.floor(Math.random() * (100 - 50) + 50)),
+        type: "bar",
+        label: "Total orders",
+        borderColor: "rgba(255, 196, 54, 0.7)",
         backgroundColor: "rgba(255, 196, 54, 0.7)",
-        stack: "Stack 0",
+        data: [order.incomingOrders, order.outGoingOrders],
+        fill: "origin",
       },
     ],
   };
 
   const employeeData = {
-    labels: ["Hoang Manh Hung", "Others"],
+    labels: [
+      JSON.parse(localStorage.getItem("account"))?.user_info?.name,
+      "Others",
+    ],
     datasets: [
       {
         label: "# of Parcels",
-        data: [369, 400],
+        data: [contribution.contribution, contribution.total],
         backgroundColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
         borderColor: ["rgb(19, 195, 107)", "rgb(47, 128, 208)"],
         borderWidth: 1,

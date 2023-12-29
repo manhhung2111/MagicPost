@@ -36,79 +36,108 @@
     font-weight: 500;
     margin: 0;
     margin-top: 1rem;
-    opacity: 0;
+    opacity: 1;
     transition: 0.5s opacity ease-in-out;
-    &.active {
-      opacity: 1;
-    }
   }
-  .button {
-    --color: black;
-    $color_1: var(--color);
-    $color_2: rgb(10, 25, 30);
-    $font-family_1: inherit;
-    $background-color_1: transparent;
-    $background-color_2: var(--color);
-    padding: 0.2em 1.7em;
-    background-color: $background-color_1;
-    border-radius: 0.3em;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.5s;
-    font-weight: 500;
-    font-size: 14px;
-    border: 2px solid;
-    font-family: $font-family_1;
-    margin-top: 30px;
-    color: $color_1;
-    z-index: 1;
-    width: fit-content;
-    &::before {
-      content: "";
-      display: block;
-      width: 50px;
-      height: 50px;
-      transform: translate(-70%, -50%);
-      position: absolute;
-      border-radius: 50%;
-      z-index: -1;
-      background-color: $background-color_2;
-      transition: 1s ease;
-      top: -1em;
-      left: -1em;
-    }
-    &::after {
-      content: "";
-      display: block;
-      width: 50px;
-      height: 50px;
-      transform: translate(-30%, -50%);
-      position: absolute;
-      border-radius: 50%;
-      z-index: -1;
-      background-color: $background-color_2;
-      transition: 1s ease;
-      left: calc(100% + 1em);
-      top: calc(100% + 1em);
-    }
-    &:hover {
+  .button-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .button {
+      --color: black;
+      $color_1: var(--color);
+      $color_2: rgb(10, 25, 30);
+      $font-family_1: inherit;
+      $background-color_1: transparent;
+      $background-color_2: #79ac78;
+      padding: 0.2em 1.7em;
+      background-color: $background-color_1;
+      border-radius: 0.3em;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.5s;
+      font-weight: 500;
+      font-size: 14px;
+      border: 2px solid;
+      font-family: $font-family_1;
+      // margin-top: 30px;
+      color: $color_1;
+      z-index: 1;
+      width: fit-content;
       &::before {
-        height: 410px;
-        width: 410px;
+        content: "";
+        display: block;
+        width: 50px;
+        height: 50px;
+        transform: translate(-70%, -50%);
+        position: absolute;
+        border-radius: 50%;
+        z-index: -1;
+        background-color: $background-color_2;
+        transition: 1s ease;
+        top: -1em;
+        left: -1em;
       }
       &::after {
-        height: 410px;
-        width: 410px;
+        content: "";
+        display: block;
+        width: 50px;
+        height: 50px;
+        transform: translate(-30%, -50%);
+        position: absolute;
+        border-radius: 50%;
+        z-index: -1;
+        background-color: $background-color_2;
+        transition: 1s ease;
+        left: calc(100% + 1em);
+        top: calc(100% + 1em);
       }
-      color: $color_2;
-      color: whitesmoke;
+      &:hover {
+        &::before {
+          height: 410px;
+          width: 410px;
+        }
+        &::after {
+          height: 410px;
+          width: 410px;
+        }
+        color: $color_2;
+        color: whitesmoke;
+      }
+      &:active {
+        filter: brightness(0.8);
+      }
+      &[disabled] {
+        cursor: not-allowed;
+      }
     }
-    &:active {
-      filter: brightness(0.8);
-    }
-    &[disabled] {
-      cursor: not-allowed;
+    .refresh-btn {
+      color: white;
+      background-color: #79ac78;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      padding: 0.7rem 2rem;
+      display: flex;
+      align-items: center;
+      border: none;
+      gap: 3px;
+      &:hover {
+        background-color: #79ac78cb;
+        svg {
+          transform: rotate(360deg);
+        }
+      }
+      & svg {
+        display: inline;
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-right: 0.75rem;
+        color: white;
+        transition: all 0.5s ease-in-out;
+      }
     }
   }
 }

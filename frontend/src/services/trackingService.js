@@ -5,6 +5,4 @@ const handleGetParcelById = async (id) => {
   return result;
 };
 
-
-
 export { handleGetParcelById };

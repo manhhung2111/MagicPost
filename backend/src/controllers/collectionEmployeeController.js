@@ -1,13 +1,21 @@
 import {
-  confirmShipment,
-  createShipmentToNextCenter,
-  getAllTransactionAndCollectionsCenter,
-  getIncomingShipments,
-  getResponsibleOrders,
+  confirmIncomingCollectionOrder,
+  getIncomingCollectionOrder,
+  getNearbyTransactionHubs,
+  getNearbyCollectionHubs,
+  getOrdersToTransferCollection,
+  transferOrdersToCollectionHub,
+  getIncomingTransactionOrder,
+  confirmIncomingTransactionOrder,
+  getOrdersToTransferTransaction,
+  transferOrdersToTransactionHub,
+  getStatsOrders,
+  getContribution,
 } from "../services/collectionEmployeeServices";
 
-const handleVerifyShipment = async (req, res) => {
-  const result = await confirmShipment(data);
+const handleGetIncomingCollectionOrder = async (req, res) => {
+  const user = req.user;
+  const result = await getIncomingCollectionOrder(user);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -16,8 +24,10 @@ const handleVerifyShipment = async (req, res) => {
   });
 };
 
-const handleGetAllTransactionAndCollectionsCenter = async (req, res) => {
-  const result = await getAllTransactionAndCollectionsCenter(data);
+const handleConfirmIncomingCollectionOrder = async (req, res) => {
+  const { parcelId } = req.body;
+  const user = req.user;
+  const result = await confirmIncomingCollectionOrder(parcelId, user);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -26,8 +36,9 @@ const handleGetAllTransactionAndCollectionsCenter = async (req, res) => {
   });
 };
 
-const handleGetResponsibleOrder = async (req, res) => {
-  const result = await getResponsibleOrders(data);
+const handleGetNearbyCollectionHubs = async (req, res) => {
+  const user = req.user;
+  const result = await getNearbyCollectionHubs(user);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -36,8 +47,9 @@ const handleGetResponsibleOrder = async (req, res) => {
   });
 };
 
-const handleCreateShipment = async (req, res) => {
-  const result = await createShipmentToNextCenter(data);
+const handleGetOrdersToTransferCollection = async (req, res) => {
+  const user = req.user;
+  const result = await getOrdersToTransferCollection(user);
 
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
@@ -46,9 +58,97 @@ const handleCreateShipment = async (req, res) => {
   });
 };
 
-const handleGetShipmentToCurrentCenter = async (req, res) => {
-  const result = await getIncomingShipments(data);
+const handleTransferOrdersToCollectionHub = async (req, res) => {
+  const { parcelIds, nextCenter } = req.body;
+  const user = req.user;
+  const result = await transferOrdersToCollectionHub(
+    parcelIds,
+    nextCenter,
+    user
+  );
 
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetIncomingTransactionOrder = async (req, res) => {
+  const user = req.user;
+  const { query } = req.body;
+  const result = await getIncomingTransactionOrder(user, query);
+
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleConfirmIncomingTransactionOrder = async (req, res) => {
+  const { parcelId } = req.body;
+  const user = req.user;
+  const result = await confirmIncomingTransactionOrder(parcelId, user);
+
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetNearbyTransactionHubs = async (req, res) => {
+  const user = req.user;
+  const result = await getNearbyTransactionHubs(user);
+
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetOrdersToTransferTransaction = async (req, res) => {
+  const user = req.user;
+  const result = await getOrdersToTransferTransaction(user);
+
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleTransferOrdersToTransactionHub = async (req, res) => {
+  const { parcelIds, nextCenter } = req.body;
+  const user = req.user;
+  const result = await transferOrdersToTransactionHub(
+    parcelIds,
+    nextCenter,
+    user
+  );
+
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetStatsOrders = async (req, res) => {
+  const user = req.user;
+  const result = await getStatsOrders(user);
+  const statusCode =
+    result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
+  return res.status(statusCode).json({
+    ...result,
+  });
+};
+
+const handleGetContribution = async (req, res) => {
+  const user = req.user;
+  const result = await getContribution(user);
   const statusCode =
     result.errorCode === 0 ? 200 : result.errorCode === 1 ? 400 : 500;
   return res.status(statusCode).json({
@@ -57,9 +157,16 @@ const handleGetShipmentToCurrentCenter = async (req, res) => {
 };
 
 export {
-  handleVerifyShipment,
-  handleGetResponsibleOrder,
-  handleCreateShipment,
-  handleGetAllTransactionAndCollectionsCenter,
-  handleGetShipmentToCurrentCenter,
+  handleConfirmIncomingCollectionOrder,
+  handleGetIncomingCollectionOrder,
+  handleGetNearbyTransactionHubs,
+  handleGetNearbyCollectionHubs,
+  handleTransferOrdersToCollectionHub,
+  handleTransferOrdersToTransactionHub,
+  handleGetIncomingTransactionOrder,
+  handleConfirmIncomingTransactionOrder,
+  handleGetOrdersToTransferTransaction,
+  handleGetOrdersToTransferCollection,
+  handleGetStatsOrders,
+  handleGetContribution,
 };

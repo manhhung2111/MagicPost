@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import "./AccountInfo.scss";
 import { useEffect, useState } from "react";
 
-function AccountInfo({ showModal, setShowModal }) {
+function AccountInfo({ showModal, setShowModal, isAuthenticated }) {
   const [info, setInfo] = useState({});
   useEffect(() => {
     let isLogin = JSON.parse(localStorage.getItem("account"))?.isAuthenticated;
@@ -12,7 +12,7 @@ function AccountInfo({ showModal, setShowModal }) {
       localStorage.getItem("account")
     ).user_info;
     setInfo((prev) => ({ center_name, email, name, role_name }));
-  }, []);
+  }, [isAuthenticated]);
   return (
     <Modal
       show={showModal}
