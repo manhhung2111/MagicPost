@@ -31,7 +31,6 @@ function TrackingPage() {
       if (parcel.errorCode === 1) {
         toast.warn(`${parcel.message}. Please try again!`);
       } else {
-        console.log(parcel);
         toast.success("Your parcel is found successfuly!");
         setParcelInfo((prev) => ({
           ...parcel.data?.parcel.packageInfo,
@@ -192,8 +191,16 @@ function TrackingPage() {
                 {parcelInfo.shipment.status === "Delivered successfully" && (
                   <div className="tracking-log">
                     <FaCheck className="icon" />
-                    <h3>Delieverd successfully to {parcelInfo.recipientInfo.nameAddress.split(".")[0]}</h3>
-                    <p>{parcelInfo.recipientInfo.nameAddress.split(".").slice(1).join('.')}</p>
+                    <h3>
+                      Delieverd successfully to{" "}
+                      {parcelInfo.recipientInfo.nameAddress.split(".")[0]}
+                    </h3>
+                    <p>
+                      {parcelInfo.recipientInfo.nameAddress
+                        .split(".")
+                        .slice(1)
+                        .join(".")}
+                    </p>
                     <p>
                       <FaRegClock /> {parcelInfo.shipment.timeDelivered}
                     </p>

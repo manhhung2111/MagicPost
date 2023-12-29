@@ -21,7 +21,7 @@ const handleCreateNewEmployee = async (req, res) => {
 
 const handleGetAllEmployees = async (req, res) => {
   const user = req.user;
-  const {sort} = req.body;
+  const { sort } = req.body;
   const result = await getAllEmployees(user, sort);
 
   const statusCode =
@@ -42,7 +42,7 @@ const handleUpdateEmployee = async (req, res) => {
 };
 
 const handleDeleteEmployee = async (req, res) => {
-  const {user_name} = req.body;
+  const { user_name } = req.body;
   const result = await deleteEmployee(user_name);
 
   const statusCode =
@@ -54,7 +54,7 @@ const handleDeleteEmployee = async (req, res) => {
 
 const handleGetIncomingParcels = async (req, res) => {
   const user = req.user;
-  const {sort} = req.body;
+  const { sort } = req.body;
   const result = await getIncomingParcels(user, sort);
 
   const statusCode =
@@ -66,7 +66,7 @@ const handleGetIncomingParcels = async (req, res) => {
 
 const handleGetOutgoingParcels = async (req, res) => {
   const user = req.user;
-  const {sort} = req.body;
+  const { sort } = req.body;
   const result = await getOutgoingParcels(user, sort);
 
   const statusCode =

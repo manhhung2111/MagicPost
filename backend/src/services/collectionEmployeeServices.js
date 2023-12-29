@@ -192,7 +192,6 @@ const transferOrdersToCollectionHub = async (parcelIds, nextCenter, user) => {
     const orders = await Order.find({
       parcelId: { $in: parcelIds },
     });
-    // update paths
     let count = 0;
     for (let i = 0; i < orders.length; i++) {
       for (let index = 0; index < orders[i].paths.length; index++) {
@@ -378,7 +377,6 @@ const transferOrdersToTransactionHub = async (parcelIds, nextCenter, user) => {
     const orders = await Order.find({
       parcelId: { $in: parcelIds },
     });
-    // update paths
     let count = 0;
     for (let i = 0; i < orders.length; i++) {
       for (let index = 0; index < orders[i].paths.length; index++) {
@@ -553,5 +551,6 @@ export {
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
   getStatsOrders,
-  getAllIncomingAndOutGoing, getContribution
+  getAllIncomingAndOutGoing,
+  getContribution,
 };

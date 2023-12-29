@@ -59,7 +59,7 @@
           }
           &.failed {
             background-color: #fa707060;
-            color: #FA7070;
+            color: #fa7070;
           }
         }
       }
@@ -118,14 +118,14 @@
         &.btn-success {
           background-color: #79ac78;
           &:hover {
-            background-color: #304D30;
+            background-color: #304d30;
           }
           &[disabled] {
             cursor: not-allowed;
           }
         }
         &.btn-fail {
-          background-color: #FA7070;
+          background-color: #fa7070;
           &:hover {
             background-color: #bf3131bb;
           }

@@ -40,7 +40,7 @@ function ConfirmOrderFromTransactionToCollection({ itemsPerPage }) {
         }))
       );
     }
-    setItemOffset(0)
+    setItemOffset(0);
   };
 
   useEffect(() => {
@@ -61,9 +61,9 @@ function ConfirmOrderFromTransactionToCollection({ itemsPerPage }) {
     setItemOffset(newOffset);
   };
 
-  const handleRefresh = async() => {
-    await fetchData()
-  }
+  const handleRefresh = async () => {
+    await fetchData();
+  };
 
   const sortBy = [
     { label: "Alphabetical", value: "Alphabetical" },
@@ -75,7 +75,11 @@ function ConfirmOrderFromTransactionToCollection({ itemsPerPage }) {
     <Container className="confirm-order-from-transaction-to-collection">
       <div className="header">
         <h2>Confirm orders from other transaction hub(s)</h2>
-        <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
+        <button
+          className="refresh-btn"
+          type="button"
+          onClick={() => handleRefresh()}
+        >
           <svg
             viewBox="0 0 16 16"
             className="bi bi-arrow-repeat"

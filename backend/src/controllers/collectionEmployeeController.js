@@ -9,7 +9,8 @@ import {
   confirmIncomingTransactionOrder,
   getOrdersToTransferTransaction,
   transferOrdersToTransactionHub,
-  getStatsOrders, getContribution
+  getStatsOrders,
+  getContribution,
 } from "../services/collectionEmployeeServices";
 
 const handleGetIncomingCollectionOrder = async (req, res) => {
@@ -153,7 +154,7 @@ const handleGetContribution = async (req, res) => {
   return res.status(statusCode).json({
     ...result,
   });
-}
+};
 
 export {
   handleConfirmIncomingCollectionOrder,
@@ -166,5 +167,6 @@ export {
   handleConfirmIncomingTransactionOrder,
   handleGetOrdersToTransferTransaction,
   handleGetOrdersToTransferCollection,
-  handleGetStatsOrders, handleGetContribution
+  handleGetStatsOrders,
+  handleGetContribution,
 };

@@ -9,6 +9,13 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Loader from "../../Utils/Loader/Loader";
 import UpdateEmployeeAccountModal from "../UpdateEmployeeAccountModal/UpdateEmployeeAccountModal";
 import DeleteEmployeeAccountModal from "../DeleteEmployeeAccountModal/DeleteEmployeeAccountModal";
+import person1 from "../../../assets/Avatar/person1.jpg";
+import person2 from "../../../assets/Avatar/person2.jpg";
+import person3 from "../../../assets/Avatar/person3.jpg";
+import person4 from "../../../assets/Avatar/person4.jpg";
+import person5 from "../../../assets/Avatar/person5.jpg";
+import person6 from "../../../assets/Avatar/person6.jpg";
+
 function TransactionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
   const [isShowSort, setIsShowSort] = useState(false);
   const [sortEmployee, setSortEmployee] = useState("Name");
@@ -29,6 +36,7 @@ function TransactionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
 
+  const avatars = [person1, person2, person3, person4, person5, person6];
   const sortOptions = ["Name"];
   const fetchData = async () => {
     if (Object.keys(employeeList).length > 0) {
@@ -153,7 +161,9 @@ function TransactionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
                     <div>{index + 1}</div>
                     <div className="employee-info">
                       <img
-                        src="https://plus.unsplash.com/premium_photo-1673264933446-203af90cd278?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE1fGJvOGpRS1RhRTBZfHxlbnwwfHx8fHw%3D"
+                        src={
+                          avatars[Math.floor(Math.random() * avatars.length)]
+                        }
                         alt="employee-avatar"
                         className="img"
                       />

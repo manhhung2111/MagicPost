@@ -150,7 +150,6 @@ function generateEmailCollection(isEmployee, center, index) {
 }
 
 allTransactionHubs.forEach((center) => {
-  // create manager
   const manager = {
     user_name: `${center}_Manager`,
     name: generateRandomName(),
@@ -182,7 +181,6 @@ allTransactionHubs.forEach((center) => {
 });
 
 allCollectionHubs.forEach((center) => {
-  // create manager
   const manager = {
     user_name: `${center}_Manager`,
     name: generateRandomName(),

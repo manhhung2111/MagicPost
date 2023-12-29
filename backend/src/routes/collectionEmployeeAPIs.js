@@ -13,7 +13,8 @@ import {
   handleConfirmIncomingTransactionOrder,
   handleGetOrdersToTransferTransaction,
   handleGetOrdersToTransferCollection,
-  handleGetStatsOrders, handleGetContribution
+  handleGetStatsOrders,
+  handleGetContribution,
 } from "../controllers/collectionEmployeeController";
 
 // AUTHENTICATION
@@ -42,5 +43,5 @@ router.put("/transfer/order-transaction", handleTransferOrdersToTransactionHub);
 
 // get success and unsuccess orders
 router.get("/order/stats", handleGetStatsOrders);
-router.get("/contribution", handleGetContribution)
+router.get("/contribution", handleGetContribution);
 export default router;

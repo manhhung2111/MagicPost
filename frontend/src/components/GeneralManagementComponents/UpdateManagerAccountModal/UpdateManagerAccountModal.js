@@ -8,12 +8,7 @@ import Row from "react-bootstrap/Row";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { handleUpdateEmployee } from "../../../services/collectionManagementServices";
-function UpdateManagerAccountModal({
-  show,
-  setShow,
-  employeeInfo,
-  fetchData,
-}) {
+function UpdateManagerAccountModal({ show, setShow, employeeInfo, fetchData }) {
   const [username, setUsername] = useState();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");

@@ -34,9 +34,6 @@ const getAllEmployees = async (user, sort) => {
       .select("name address phone email user_name -_id")
       .sort({ name: 1 });
 
-    // if (sort === "Username") {
-    //   result.sort({ user_name: 1 });
-    // }
     return {
       errorCode: 0,
       data: { packages: result, totalEmployee: result.length },
@@ -89,7 +86,6 @@ const deleteEmployee = async (user_name) => {
   }
 };
 
-// đơn hàng đến : đơn hàng dc chuyển đi
 const getIncomingParcels = async (user, sort) => {
   try {
     const curCenter = user.center_name;
@@ -146,8 +142,6 @@ const getIncomingParcels = async (user, sort) => {
 };
 
 const getOutgoingParcels = async (user, sort) => {
-  // outgoing : có path là cetner hiện tại và time departed true
-  // tổng số đơn hàng outgoing
   try {
     const curCenter = user.center_name;
 
@@ -209,16 +203,13 @@ const getOutgoingParcels = async (user, sort) => {
 };
 
 const getEmployeeContribution = async (user) => {
-  // tong don hang cua moi employee incoming va outgoing
-  // center {icomgin: 12, outgoing: 12}
-
   try {
     const allEmployees = (await getAllEmployees(user)).data.packages;
     const result = [];
     for (let i = 0; i < allEmployees.length; i++) {
       const in_out = (await getAllIncomingAndOutGoing(allEmployees[i])).data
         .total_in_out;
-      result.push({name: allEmployees[i].name, parcel: in_out});
+      result.push({ name: allEmployees[i].name, parcel: in_out });
     }
     return {
       errorCode: 0,

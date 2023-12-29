@@ -8,12 +8,7 @@ import Row from "react-bootstrap/Row";
 import { toast } from "react-toastify";
 import { handleDeleteEmployee } from "../../../services/collectionManagementServices";
 import { FaRegTrashAlt } from "react-icons/fa";
-function DeleteEmployeeAccountModal({
-  show,
-  setShow,
-  user_name,
-  fetchData
-}) {
+function DeleteEmployeeAccountModal({ show, setShow, user_name, fetchData }) {
   const [username, setUsername] = useState(user_name);
 
   useEffect(() => {
@@ -21,13 +16,11 @@ function DeleteEmployeeAccountModal({
   }, [user_name]);
   const resetAllInputs = () => {
     setUsername("");
-
   };
   const handleClose = () => {
     resetAllInputs();
     setShow(false);
   };
-
 
   const handleSubmit = async () => {
     const result = await handleDeleteEmployee(user_name);

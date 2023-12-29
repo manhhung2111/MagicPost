@@ -87,7 +87,6 @@ const getParcelById = async (id) => {
       centers.push(center.name);
     }
 
-    console.log(centers);
     return {
       errorCode: 0,
       data: { parcel: result, status: { ...status, centers: centers } },

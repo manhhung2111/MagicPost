@@ -245,7 +245,7 @@ function SenderOrderTransaction({ show, setShow }) {
   const isAllInputsValid = () => {
     function hasTwoSentences(str) {
       // Define a regular expression pattern for two sentences separated by a dot
-      const pattern = /[.!?]\s+[A-Z]/;
+      const pattern = /^[a-zA-Z0-9][^.]*\.[\s]*[a-zA-Z0-9][^.]*$/;
 
       // Test the string against the pattern
       return pattern.test(str);
@@ -373,13 +373,17 @@ function SenderOrderTransaction({ show, setShow }) {
       packageInfo: {
         senderInfo: {
           ...senderInfo,
-          postalCode: allDistricts.find(district => district.value === senderInfo.address).postalCode,
+          postalCode: allDistricts.find(
+            (district) => district.value === senderInfo.address
+          ).postalCode,
         },
         recipientInfo: {
           phoneNum,
           nameAddress,
           address,
-          postalCode: allDistricts.find(district => district.value === recipientInfo.address).postalCode,
+          postalCode: allDistricts.find(
+            (district) => district.value === recipientInfo.address
+          ).postalCode,
         },
         typeOfParcel: {
           isDocument: isDocument,
