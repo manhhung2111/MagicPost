@@ -142,7 +142,7 @@ function TrackingPage() {
                   <h3>{`${index === 0? "Created at " : "Arrived at "} ${path.center_code}`}</h3>
                   <p>{parcelInfo.centers[index]}</p>
                   <p>
-                    <FaRegClock /> {path.time.timeArrived}
+                    <FaRegClock /> {path?.time?.timeArrived}
                   </p>
                 </div>)
                 )}
