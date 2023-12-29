@@ -11,7 +11,7 @@ import LoginModal from "./components/HomeComponents/LoginModal/LoginModal";
 import avatar from "./assets/programmer.png";
 import { useNavigate } from "react-router-dom";
 import AccountInfo from "./components/HomeComponents/AccountInfo/AccountInfo";
-import axios from './config/axiosConfig'
+import axios from "./config/axiosConfig";
 
 function App() {
   const [headerColor, setHeaderColor] = useState("");
@@ -57,11 +57,8 @@ function App() {
     setIsShowSetting(false);
     setShowLoginModal(false);
     localStorage.clear();
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer`;
+    axios.defaults.headers.common["Authorization"] = `Bearer`;
     navigate("/");
-    
   };
 
   return (
@@ -199,6 +196,7 @@ function App() {
       <AccountInfo
         showModal={showAccountModal}
         setShowModal={setIsShowAccountModal}
+        isAuthenticated={isAuthenticated}
       />
     </div>
   );
