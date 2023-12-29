@@ -106,11 +106,12 @@ function CreateOrderFromCollectionToTransaction() {
       toast.success(result.message);
       setDestination(null);
       setParcelIds([]);
+      await fetchData();
     }
   };
-  const handleRefresh = async() => {
-    await fetchData()
-  }
+  const handleRefresh = async () => {
+    await fetchData();
+  };
   return (
     <Container className="create-order-from-collection-to-transaction">
       {destOptions.length === 0 && <Loader />}
@@ -161,7 +162,11 @@ function CreateOrderFromCollectionToTransaction() {
             <button className="button" onClick={() => handleSubmit()}>
               Confirm Transfer
             </button>
-            <button className="refresh-btn" type="button" onClick={() => handleRefresh()}>
+            <button
+              className="refresh-btn"
+              type="button"
+              onClick={() => handleRefresh()}
+            >
               <svg
                 viewBox="0 0 16 16"
                 className="bi bi-arrow-repeat"

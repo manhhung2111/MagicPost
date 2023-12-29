@@ -43,7 +43,7 @@ function ParcelTransactionStatusStatistics() {
 
   useEffect(() => {
     fetchOrders();
-    fetchContribution()
+    fetchContribution();
   }, []);
   ChartJS.register(
     LinearScale,

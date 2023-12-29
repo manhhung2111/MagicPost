@@ -1,17 +1,16 @@
 .parcel-collection-statistic {
-    h2 {
-      font-weight: bold;
-    }
-    display: grid;
-    grid-template-columns: 6.5fr 3.5fr;
-    gap: 2rem;
-    .bar-chart,
-    .doughnut-chart {
-      background-color: #fff;
-      border-radius: 10px;
-      margin-top: 2rem;
-      padding: 1rem;
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    }
+  h2 {
+    font-weight: bold;
   }
-  
+  display: grid;
+  grid-template-columns: 6.5fr 3.5fr;
+  gap: 2rem;
+  .bar-chart,
+  .doughnut-chart {
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 2rem;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  }
+}

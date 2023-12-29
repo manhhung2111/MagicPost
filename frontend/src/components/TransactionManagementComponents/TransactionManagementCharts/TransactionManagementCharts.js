@@ -33,7 +33,7 @@ function TransactionManagementCharts({ order }) {
 
   useEffect(() => {
     fetchContribution();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   ChartJS.register(
     LinearScale,

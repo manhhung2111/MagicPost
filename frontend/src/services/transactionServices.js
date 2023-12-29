@@ -81,7 +81,7 @@ const handleGetOrderStatistics = async () => {
 const handleGetContribution = async () => {
   const result = await axios.get("trans-emp/contribution");
   return result;
-}
+};
 export {
   handleGetAllDistricts,
   handleCreateSenderOrder,
@@ -93,5 +93,6 @@ export {
   handleCreateShipmentToRecipient,
   handleGettAllRecipientShipment,
   handleConfirmRecipientShipmentStatus,
-  handleGetOrderStatistics, handleGetContribution
+  handleGetOrderStatistics,
+  handleGetContribution,
 };

@@ -144,7 +144,6 @@ const getAllTransactionPoints = async () => {
 
 const getOrdersToCollectionHub = async (user) => {
   try {
-    // get orders confirmed by the current user to transfer to the collection hub
     const { center_name: currentCenter, user_name } = user;
     const allOrders = await Order.find({});
     const result = allOrders.filter((order) => {
@@ -183,7 +182,6 @@ const transferOrdersToCollectionHub = async (parcelIds, user) => {
     const orders = await Order.find({
       parcelId: { $in: parcelIds },
     });
-    // update paths
     let count = 0;
     for (let i = 0; i < orders.length; i++) {
       for (let index = 0; index < orders[i].paths.length; index++) {
@@ -290,7 +288,6 @@ const confirmOrderFromCollectionHub = async (parcelId, user) => {
   try {
     const { center_name: currentCenter, user_name: currentUser } = user;
     const order = await Order.findOne({ parcelId });
-    // update paths
     if (!order) {
       return {
         errorCode: 1,
@@ -468,7 +465,6 @@ const confirmRecipientShipment = async (parcelId, status) => {
   }
 };
 
-// gop thanh 1
 const getStatsOrders = async (user) => {
   try {
     const user_name = user.user_name;
@@ -631,5 +627,6 @@ export {
   getAllOrderToShip,
   getAllRecipientShipment,
   getStatsOrders,
-  getAllIncomingAndOutGoing, getContribution
+  getAllIncomingAndOutGoing,
+  getContribution,
 };

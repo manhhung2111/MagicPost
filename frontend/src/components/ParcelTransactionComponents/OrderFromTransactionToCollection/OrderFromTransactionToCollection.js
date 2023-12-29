@@ -52,7 +52,6 @@ function OrderFromTransactionToCollection() {
   };
   const handleSubmit = async () => {
     if (!validate()) return;
-    console.log(parcelIds);
     const data = {
       parcelIds: parcelIds.map((parcel) => {
         return parcel.value;

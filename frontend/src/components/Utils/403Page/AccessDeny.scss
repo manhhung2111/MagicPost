@@ -1,6 +1,6 @@
 .access-deny-container {
   $bg: #313942;
-  $ghost: #818FB4;
+  $ghost: #818fb4;
   $heading: #e7ebf2;
   width: 100vw;
   height: 100vh;
@@ -71,8 +71,8 @@
     &:hover {
       color: #ffffff;
       transform: scale(1.1);
-      outline: 2px solid #818FB4;
-      box-shadow: 4px 5px 17px -4px #818FB4;
+      outline: 2px solid #818fb4;
+      box-shadow: 4px 5px 17px -4px #818fb4;
     }
 
     &::before {
@@ -82,7 +82,7 @@
       top: 0;
       width: 0;
       height: 100%;
-      background-color: #818FB4;
+      background-color: #818fb4;
       transform: skewX(45deg);
       z-index: -1;
       transition: width 1000ms;

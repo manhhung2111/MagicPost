@@ -11,7 +11,7 @@ import {
   handleCreateNewManager,
   handleGetCentersInfo,
 } from "../../../services/generalManagementServices";
-function AddManagerAccountModal({ show, setShow, setCardsStatistics}) {
+function AddManagerAccountModal({ show, setShow, setCardsStatistics }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -28,12 +28,15 @@ function AddManagerAccountModal({ show, setShow, setCardsStatistics}) {
     const options = await handleGetCentersInfo();
     if (options?.errorCode === 0) {
       setCenterOptions(options.data);
-      setCardsStatistics(prev => ({...prev, totalCenters: options.data?.length}))
+      setCardsStatistics((prev) => ({
+        ...prev,
+        totalCenters: options.data?.length,
+      }));
     }
   };
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const resetAllInputs = () => {
     setUsername("");

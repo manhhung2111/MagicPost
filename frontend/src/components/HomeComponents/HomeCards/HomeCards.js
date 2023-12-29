@@ -3,7 +3,7 @@ import "./HomeCard.scss";
 import freightTruck from "../../../assets/freight_truck.jpg";
 import freightShip from "../../../assets/freight_ship.jpg";
 import freightRailRoad from "../../../assets/freight_railroad.jpg";
-import Container from 'react-bootstrap/Container';
+import Container from "react-bootstrap/Container";
 
 function HomeCards() {
   const cards = [
@@ -30,13 +30,13 @@ function HomeCards() {
     <Container className="home-cards-container">
       {cards.map((card, index) => {
         return (
-            <HomeCard 
-                title={card.title}
-                description={card.description}
-                imgSrc={card.imgSrc}
-                key={index}
-            />
-        )
+          <HomeCard
+            title={card.title}
+            description={card.description}
+            imgSrc={card.imgSrc}
+            key={index}
+          />
+        );
       })}
     </Container>
   );

@@ -132,7 +132,7 @@ const handleGetContribution = async (req, res) => {
   return res.status(statusCode).json({
     ...result,
   });
-}
+};
 export {
   handleCreateOrder,
   handleConfirmOrder,
@@ -144,5 +144,6 @@ export {
   handleTransferOrdersToCollectionHub,
   handleGetAllOrderToShip,
   handleGetAllRecipientShipment,
-  handleGetStatsOrders, handleGetContribution
+  handleGetStatsOrders,
+  handleGetContribution,
 };

@@ -28,12 +28,11 @@ function CollectionManagementCharts({ order }) {
     const result = await handleGetEmployeeContribution();
     if (result.errorCode === 0) {
       setEmployeeContribution(result.data);
-      console.log(result.data);
     }
   };
   useEffect(() => {
     fetchContribution();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   ChartJS.register(
     LinearScale,

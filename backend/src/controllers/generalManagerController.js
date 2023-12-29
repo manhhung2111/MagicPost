@@ -14,7 +14,9 @@ import {
   updateManager,
   deleteManager,
   getAllCentersInfo,
-  getAllManager, getCollectionStatistics, getTransactionStatistics
+  getAllManager,
+  getCollectionStatistics,
+  getTransactionStatistics,
 } from "../services/generalManagerServices";
 
 const handleGetDTK = async () => {

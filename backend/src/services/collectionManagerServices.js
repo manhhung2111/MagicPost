@@ -204,9 +204,6 @@ const getOutgoingParcels = async (user, sort) => {
 };
 
 const getEmployeeContribution = async (user) => {
-  // tong don hang cua moi employee incoming va outgoing
-  // center {icomgin: 12, outgoing: 12}
-
   try {
     const allEmployees = (await getAllEmployees(user)).data.packages;
     const result = [];

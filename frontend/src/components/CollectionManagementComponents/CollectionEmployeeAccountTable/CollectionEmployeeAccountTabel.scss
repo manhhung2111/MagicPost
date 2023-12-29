@@ -27,7 +27,6 @@
     }
     .right-content {
       display: flex;
-      // flex-direction: column;
       justify-content: flex-end;
       align-items: center;
       gap: 7px;
@@ -93,7 +92,6 @@
           border-radius: 5px;
           font-size: 1.2rem;
           font-weight: 500;
-          // border-bottom: 1px solid black;
           &:hover {
             background-color: #e9ebec;
           }
@@ -111,7 +109,6 @@
               content: "";
               transform: translateX(10px) rotate(-45deg);
               transform-origin: left bottom;
-              // transform: translateY(-50%);
             }
             &::after {
               position: absolute;

@@ -14,7 +14,7 @@ import {
   Filler,
   ArcElement,
 } from "chart.js";
-import { Chart, Doughnut } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 
 function GeneralManagementCharts({ centers }) {
   ChartJS.register(
@@ -92,7 +92,12 @@ function GeneralManagementCharts({ centers }) {
   };
   return (
     <div className="general-management-charts">
-      <Chart type="bar" data={parcelsData} options={options} className="chart"/>
+      <Chart
+        type="bar"
+        data={parcelsData}
+        options={options}
+        className="chart"
+      />
     </div>
   );
 }

@@ -21,7 +21,7 @@
         border-radius: 50%;
         cursor: pointer;
         &:hover {
-            background-color: #eeeeee;
+          background-color: #eeeeee;
         }
       }
     }
@@ -58,7 +58,7 @@
       }
       &.delete {
         color: rgba(220, 134, 134, 1);
-        background-color: rgba(220, 134, 134, 0.4);;
+        background-color: rgba(220, 134, 134, 0.4);
         &:hover {
           color: white;
           background-color: rgba(220, 134, 134, 1);

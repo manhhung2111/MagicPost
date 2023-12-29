@@ -23,24 +23,29 @@ const handleDeleteEmployee = async (user_name) => {
 };
 
 const handleGetIncomingParcels = async (sortBy) => {
-  const result = await axios.post("trans-mana/incoming-order", {sort: sortBy});
+  const result = await axios.post("trans-mana/incoming-order", {
+    sort: sortBy,
+  });
   return result;
 };
 
 const handleGetOutgoingParcels = async (sortBy) => {
-  const result = await axios.post("trans-mana/outgoing-order", {sort: sortBy});
+  const result = await axios.post("trans-mana/outgoing-order", {
+    sort: sortBy,
+  });
   return result;
 };
 
 const handleGetEmployeeContribution = async () => {
   const result = await axios.get("trans-mana/employee-contribution");
   return result;
-}
+};
 export {
   handleCreateNewEmployee,
   handleGetAllEmployee,
   handleUpdateEmployee,
   handleDeleteEmployee,
   handleGetIncomingParcels,
-  handleGetOutgoingParcels, handleGetEmployeeContribution
+  handleGetOutgoingParcels,
+  handleGetEmployeeContribution,
 };
