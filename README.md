@@ -32,9 +32,9 @@
     | --- | --- | --- |
     | Lãnh đạo công ty | General Manager | 111 |
     | Trưởng điểm giao dịch Thanh Xuân | DGD_TX_Hanoi_Manager | 111 |
-    | Trưởng điểm tập kết | DTK_Hanoi_Manager | 111 |
+    | Trưởng điểm tập kết Hà Nội | DTK_Hanoi_Manager | 111 |
     | Giao dịch viên điểm giao dịch Thanh Xuân | DGD_TX_Hanoi_Employee1 | 111 |
-    | Nhân viên điểm tập kết | DTK_Hanoi_Employee1 | 111 |
+    | Nhân viên điểm tập kết Hà Nội | DTK_Hanoi_Employee1 | 111 |
     
     Mã vận đơn mẫu: MPDS5R1FYgzTH
     
