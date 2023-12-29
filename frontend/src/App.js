@@ -140,6 +140,11 @@ function App() {
                       Collection Management
                     </NavLink>
                   )}
+                  {isAuthenticated === "TGD" && (
+                    <NavLink to={"/general-management"} className="nav-link">
+                      General Management
+                    </NavLink>
+                  )}
                   {headerColor === "blur" && !isAuthenticated && (
                     <button
                       className="signin-btn"

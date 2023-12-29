@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { FaList } from "react-icons/fa6";
-import "./CollectionEmployeeAccountTabel.scss";
+import "./ManagerAccountTabel.scss";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
-import { handleGetAllEmployee } from "../../../services/collectionManagementServices";
+import { handleGetAllManagers } from "../../../services/generalManagementServices"; // thay
 import ReactPaginate from "react-paginate";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Loader from "../../Utils/Loader/Loader";
-import UpdateEmployeeAccountModal from "../UpdateEmployeeAccountModal/UpdateEmployeeAccountModal";
-import DeleteEmployeeAccountModal from "../DeleteEmployeeAccountModal/DeleteEmployeeAccountModal";
-function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
+import UpdateManagerAccountModal from "../UpdateManagerAccountModal/UpdateManagerAccountModal"
+import DeleteManagerAccountModal from '../DeleteManagerAccountModal/DeleteManagerAccountModal'
+function ManagerAccountTabel({ itemsPerPage, setCardsStatistics }) {
   const [isShowSort, setIsShowSort] = useState(false);
   const [sortEmployee, setSortEmployee] = useState("Name");
   const [employeeList, setEmployeeList] = useState({});
@@ -33,13 +33,13 @@ function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
       setEmployeeList({});
     }
 
-    const result = await handleGetAllEmployee();
+    const result = await handleGetAllManagers();
     if (result.errorCode === 0) {
       setTimeout(async () => {
         await setEmployeeList((prev) => result.data);
         setCardsStatistics((prev) => ({
           ...prev,
-          totalEmployees: result.data.totalEmployee,
+          totalManagers: result.data.totalManagers,
         }));
       }, 1500);
     }
@@ -86,7 +86,7 @@ function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
   return (
     <div className="collection-employee-account-table">
       <div className="top">
-        <h3>Manage employee accounts</h3>
+        <h3>Manage manager accounts</h3>
         <div className="right-content">
           <button
             className="refresh-btn"
@@ -191,7 +191,7 @@ function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
         <div className="paginate">
           <p className="info">
             Showing <b>{currentItems?.length}</b> of{" "}
-            <b>{employeeList?.totalEmployee}</b> results
+            <b>{employeeList?.totalManagers}</b> results
           </p>
           <ReactPaginate
             nextLabel={<FaAngleDoubleRight className="icon" />}
@@ -216,13 +216,13 @@ function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
           />
         </div>
       )}
-      <UpdateEmployeeAccountModal
+      <UpdateManagerAccountModal
         setShow={setShowEditModal}
         show={showEditModal}
         employeeInfo={editEmployeeInfo}
         fetchData={fetchData}
       />
-      <DeleteEmployeeAccountModal
+      <DeleteManagerAccountModal
         show={showDeleteModal}
         setShow={setShowDeleteModal}
         user_name={deleteEmployeeUsername}
@@ -232,4 +232,4 @@ function CollectionEmployeeAccountTable({ itemsPerPage, setCardsStatistics }) {
   );
 }
 
-export default CollectionEmployeeAccountTable;
+export default ManagerAccountTabel;
